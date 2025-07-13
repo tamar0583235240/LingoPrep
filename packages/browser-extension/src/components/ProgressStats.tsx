@@ -1,39 +1,36 @@
-
-export type ProgressData = {
-  total: number;
-  completed: number;
-};
-
-interface ProgressStatsProps {
-  pd: ProgressData | null;
-}
+import type { ProgressStatsProps } from "../api/types";
+import { BarChart2 } from "lucide-react";
+import { CardWrapper } from "../ui/CardWrapper";
 
 export const ProgressStats = ({ pd }: ProgressStatsProps) => {
   if (!pd) return <div className="p-4 text-center">Loading...</div>;
+  console.log("ProgressStats pd:", pd);
 
-  const percent = ((pd.completed / pd.total) * 100).toFixed(2);
-
+  const total = pd?.totalQuestions ?? 0;
+  const answered = pd?.answeredQuestions ?? 0;
+  const percentage = pd?.progressPercent ?? 0;
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg w-80 text-center font-sans">
-      {/* כותרת */}
-      <h2 className="text-lg font-semibold mb-2 text-gray-700">התקדמות</h2>
-      
-      {/* אחוזים */}
-      <div className="text-4xl font-bold mb-4 text-gray-900">{percent}%</div>
-      
-      {/* מסגרת פס ההתקדמות */}
-      <div className="w-full bg-gray-200 rounded-full h-4 shadow-inner mb-4 relative overflow-hidden">
-        {/* חלק ההתקדמות */}
+    <CardWrapper
+      title="התקדמות כללית"
+      icon={<BarChart2 size={24} />}
+    >
+      <div className="h-52 flex flex-col items-center justify-center space-y-7">
+
+      <div className="font-semibold text-sm text-[--color-text]">
+        {answered} / {total} שאלות הושלמו
+      </div>
+
+      <div className="w-full h-4 bg-[--color-border] rounded-full overflow-hidden">
         <div
-          className="bg-gradient-to-r from-green-400 to-green-600 h-4 rounded-full transition-all duration-700 ease-in-out"
-          style={{ width: `${parseFloat(percent)}%` }}
-        ></div>
+          className="h-full bg-[--color-primary] transition-all duration-700"
+          style={{ width: `${percentage}%` }}
+        />
       </div>
-      
-      {/* טקסט תיאור */}
-      <div className="text-sm text-gray-600">
-        {pd.completed} מתוך {pd.total} הושלמו
+
+      <div className="text-sm text-[--color-secondary-text]">
+        הושלמו {percentage.toFixed(1)}% מתוך כלל השאלות
       </div>
-    </div>
+       </div>
+ </CardWrapper>
   );
 };

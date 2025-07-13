@@ -1,14 +1,13 @@
-export interface ProgressData {
-  first_name: string;
-  last_name: string;
-  email: string;
-  percent: number;
-  answered: number;
-  total: number;
-  weakAreas: string[];
-}
-
 export interface LoginRequest {
   email: string;
   password: string;
+}
+export type ProgressData = {
+  totalQuestions: number;
+  answeredQuestions: number;
+  progressPercent: number;
+};
+
+export interface ProgressStatsProps {
+  pd: ProgressData | null;
 }

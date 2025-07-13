@@ -1,8 +1,9 @@
-import { Router } from "express";
-import { getAiInsights, getAiInsightsByAnswerId } from "../controllers/aIInsightController";
+import { Router } from 'express';
+import {  getAiInsightsByAnswerId ,getAiInsights} from "../controllers/aIInsightController";
 
 const AiInsightsRouter = Router();
 
-AiInsightsRouter.get('/AiInsights/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
-AiInsightsRouter.get('/AiInsights/getAiInsights', getAiInsights);  
+AiInsightsRouter.get('/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
+AiInsightsRouter.get('/',getAiInsights);
 export default AiInsightsRouter;        
+

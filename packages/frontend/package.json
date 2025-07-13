@@ -5,13 +5,16 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.1.1",
     "@jridgewell/gen-mapping": "^0.3.8",
     "@mui/icons-material": "^7.1.1",
     "@mui/material": "^7.1.1",
+    "@nodelib/fs.walk": "^1.2.8",
     "@react-oauth/google": "^0.12.2",
     "@reduxjs/toolkit": "^2.8.2",
     "@standard-schema/utils": "^0.3.0",
+    "@tanstack/react-query": "^5.81.1",
     "@testing-library/dom": "^10.4.0",
     "@types/node": "^16.18.126",
     "@types/prop-types": "^15.7.15",
@@ -21,8 +24,11 @@
     "ajv-keywords": "^5.1.0",
     "axios": "^1.4.0",
     "clsx": "^2.1.1",
-    "core-js-pure": "^3.43.0",
     "cross-fetch": "^4.1.0",
+    "framer-motion": "^12.19.4",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1",
+    "core-js-pure": "^3.43.0",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.522.0",
     "prompts": "^2.4.2",
@@ -42,6 +48,7 @@
     "tailwind-merge": "^3.3.1",
     "typeorm": "^0.3.25",
     "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5",
     "yup": "^1.6.1"
   },
   "devDependencies": {
@@ -60,7 +67,13 @@
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.4",
     "postcss-value-parser": "^4.2.0",
-    "tailwindcss": "^3.4.17"
+    "redux-mock-store": "^1.5.5",
+    "source-map-support": "^0.5.21",
+    "tailwindcss": "^3.4.17",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5",
+    "zustand": "^5.0.5"
   },
   "scripts": {
     "start": "react-scripts start",

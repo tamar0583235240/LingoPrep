@@ -25,13 +25,13 @@ export const login = async (email: string, password: string): Promise<Users | nu
 
 const signup = async (userData: Users): Promise<Users> => {
   try {
-    const { id, first_name, last_name, email, phone, role, createdAt, isActive, password} = userData;
+    const { id, first_name, last_name, email, phone, role, createdAt, isActive, password, slug } = userData;
 
     const res = await pool.query(
-      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password, slug)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
        RETURNING *`,
-      [id, first_name, last_name, email, phone, role, createdAt, isActive, password]
+      [id, first_name, last_name, email, phone, role, createdAt, isActive, password, slug]
     );
 
     return (res.rows[0] as Users) || null;

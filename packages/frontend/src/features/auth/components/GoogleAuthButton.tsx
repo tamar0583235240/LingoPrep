@@ -1,4 +1,3 @@
-import React from 'react';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -7,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useAuthWithGoogleMutation } from '../../../shared/api/userApi';
 import { loginFailure, loginSuccess } from '../store/authSlice';
 
-const clientId = '412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com';
+const clientId = process.env.CLIENT_ID || '953970619581-k1a6eb1lg0eh0j6ea46rktpelhvfnd3d.apps.googleusercontent.com';
 
 const GoogleAuthButton = () => {
   const MySwal = withReactContent(Swal);

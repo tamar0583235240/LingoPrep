@@ -22,8 +22,8 @@
 
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
-dotenv.config();
 import { createClient } from '@supabase/supabase-js';
+dotenv.config();
 
 
 export const pool = new Pool({

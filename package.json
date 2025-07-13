@@ -30,7 +30,10 @@
     "tailwind-variants": "^1.0.0",
     "typeorm": "^0.3.25",
     "uuid": "^11.1.0",
-    "yup": "^1.6.1"
+    "yup": "^1.6.1",
+    "framer-motion": "^12.20.2",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.9",

@@ -23,7 +23,7 @@ export const uploadFileToCloudinary = (file: Express.Multer.File, folder: string
   return new Promise<any>((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
       { resource_type: resourceType, folder },
-      (error, result) => {
+      (error: any, result: any) => {
         if (error || !result) {
           reject(error);
         } else {
@@ -37,7 +37,7 @@ export const uploadFileToCloudinary = (file: Express.Multer.File, folder: string
 export const deleteFileFromCloudinary = (publicId: string) => {
   
   return new Promise<void>((resolve, reject) => {
-    cloudinary.uploader.destroy(publicId, (error, result) => {
+    cloudinary.uploader.destroy(publicId, (error: any, result: any) => {
       if (error) {
         reject(error);
       } else {

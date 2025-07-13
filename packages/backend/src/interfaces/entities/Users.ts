@@ -10,8 +10,11 @@ import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
 import { WorkExperiences } from "./WorkExperiences";
 import { UserReminderSettings } from "./UserReminderSettings";
+import { UserSessions } from "./UserSessions";
+
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
+@Index("users_slug_key", ["slug"], { unique: true })
 @Entity("users", { schema: "public" })
 export class Users {
   @Column("uuid", { primary: true, name: "id" })
@@ -34,7 +37,7 @@ export class Users {
 
   @Column("timestamp without time zone", {
     name: "created_at",
-    default: () => "now()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   createdAt: Date;
 
@@ -44,19 +47,16 @@ export class Users {
   @Column("text", { name: "password", nullable: true })
   password: string | null;
 
+  @Column("text", { name: "slug", nullable: true, unique: true })
+  slug: string | null;
+
   @OneToMany(() => ContentReports, (contentReports) => contentReports.user)
   contentReports: ContentReports[];
 
-  @OneToMany(
-    () => ExperienceThanks,
-    (experienceThanks) => experienceThanks.user
-  )
+  @OneToMany(() => ExperienceThanks, (experienceThanks) => experienceThanks.user)
   experienceThanks: ExperienceThanks[];
 
-  @OneToMany(
-    () => InterviewExperiences,
-    (interviewExperiences) => interviewExperiences.user
-  )
+  @OneToMany(() => InterviewExperiences, (interviewExperiences) => interviewExperiences.user)
   interviewExperiences: InterviewExperiences[];
 
   @OneToMany(() => Answers, (answers) => answers.user)
@@ -65,30 +65,26 @@ export class Users {
   @OneToMany(() => Feedback, (feedback) => feedback.givenByUser)
   feedbacks: Feedback[];
 
-  @OneToMany(
-    () => PasswordResetTokens,
-    (passwordResetTokens) => passwordResetTokens.user
-  )
+  @OneToMany(() => PasswordResetTokens, (passwordResetTokens) => passwordResetTokens.user)
   passwordResetTokens: PasswordResetTokens[];
 
- @OneToOne(() => Profiles, (profiles) => profiles.user, {
-  nullable: true,
-})
-profiles: Profiles | null;
-
+  @OneToOne(() => Profiles, (profiles) => profiles.user, {
+    nullable: true,
+  })
+  profiles: Profiles | null;
 
   @OneToMany(() => Resources, (resources) => resources.user)
   resources: Resources[];
 
-  @OneToMany(
-    () => SharedRecordings,
-    (sharedRecordings) => sharedRecordings.owner
-  )
+  @OneToMany(() => SharedRecordings, (sharedRecordings) => sharedRecordings.owner)
   sharedRecordings: SharedRecordings[];
 
   @OneToMany(() => WorkExperiences, (workExperiences) => workExperiences.user)
   workExperiences: WorkExperiences[];
 
   @OneToMany(() => UserReminderSettings, (setting) => setting.user)
-userReminderSettings: UserReminderSettings[];
+  userReminderSettings: UserReminderSettings[];
+
+  @OneToMany(() => UserSessions, (userSessions) => userSessions.user)
+  userSessions: UserSessions[];
 }

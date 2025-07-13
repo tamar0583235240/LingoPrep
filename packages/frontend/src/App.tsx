@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Provider } from 'react-redux';
 
@@ -8,10 +8,8 @@ import { store } from './shared/store/store';
 import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginStart, loginSuccess, logout } from './features/auth/store/authSlice';
 import { useRefreshTokenMutation } from './shared/api/authApi';
-import AppRoutes from "./shared/routes/appRoutes";
+import AppRoutes from './shared/routes/appRoutes';
 import { MessageModalProvider } from './shared/ui/MessageModalContext';
-
-// import { WorkExperienceTab } from './features/profile/components/WorkExperienceTab'; // לבדיקה זמנית
 
 function AppWrapper() {
   const dispatch = useAppDispatch();
@@ -20,14 +18,15 @@ function AppWrapper() {
 
   useEffect(() => {
     dispatch(loginStart());
+
     refreshTokenTrigger()
       .unwrap()
       .then((res) => {
-        console.log("הצלחה!", res);
+        console.log('הצלחה!', res);
         dispatch(loginSuccess({ token: res.token, user: res.user }));
       })
       .catch((err) => {
-        console.log("נכשל ברענון הטוקן", err);
+        console.log('נכשל ברענון הטוקן', err);
         dispatch(logout());
       })
       .finally(() => {

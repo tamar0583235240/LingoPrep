@@ -4,26 +4,35 @@
   "version": "1.0.0",
   "description": "תוסף להצגת התקדמות והטיפים במערכת WIT",
   "icons": {
-    "16": "public/icon16.png",
-    "48": "public/icon48.png",
-    "128": "public/icon128.png"
+    "16": "vite.svg",
+    "48": "vite.svg",
+    "128": "vite.svg"
   },
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "index.html",
     "default_icon": {
-      "16": "public/icon16.png",
-      "48": "public/icon48.png",
-      "128": "public/icon128.png"
+      "16": "vite.svg",
+      "48": "vite.svg",
+      "128": "vite.svg"
     }
   },
   "permissions": [
     "storage",
-    "identity"           
+    "identity"
   ],
+  "oauth2": {
+    "client_id": "973113429052-nthdieqjkfm3jpgkvakja07gu7d50t8h.apps.googleusercontent.com",
+    "scopes": ["openid", "email", "profile"]
+  },
   "host_permissions": [
-    "http://localhost:5000/*" 
+    "http://localhost:5000/*",
+    "https://accounts.google.com/*",
+    "https://www.googleapis.com/*"
   ],
   "background": {
     "service_worker": "background.js"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
   }
 }
