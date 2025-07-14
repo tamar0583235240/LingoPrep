@@ -1,11 +1,12 @@
+import { useSelector } from "react-redux";
 import * as FaIcons from "react-icons/fa";
 import { useLocation, NavLink } from "react-router-dom";
 import { cn } from "../utils/cn";
 import React from "react";
 import { ExitButton } from "../../features/auth/components/ExitButton";
+import { ReminderBell } from "./RemindersSidebar";
 
 const FaGraduationCap = FaIcons.FaGraduationCap as unknown as React.FC;
-
 
 interface NavItem {
   label: string;
@@ -28,18 +29,19 @@ const navItems: NavItem[] = [
 
 const SidebarNavigation = () => {
   const location = useLocation();
-
+  const isAdmin = useSelector((state: any) => state.auth.isAdmin);
   return (
     <aside
       className="w-64 h-screen bg-white shadow-md p-4 flex flex-col text-right"
       dir="rtl"
     >
       {/* Header */}
-      <div className="flex items-center justify-start gap-2 mb-6">
+      <div className="flex items-center justify-between gap-2 mb-6">
         <div className="bg-primary text-white p-2 rounded-md">
           <FaGraduationCap />
         </div>
         <h1 className="text-xl font-bold text-text-main">Interview Pro</h1>
+        {isAdmin && <ReminderBell />}
       </div>
 
       {/* Navigation */}
@@ -70,7 +72,7 @@ const SidebarNavigation = () => {
           )
         )}
       </nav>
-    
+
       <ExitButton />
     </aside>
   );

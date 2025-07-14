@@ -7,8 +7,7 @@ import cors from 'cors';
 // import exampleRouts from './src/routes/exampleRouts';
 import questionRoute from './src/routes/questionRouts';
 import sharedRecordingsRoutes from './src/routes/sharedRecordingRouts';
-
-
+import remindersRouter from './src/routes/remindersRouts';
 
 import interviewMaterialsHub from '../backend/src/routes/interview-materials-hub'
 import dotenv from 'dotenv';
@@ -40,5 +39,7 @@ app.use('/question', questionRoute);
 app.use('/shared-recordings', sharedRecordingsRoutes);
 app.use('/auth', authRouts);
 app.use('/interview-materials-hub', interviewMaterialsHub);
+// app.use('/api', remindersRouter);
+app.use('/api/reminders', remindersRouter);
 
 export default app
