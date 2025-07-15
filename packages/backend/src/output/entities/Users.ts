@@ -28,7 +28,7 @@ export class Users {
   role: string;
 
   @Column("timestamp without time zone", {
-    name: "created_at",
+    name: "created_dat",
     default: () => "now()",
   })
   createdAt: Date;

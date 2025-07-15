@@ -21,32 +21,3 @@ export const deleteToken = async (token: string) => {
     [token]
   );
 };
-
-
-// import {supabase} from "../config/dbConnection";
-
-// export const createToken = async (userId: string, token: string, expiresAt: Date) => {
-//   const { error } = await supabase.from("password_reset_tokens").insert({
-//     user_id: userId,
-//     token,
-//     expires_at: expiresAt.toISOString(),
-//   });
-
-//   if (error) throw error;
-// };
-
-// export const getToken = async (token: string) => {
-//   const { data, error } = await supabase
-//     .from("password_reset_tokens")
-//     .select("*")
-//     .eq("token", token)
-//     .single();
-
-//   if (error) return null; // או לזרוק שגיאה לפי החלטתך
-//   return data;
-// };
-
-// export const deleteToken = async (token: string) => {
-//   const { error } = await supabase.from("password_reset_tokens").delete().eq("token", token);
-//   if (error) throw error;
-// };

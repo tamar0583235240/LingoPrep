@@ -25,6 +25,8 @@ const navItems: NavItem[] = [
   { label: "Manage Tips & Practices", href: "/admin/reminders" },
   { label: "Manage Users", href: "/admin/users" },
   { label: "Manage Resources", href: "/admin/resources" },
+  { label: "Manage Dynamic Content", href: "/admin/dynamic-content" }, // ← הוספה חדשה
+
 ];
 
 const SidebarNavigation = () => {

@@ -49,12 +49,18 @@ export const userApi = api.injectEndpoints({
 });
 
 export const {
+  // useGetUserByIdQuery,
+  useGetMeQuery,
+  // useAddUserMutation,
+  // useUpdateUserMutation,
+  // useDeleteUserMutation,
+
   useGetUsersQuery,
   useGetUserByIdQuery,
-  useGetMeQuery,
-  useAddUserMutation,
-  useUpdateUserMutation,
-  useDeleteUserMutation,
+  // useGetMeQuery,
+  // useAddUserMutation,
+  // useUpdateUserMutation,
+  // useDeleteUserMutation,
   useAuthWithGoogleMutation,
   useLazyGetUserByIdQuery
 } = userApi;

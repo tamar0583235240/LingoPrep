@@ -74,7 +74,7 @@ export function EditableListItem<T extends { id?: string | number }>({
         {isEditing ? (
           <>
             <Button size="sm" variant="primary-dark" onClick={() => onSave(itemId, editedData)}>
-              <FaSave /> שמור
+             {FaSave && <FaSave />}שמור
             </Button>
             <Button size="sm" variant="outline" onClick={onCancelEdit}>
               <FaTimes /> בטל

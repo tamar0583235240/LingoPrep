@@ -43,7 +43,9 @@ export const uploadRecording = async (req: Request, res: Response) => {
     const fileUrl = (result as any).secure_url;
 
     const query = `
-      INSERT INTO "resources" (id, title, type, description, "file_url", "user_id", "created_at")
+
+      INSERT INTO "resources" (id, title, type, description, "file_url", "user_id", "created_dat")
+
       VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW())
     `;
     const values = [

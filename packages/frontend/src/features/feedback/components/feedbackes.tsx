@@ -1,5 +1,4 @@
 // בס"ד
-
 import { useState } from "react"
 import { MessageCircle, ChevronDown, ChevronUp, User, Calendar } from "lucide-react"
 import { useGetFeedbackesBysharedRecordingIdQuery } from "../services/feedbackApi"
@@ -99,7 +98,8 @@ export const Feedbackes = ({props}:{props: {sharedRecordingId: string , usersLis
                                             <div className="flex items-center gap-2 text-gray-500">
                                                 <Calendar size={16} />
                                                 <span className="text-sm">
-                                                    {f?.created_at && new Date(f.created_at).toLocaleDateString('he-IL')}
+                                                    {f?.created_dat && new Date(f.created_dat).toLocaleDateString('he-IL')}
+
                                                 </span>
                                             </div>
                                         </div>

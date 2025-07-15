@@ -5,4 +5,6 @@ const AiInsightsRouter = Router();
 
 AiInsightsRouter.get('/AiInsights/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
 AiInsightsRouter.get('/AiInsights/getAiInsights', getAiInsights);  
-export default AiInsightsRouter;        
+
+
+export default AiInsightsRouter;
