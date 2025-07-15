@@ -64,6 +64,7 @@ export const createUser = async (req: Request, res: Response) => {
         isActive: true,
         answers: [],
         feedbacks: [],
+        feedbacktypes: [],
         passwordResetTokens: [],
         sharedRecordings: [],
         resources: [],

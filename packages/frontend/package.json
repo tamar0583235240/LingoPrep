@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-    "proxy": "http://localhost:5000",
+    
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -62,6 +62,7 @@
       "last 1 safari version"
     ]
   },
+  "proxy": "http://localhost:5000",
   "devDependencies": {
     "@nodelib/fs.walk": "^1.2.8",
     "@types/jwt-decode": "^2.2.1",

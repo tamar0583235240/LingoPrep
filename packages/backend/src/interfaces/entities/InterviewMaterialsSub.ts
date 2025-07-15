@@ -15,13 +15,15 @@ export class InterviewMaterialsSub {
   @Column("text", { name: "short_description", nullable: true })
   shortDescription: string | null;
 
+// removed merge conflict markers
+  @Column("text", { name: "file_url" })
+  @Column("text", { name: "file_url" })
+  fileUrl: string;
+
   @Column("integer", {
     name: "downloads_count",
     nullable: true,
     default: () => "0",
   })
   downloadsCount: number | null;
-
-  @Column("text", { name: "file_url" })
-  fileUrl: string;
 }

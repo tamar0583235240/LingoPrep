@@ -52,3 +52,8 @@ export const pool = new Pool({
 });
 
 console.log('Database connection pool created');
+
+// export { pool };
+
+
+

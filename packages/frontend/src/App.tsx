@@ -23,6 +23,7 @@ function App() {
       console.log("הצלחה!", res);
       dispatch(loginSuccess({ token: res.token, user: res.user }));
     })
+    
     .catch((err) => {
       console.log("נכשל ברענון הטוקן", err);
       dispatch(logout());
@@ -44,3 +45,47 @@ function App() {
 }
 
 export default App;
+
+
+// --------------------------------------------------
+// import React from 'react';
+// import { Provider } from 'react-redux';
+// import { setupListeners } from '@reduxjs/toolkit/query';
+// import { configureStore } from '@reduxjs/toolkit';
+
+// import { api } from './shared/api/api';
+// import SharedRecordings from './features/shared-recordings/components/SharedRecordings';
+
+// import './App.css';
+
+// // הגדרת החנות (store)
+// const store = configureStore({
+//   reducer: {
+//     [api.reducerPath]: api.reducer,
+//   },
+//   middleware: (getDefaultMiddleware) =>
+//     getDefaultMiddleware().concat(api.middleware),
+// });
+
+// setupListeners(store.dispatch);
+
+// function App() {
+//   const userId = 'user1';
+
+//   return (
+//     <Provider store={store}>
+//       <div className="App">
+//         <header className="App-header">
+//           <h1>Project base viewer</h1>
+//         </header>
+
+//         <main>
+//           <SharedRecordings userId={userId} />
+//         </main>
+//       </div>
+//     </Provider>
+//   );
+// }
+
+// export default App;
+

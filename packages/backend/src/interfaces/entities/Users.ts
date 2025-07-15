@@ -1,9 +1,17 @@
 import { Column, Entity, Index, OneToMany } from "typeorm";
 import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
+<<<<<<< HEAD
 import { PasswordResetTokens } from "./PasswordResetTokens";
 import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
+=======
+import { Feedbacktype } from "./Feedbacktype";
+import { PasswordResetTokens } from "./PasswordResetTokens";
+import { Resources } from "./Resources";
+import { SharedRecordings } from "./SharedRecordings";
+import { UserActivity } from "./UserActivity";
+>>>>>>> tamar-adess
 import { UserReminderSettings } from "./UserReminderSettings";
 
 @Index("users_email_key", ["email"], { unique: true })
@@ -46,11 +54,20 @@ export class Users {
   @OneToMany(() => Feedback, (feedback) => feedback.givenByUser)
   feedbacks: Feedback[];
 
+  @OneToMany(() => Feedbacktype, (feedbacktype) => feedbacktype.givenByUser)
+  feedbacktypes: Feedbacktype[];
+
   @OneToMany(
     () => PasswordResetTokens,
     (passwordResetTokens) => passwordResetTokens.user
   )
   passwordResetTokens: PasswordResetTokens[];
+
+  @OneToMany(() => PasswordResetTokens, (passwordResetTokens) => passwordResetTokens.user)
+  passwordResetTokens: PasswordResetTokens[];
+
+  @OneToMany(() => Resources, (resources) => resources.user)
+  resources: Resources[];
 
   @OneToMany(() => Resources, (resources) => resources.user)
   resources: Resources[];
@@ -61,6 +78,12 @@ export class Users {
   )
   sharedRecordings: SharedRecordings[];
 
+<<<<<<< HEAD
+=======
+  @OneToMany(() => UserActivity, (userActivity) => userActivity.user)
+  userActivities: UserActivity[];
+
+>>>>>>> tamar-adess
   @OneToMany(
     () => UserReminderSettings,
     (userReminderSettings) => userReminderSettings.user
