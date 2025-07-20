@@ -40,6 +40,7 @@ const InterviewPage = () => {
   );
 
   const [showTips, setShowTips] = useState(false);
+  const [showAnswerAI, setShowAnswerAI] = useState(false);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
 
   const answeredQuestionIds = useMemo(() => {
@@ -70,7 +71,7 @@ const InterviewPage = () => {
   useEffect(() => {
     dispatch(setCurrentAnswerId(null));
     setIsLoadingAI(false);
-    setShowTips(false);
+    setShowTips(true);
   }, [currentIndex]);
 
   useEffect(() => {
@@ -97,91 +98,85 @@ const InterviewPage = () => {
     }, 800);
   };
 
-  return (
-    <div className="min-h-screen flex flex-row-reverse bg-[--color-background]">
-      <CategoryDropdown />
-      <main className="flex-1 flex flex-col items-center justify-start px-4 py-10">
-        <div className="w-full max-w-2xl space-y-8">
-          {questionsWithStatus[currentIndex] ? (
-            <Question
-              question={questionsWithStatus[currentIndex]}
-              onFinishRecording={() => setShowTips(true)}
-              onAnswerSaved={handleAnswerSaved}
-            />
-          ) : (
-            <div>אין שאלות להצגה</div>
-          )}
-        </div>
-        <div className="mt-8 w-full max-w-2xl">
-          <EndSurvey
-            showEndButton={allAnswered}
-            answeredCount={answeredCount}
-            totalQuestions={totalQuestions}
+
+return (
+  
+  <div className="min-h-screen bg-[#f7faff] flex flex-row relative">
+
+    {/* Sidebar מימין */}
+    <aside className="">
+      <Sidebar
+        questions={questionsWithStatus}
+        currentIndex={currentIndex}
+        onNavigate={(index) => dispatch(goToQuestion(index))}
+      />
+    </aside>
+
+    {/* תוכן מרכזי */}
+    <main className="flex-1 flex flex-col items-center justify-start px-4 py-12 relative">
+          <div className="mb-4 w-full max-w-sm self-center">
+        <CategoryDropdown />
+      </div>
+      {/* שאלה */}
+      {isLoading ? (
+        <p className="p-8 text-center">טוען שאלות...</p>
+      ) : questionsWithStatus[currentIndex] ? (
+        <div className="p-10 max-w-4xl w-full">
+          <Question
+            question={questionsWithStatus[currentIndex]}
+            onFinishRecording={() => setShowTips(true)}
+            onAnswerSaved={handleAnswerSaved}
           />
         </div>
-      </main>
-      <aside className="w-64 flex-shrink-0 border-l border-[--color-border] bg-white shadow-md z-10">
-        <Sidebar
-          questions={questionsWithStatus}
-          currentIndex={currentIndex}
-          onNavigate={(index) => dispatch(goToQuestion(index))}
-        />
-      </aside>
+      ) : (
+        <p className="text-red-500 text-center mt-10">אין שאלות להצגה</p>
+      )}
+    </main>
 
-      {/* Left Panel - Tips & AI Analysis */}
-      <aside className="w-96 flex-shrink-0 border-r border-[--color-border] bg-white shadow-lg overflow-y-auto order-1">
-        <div className="p-6 space-y-6">
-          {/* Tips Section */}
-          {showTips && (
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-blue-800">טיפים לשיפור</h3>
-              </div>
-              <TipsComponent />
-            </div>
-          )}
-
-          {/* AI Loading */}
-          {isLoadingAI && (
-            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-200 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-purple-800">מנתח תשובה...</h3>
-              </div>
-              <MagicLoader />
-            </div>
-          )}
-
-          {/* AI Analysis */}
-          {currentAnswerId && !isLoadingAI && (
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-green-800">ניתוח AI</h3>
-              </div>
-              {/* <AnswerAI answerId={currentAnswerId} /> */}
-              <AnswerAI answerId={"1379f739-611b-4b7e-b84a-77fca43f7489"} />
-
-            </div>
-          )}
+    {/* אזור טיפים קבוע בתחתית שמאל */}
+    <div className="fixed bottom-4 left-4 w-[350px] z-30">
+      {showTips ? (
+        <div className="bg-white border border-indigo-100 rounded-xl shadow-lg p-4">
+          <div className="text-right mb-2">
+            <button
+              onClick={() => setShowTips(false)}
+              className="text-sm text-gray-500 hover:text-gray-700"
+            >
+               ✕
+            </button>
+          </div>
+          <TipsComponent />
         </div>
-      </aside>
+      ) : (
+        <button
+          onClick={() => setShowTips(true)}
+          className="bg-white border border-indigo-100 rounded-xl shadow-lg px-4 py-2 text-indigo-600 underline hover:text-indigo-800"
+        >
+          הצג טיפים
+        </button>
+      )}
     </div>
-  );
+
+    {/* פופאפ ל-AI */}
+    {currentAnswerId && (
+      <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl mx-4 p-6 relative">
+          {/* כפתור סגירה */}
+          <button
+            onClick={() => dispatch(setCurrentAnswerId(null))}
+            className="absolute top-2 left-2 text-gray-500 hover:text-gray-800 text-xl"
+          >
+            ×
+          </button>
+
+          <AnswerAI answerId={currentAnswerId} />
+        </div>
+      </div>
+    )}
+  </div>
+);
+
+
 };
 
 export default InterviewPage;

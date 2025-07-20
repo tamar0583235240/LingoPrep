@@ -39,33 +39,34 @@ const CategoryDropdown: React.FC = () => {
   const selectedName =
     categories?.find((c) => String(c.id) === selectedCategory)?.name || "בחר קטגוריה";
 
-  return (
-    <div className="relative w-64">
-      <button
-        onClick={() => setIsOpen((prev) => !prev)}
-        className="w-full border border-border bg-white text-text-main px-4 py-3 rounded-lg font-semibold flex items-center justify-between hover:bg-muted transition"
-      >
-        {selectedName}
-        <FiChevronDown className={`transform transition ${isOpen ? "rotate-180" : ""}`} />
-      </button>
+return (
+  <div className="relative w-56 text-right">
+    <button
+      onClick={() => setIsOpen((prev) => !prev)}
+      className="w-full border border-gray-300 bg-white text-gray-800 px-4 py-2 rounded-md font-medium flex items-center justify-between shadow-sm hover:bg-gray-50 transition"
+    >
+      <span className="truncate">{selectedName}</span>
+      <FiChevronDown className={`ml-2 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+    </button>
 
-      {isOpen && (
-        <ul className="absolute z-20 mt-2 w-full bg-white border border-border rounded-lg shadow-md max-h-64 overflow-y-auto">
-          {categories?.map((category) => (
-            <li
-              key={category.id}
-              onClick={() => handleSelect(String(category.id))}
-              className={`px-4 py-2 cursor-pointer hover:bg-muted transition ${
-                selectedCategory === String(category.id) ? "bg-primary-light font-bold" : ""
-              }`}
-            >
-              {category.name}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
+    {isOpen && (
+      <ul className="absolute z-30 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto animate-fade-in">
+        {categories?.map((category) => (
+          <li
+            key={category.id}
+            onClick={() => handleSelect(String(category.id))}
+            className={`px-4 py-2 cursor-pointer text-sm text-gray-700 hover:bg-gray-100 transition 
+              ${selectedCategory === String(category.id) ? "bg-primary/10 font-semibold text-primary" : ""}
+            `}
+          >
+            {category.name}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+);
+
 };
 
 export default CategoryDropdown;
