@@ -36,8 +36,8 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api' ,feedbackRouter )
-app.use('/tips-manager' ,tipsRouts )
-app.use('/practices-manager' ,practicesRouts )
+app.use('/api/tips-manager' ,tipsRouts )
+app.use('/api/practices-manager' ,practicesRouts )
 app.use('/api' , AiInsightsRouter ) 
 app.use('/api' , sharedRecrdingRouter )  
 app.use('/answers', answerRouter);

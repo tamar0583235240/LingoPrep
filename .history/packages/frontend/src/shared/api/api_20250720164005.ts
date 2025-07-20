@@ -106,7 +106,7 @@ interface SaveReminderSettingsRequest {
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/api' }), // base הוא /api
-  tagTypes: ['Reminders', 'Item', 'question', 'DynamicContents', 'users', 'shared_recordings', 'answers', 'AiInsights', 'Feedback'],
+  tagTypes: ['Reminders', 'Item', 'question', 'DynamicContents', 'users', 'shared_recordings'],
   endpoints: (builder) => ({
     // ✅ כאן בדיוק
     getUserReminderSettings: builder.query<Record<ReminderType, ReminderSelection>, string>({
