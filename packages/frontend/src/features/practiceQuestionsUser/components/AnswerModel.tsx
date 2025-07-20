@@ -69,13 +69,19 @@ export const AnswerModal = ({ question, onClose, onSubmit }: AnswerModalProps) =
 
                 <div className="flex justify-between items-center mt-6">
                     {/* כפתור ביטול בצד ימין */}
-                    <button onClick={onClose} className="text-sm text-gray-600 hover:underline">
+                    <button
+                        onClick={onClose}
+                        className="text-sm text-red-600 hover:text-red-700 font-medium transition"
+                    >
                         ביטול
                     </button>
 
                     {/* כפתורי שמור ושלח בצד שמאל */}
                     <div className="flex gap-3">
                         <button
+                            onClick={() => {
+                                onClose();
+                            }}
                             className="border border-[--color-primary] text-[--color-primary] px-4 py-2 rounded hover:bg-[--color-primary]/10 transition"
                         >
                             שמור להמשך
@@ -88,7 +94,7 @@ export const AnswerModal = ({ question, onClose, onSubmit }: AnswerModalProps) =
                             }}
                             className="bg-[--color-primary] text-white px-4 py-2 rounded hover:bg-[--color-primary-dark] transition"
                         >
-                            שלח תשובה
+                            שתף תשובה
                         </button>
                     </div>
                 </div>

@@ -33,8 +33,8 @@ const AddUserWithSwal: React.FC = () => {
       onClick={handleAddUserClick}
       className="bg-primary-dark text-white px-4 py-2 rounded-md font-medium transition hover:bg-primary-dark/90 flex items-center gap-2 group"
     >
-      <Plus className="w-5 h-5 transition-transform duration-300 group-hover:rotate-90" />
       הוספת משתמש
+      <Plus className="w-5 h-5 transition-transform duration-300 group-hover:rotate-90" />
     </button>
   );
 };

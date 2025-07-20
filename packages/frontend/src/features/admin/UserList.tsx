@@ -24,12 +24,12 @@ const UserList = () => {
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const {
     data: users = [],
-     isLoading,
+    isLoading,
     isError,
     error,
   } = useGetUsersQueryAdmin();
 
-    useEffect(() => {
+  useEffect(() => {
     console.log("✅ users data:", users);
     if (isError) {
       console.log("❌ שגיאה בשליפת המשתמשים:", error);
@@ -120,17 +120,11 @@ const UserList = () => {
     <div className="max-w-7xl mx-auto my-8 px-4">
       <h2 className="text-center text-2xl font-bold mb-8"><AdminUsersTitle /></h2>
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6 rtl">
+        <div className="flex gap-4 items-center">
+          <AddUserWithSwal />
+          <UploadUsers />
+        </div>
         <div className="flex flex-wrap gap-4 items-center">
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive')}
-            className="border rounded px-3 py-2 w-40 text-right"
-            dir="rtl"  // או style={{ direction: 'rtl' }}
-          >
-            <option value="all">הצג את כולם</option>
-            <option value="active">משתמשים פעילים</option>
-            <option value="inactive">משתמשים לא פעילים</option>
-          </select>
           <div className="relative">
             <input
               type="text"
@@ -146,10 +140,16 @@ const UserList = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="flex gap-4 items-center">
-          <UploadUsers />
-          <AddUserWithSwal />
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive')}
+            className="border rounded px-3 py-2 w-40 text-right"
+            dir="rtl"
+          >
+            <option value="all">הצג את כולם</option>
+            <option value="active">משתמשים פעילים</option>
+            <option value="inactive">משתמשים לא פעילים</option>
+          </select>
         </div>
       </div>
       {isLoading ? (

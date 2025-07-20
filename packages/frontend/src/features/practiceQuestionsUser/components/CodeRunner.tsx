@@ -3,44 +3,12 @@ import Editor, { Monaco } from '@monaco-editor/react';
 import { Button } from '../../../shared/ui/button';
 import { useRunCodeMutation } from '../../../shared/api/runCodeApi';
 
-type Language = 'java' | 'python' | 'sql' | 'html' | 'c' | 'cpp'| 'javascript';
+type Language = 'java' | 'python' | 'sql' | 'html' | 'c' | 'cpp' | 'javascript';
 
 interface CodeRunnerProps {
   onCodeChange?: (code: string) => void; // הוספתי את הפרופס כאן
 }
 
-// const languageMap: Record<Language, string> = {
-//   java: 'java',
-//   python: 'python',
-//   sql: 'sql',
-//   html: 'html',
-// };
-
-// const initialCode: Record<Language, string> = {
-//   java: `public class Main {
-//   public static void main(String[] args) {
-//     System.out.println("Hello, Java!");
-//   }
-// }`,
-//   python: `print("Hello, Python!")`,
-//   sql: `SELECT 'Hello, SQL!' AS message;`,
-//   html: `<!DOCTYPE html>
-// <html>
-//   <head>
-//     <title>Hello HTML</title>
-//   </head>
-//   <body>
-//     <h1>Hello, HTML!</h1>
-//   </body>
-// </html>`,
-// };
-
-// const commentSymbols: Record<Language, string> = {
-//   java: '//',
-//   python: '#',
-//   sql: '--',
-//   html: '<!--',
-// };
 const languageMap: Record<Language, string> = {
   java: 'java',
   python: 'python',
@@ -93,7 +61,7 @@ const commentSymbols: Record<Language, string> = {
   html: '<!--',
   c: '//',
   cpp: '//',
-    javascript: '//',
+  javascript: '//',
 
 };
 
@@ -155,8 +123,6 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
           zIndex: 1,
         }}
       >
-        {/* <h3 style={{ marginBottom: 0 }}>הרצת קוד - בחר שפה</h3> */}
-
         <div
           style={{
             display: 'flex',
@@ -178,15 +144,15 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
             }}
             disabled={isLoading}
           >
-      <option value="java">Java</option>
-  <option value="python">Python</option>
-  <option value="sql">SQL</option>
-  <option value="html">HTML</option>
-  <option value="c">C</option>
-  <option value="cpp">C++</option>
-    <option value="javascript">JavaScript</option>
+            <option value="java">Java</option>
+            <option value="python">Python</option>
+            <option value="sql">SQL</option>
+            <option value="html">HTML</option>
+            <option value="c">C</option>
+            <option value="cpp">C++</option>
+            <option value="javascript">JavaScript</option>
 
-</select>
+          </select>
 
           <Button
             onClick={handleRunCode}
@@ -194,7 +160,7 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
             disabled={isLoading}
             style={{ minWidth: 100, padding: '4px 8px' }}
           >
-            {isLoading ? 'מריץ...' : 'הרצת קוד'}
+            {isLoading ? '...מריץ' : 'הרצת קוד'}
           </Button>
         </div>
 
@@ -248,19 +214,20 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
               style={{
                 position: 'absolute',
                 top: 10,
-                right: 10,
+                left: 10,
                 background: 'transparent',
                 border: 'none',
-                fontSize: 24,
+                fontSize: 35,
                 cursor: 'pointer',
                 lineHeight: 1,
+                color: 'red'
               }}
               aria-label="Close output modal"
             >
               ×
             </button>
 
-            <h2>תוצאת הרצת הקוד</h2>
+            <h2 className="text-m font-bold text-[--color-text] mb-2">תוצאת הרצת הקוד</h2>
 
             {language === 'html' ? (
               <iframe
@@ -285,6 +252,8 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
                   lineHeight: 1.4,
                   maxHeight: '60vh',
                   overflowY: 'auto',
+                  direction: 'ltr',
+                  textAlign: 'left',
                 }}
               >
                 {typeof output === 'string' ? output : JSON.stringify(output, null, 2)}
