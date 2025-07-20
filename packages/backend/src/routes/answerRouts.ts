@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import * as express from 'express';
 import {
   createAnswerController,
@@ -19,3 +20,15 @@ router.delete('/:id', deleteAnswerController);        // מחיקה
 
 export default router;
 
+=======
+import { Router } from 'express';
+import { answerController } from '../controllers/answerController';
+import { getProgressStats } from "../controllers/answerController";
+
+
+const router = Router();
+router.get('/getAllAnswersByIdUser/:user_id' ,answerController);
+router.get("/progress/:userId", getProgressStats);
+
+export default router;
+>>>>>>> d4bd717e771642befbf637205599dcde848ed652

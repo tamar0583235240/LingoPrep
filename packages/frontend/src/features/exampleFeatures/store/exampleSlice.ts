@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { exampleType } from '../types/exampleType';
 
-
 interface ExampleState {
   data: exampleType[];
   loading: boolean;

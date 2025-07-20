@@ -1,5 +1,17 @@
 {
+  "name": "interview-practice-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for interview practice platform",
+  "main": "index.tsx",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
+    "@hookform/resolvers": "^5.1.1",
+    "bcrypt": "^5.1.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.19.2",
     "lucide-react": "^0.522.0",
@@ -10,9 +22,6 @@
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
-    "@types/redux-persist": "^4.3.1",
     "tailwindcss": "^3.4.3"
   }
 }

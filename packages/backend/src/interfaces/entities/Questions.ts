@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   Column,
   Entity,
@@ -8,6 +9,10 @@ import {
 } from "typeorm";
 import { Answers } from "./Answer";
 import { Categories } from "./Categories";
+=======
+import { Column, Entity, Index, OneToMany } from "typeorm";
+import { Answers } from "./Answers";
+>>>>>>> d4bd717e771642befbf637205599dcde848ed652
 
 @Index("questions_pkey", ["id"], { unique: true })
 @Entity("questions", { schema: "public" })
@@ -33,6 +38,7 @@ export class Questions {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
+<<<<<<< HEAD
   @Column("text", { name: "options", nullable: true, array: true })
   options: string[] | null;
 
@@ -45,4 +51,8 @@ export class Questions {
   @ManyToOne(() => Categories, (categories) => categories.questions)
   @JoinColumn([{ name: "category_id", referencedColumnName: "id" }])
   category_2: Categories;
+=======
+  @OneToMany(() => Answers, (answers) => answers.question)
+  answers: Answers[];
+>>>>>>> d4bd717e771642befbf637205599dcde848ed652
 }

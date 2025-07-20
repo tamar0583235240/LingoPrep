@@ -1,0 +1,123 @@
+name: CI
+on:
+  push:
+    branches: [main, TamarBiton]
+  pull_request:
+    branches: [main]
+jobs:
+  install-and-test:
+    name: Install, Lint, Build & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: |
+            packages/frontend/package-lock.json
+            packages/backend/package-lock.json
+      # ---------- CLIENT ----------
+      - name: Install client dependencies
+        working-directory: packages/frontend
+        run: npm install
+      - name: Build client (ignore warnings)
+        working-directory: packages/frontend
+        run: CI=false npm run build
+
+      - name: Test client
+        working-directory: packages/frontend
+        run: npm test -- --watchAll=false
+      # ---------- SERVER ----------
+      - name: Install server dependencies
+        working-directory: packages/backend
+        run: npm install
+      - name: Build server
+        working-directory: packages/backend
+        run: npm run build
+      - name: Test server (skipped if not available)
+        working-directory: packages/backend
+        run: |
+          if [ -f "package.json" ] && grep -q '"test"' package.json; then
+            npm test
+          else
+            echo "No server tests defined. Skipping."
+          fi
+  # ---------- STRUCTURE CHECK ----------
+  verify-structure:
+    name: Validate Project Structure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check folder structure
+        run: |
+          EXPECTED_DIRS=(
+            "packages/frontend/src/features/auth"
+            "packages/frontend/src/features/interview"
+            "packages/backend/src/controllers"
+            "packages/backend/src/routes"
+            "packages/frontend/src/pages"
+          )
+          for DIR in "${EXPECTED_DIRS[@]}"; do
+            if [ ! -d "$DIR" ]; then
+              echo "Missing expected directory: $DIR" && exit 1
+            fi
+          done
+          echo ":white_check_mark: All expected folders exist."
+      - name: Check critical files exist
+        run: |
+          CRITICAL_FILES=(
+            "packages/frontend/src/index.tsx"
+            "packages/frontend/src/App.tsx"
+            "packages/backend/index.ts"
+            "packages/backend/app.ts"
+          )
+          for FILE in "${CRITICAL_FILES[@]}"; do
+            if [ ! -f "$FILE" ]; then
+              echo ":x: Missing critical file: $FILE" && exit 1
+            fi
+          done
+          echo ":white_check_mark: All critical files exist."
+      - name: Check no extra package.json files
+        run: |
+          EXTRA_PKG=$(find . -name package.json ! -path "./packages/frontend/package.json" ! -path "./packages/backend/package.json" ! -path "./packages/shared/package.json")
+          if [ -n "$EXTRA_PKG" ]; then
+            echo ":x: Found unexpected package.json files:" && echo "$EXTRA_PKG" && exit 1
+          fi
+          echo ":white_check_mark: No unexpected package.json files found."
+      - name: Check no node_modules outside frontend/backend
+        run: |
+          OUTSIDE_NODE_MODULES=$(find . -type d -name node_modules ! -path "./packages/frontend/node_modules" ! -path "./packages/backend/node_modules")
+          if [ -n "$OUTSIDE_NODE_MODULES" ]; then
+            echo ":x: Found unexpected node_modules directories:" && echo "$OUTSIDE_NODE_MODULES" && exit 1
+          fi
+          echo ":white_check_mark: No unexpected node_modules directories found."
+      - name: Check no unexpected build/dist folders
+        run: |
+          INVALID_BUILD_DIRS=$(find . -type d \( -name dist -o -name build \) ! -path "./packages/frontend/build" ! -path "./packages/backend/dist")
+          if [ -n "$INVALID_BUILD_DIRS" ]; then
+            echo ":x: Found unexpected build/dist directories:" && echo "$INVALID_BUILD_DIRS" && exit 1
+          fi
+          echo ":white_check_mark: No unexpected build/dist directories found."
+      - name: Check no .env files outside backend
+        run: |
+          INVALID_ENVS=$(find . -name ".env" ! -path "./packages/backend/.env")
+          if [ -n "$INVALID_ENVS" ]; then
+            echo ":x: Found unexpected .env files:" && echo "$INVALID_ENVS" && exit 1
+          fi
+          echo ":white_check_mark: No unexpected .env files found."
+
+
+
+
+
+
+
+
+
+
