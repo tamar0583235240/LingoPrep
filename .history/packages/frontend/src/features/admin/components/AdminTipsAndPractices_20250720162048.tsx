@@ -22,12 +22,7 @@ import {
 
 const MySwal = withReactContent(Swal);
 
-type AdminQuestionsProps = {
-  allowedRoles: string[];
-  children: React.ReactNode;
-};
-
-const AdminTipsAndPractices: React.FC<AdminQuestionsProps> = ({ allowedRoles, children }) => {
+onst AdminTipsAndPractices: React.FC = () => {
   const [searchTips, setSearchTips] = useState('');
   const [searchPractices, setSearchPractices] = useState('');
 

@@ -19,15 +19,12 @@ import {
   useUpdatePracticeMutation,
   useDeletePracticeByIdMutation,
 } from '../services/TipsAndPracticesAdminApi';
+import { PropsOf } from '@emotion/react';
 
 const MySwal = withReactContent(Swal);
+function AdminTipsAndPractices({ children, allowedRoles }: PropsOf): JSX.Element | null {
 
-type AdminQuestionsProps = {
-  allowedRoles: string[];
-  children: React.ReactNode;
-};
-
-const AdminTipsAndPractices: React.FC<AdminQuestionsProps> = ({ allowedRoles, children }) => {
+// const AdminTipsAndPractices: React.FC = () => {
   const [searchTips, setSearchTips] = useState('');
   const [searchPractices, setSearchPractices] = useState('');
 

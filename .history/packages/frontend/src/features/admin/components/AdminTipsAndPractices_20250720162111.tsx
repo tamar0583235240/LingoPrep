@@ -27,7 +27,7 @@ type AdminQuestionsProps = {
   children: React.ReactNode;
 };
 
-const AdminTipsAndPractices: React.FC<AdminQuestionsProps> = ({ allowedRoles, children }) => {
+const AdminTipsAndPractices: React.FC = () => {
   const [searchTips, setSearchTips] = useState('');
   const [searchPractices, setSearchPractices] = useState('');
 

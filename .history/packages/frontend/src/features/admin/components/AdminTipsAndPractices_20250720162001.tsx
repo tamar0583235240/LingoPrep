@@ -21,13 +21,9 @@ import {
 } from '../services/TipsAndPracticesAdminApi';
 
 const MySwal = withReactContent(Swal);
+// export function RoleProtectedRoute({ children, allowedRoles }: Props): JSX.Element | null {
 
-type AdminQuestionsProps = {
-  allowedRoles: string[];
-  children: React.ReactNode;
-};
-
-const AdminTipsAndPractices: React.FC<AdminQuestionsProps> = ({ allowedRoles, children }) => {
+const AdminTipsAndPractices: React.FC = () => {
   const [searchTips, setSearchTips] = useState('');
   const [searchPractices, setSearchPractices] = useState('');
 
