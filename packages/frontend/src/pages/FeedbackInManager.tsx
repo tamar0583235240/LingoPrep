@@ -4,7 +4,8 @@ import { useState } from "react"
 import FeedbackCardManager from "../features/feedback/components/FeedbackCardManager"
 import { Grid } from "../shared/ui/grid"
 import FeedbackChart from '../features/feedback/components/FeedbackChart'
-import { useGetAllFeedbacksQuery } from '../features/feedback/services/FeedbackApi'
+import { useGetAllFeedbacksQuery } from '../features/feedback/services/feedbackApi'
+import ExportFeedbacksToExcel from '../features/feedback/components/exportFeedbacksToExcel'
 
 const sampleFeedbacks = [
     {
@@ -47,7 +48,9 @@ const sampleFeedbacks = [
     },
 ]
 const FeedbackInManager = () => {
-const {data, isLoading, isError,}=useGetAllFeedbacksQuery()
+    const { data, isLoading, isError, } = useGetAllFeedbacksQuery()
+    console.log(data);
+
     const [reminders, setReminders] = useState<Set<string>>(new Set())
 
     const toggleReminder = (feedbackId: string) => {
@@ -85,7 +88,9 @@ const {data, isLoading, isError,}=useGetAllFeedbacksQuery()
                             </div>
                         )}
                     </div>
-
+                    <div className="mb-4 text-left" dir="rtl">
+                        <ExportFeedbacksToExcel />
+                    </div>
                     <Grid cols={2} className="gap-4">
                         {data?.map((feedback) => (
                             <FeedbackCardManager

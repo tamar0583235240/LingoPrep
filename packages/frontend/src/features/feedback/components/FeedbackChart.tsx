@@ -1,4 +1,4 @@
-import { useGetFeedbackAveragesQuery } from "../services/FeedbackApi";
+import { useGetFeedbackAveragesQuery } from "../services/feedbackApi";
 import {
   BarChart,
   Bar,
@@ -9,9 +9,10 @@ import {
 } from "recharts";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
+
+
 export default function FeedbackChart() {
   const { data, isLoading, error } = useGetFeedbackAveragesQuery();
-
   if (isLoading) return <p>טוען...</p>;
 
   if (error) {
