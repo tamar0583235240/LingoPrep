@@ -42,37 +42,6 @@ async function updateReminderSent(userId: string, type: ReminderType, sequence: 
 }
 
 async function processReminders() {
-    // שליחת מייל בדיקה - להסיר לאחר הבדיקה
-    //     await sendEmail({
-    //         // to: 't0527146247@gmail.com',
-    //         // subject: 'בדיקת שליחת מייל',
-    //         // html: '<p>המייל הזה נשלח לבדיקה בלבד</p>',
-    await sendEmail({
-        //לשים מייל שרוצה שישלח
-        to: 'example@gmail.com',
-        subject: '💡 טיפ מעשי!',
-        html: `
-  <div style="direction: rtl; font-family: Arial, sans-serif; padding: 20px; background-color: #f7f9fc; border-radius: 8px; max-width: 600px; margin: auto;">
-    
-    <p style="font-size: 18px; color: #333; line-height: 1.6;">
-      <strong>לפני הראיון:</strong> זכרי לחייך, להתלבש בהתאם ולשמור על קשר עין.
-      <br />
-      טיפ קטן – השפעה גדולה!
-    </p>
-
-    <p style="font-size: 14px; color: #666; margin-top: 24px;">
-      🚀 נשלח אלייך כחלק מהתזכורות החכמות של <strong>LingoPrep</strong>
-    </p>
-    
-    <p style="font-size: 13px; color: #999; margin-top: 16px;">
-      ⚙️ ניתן לבטל או לשנות את התזכורות בכל שלב דרך <strong>מסך ההגדרות</strong>
-    </p>
-    
-  </div>
-  `,
-    });
-
-    console.log("✅ מייל בדיקה נשלח");
 
     const users = await getUsersToRemind();
 
