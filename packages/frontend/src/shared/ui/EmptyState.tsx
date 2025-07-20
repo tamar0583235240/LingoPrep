@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // components/common/EmptyState.tsx
 import * as React from "react";
 import { cn } from "../utils/cn";
@@ -52,3 +53,59 @@ export const EmptyState = ({
 };
 
 EmptyState.displayName = "EmptyState";
+=======
+// // components/common/EmptyState.tsx
+// import * as React from "react";
+// import { cn } from "../utils/cn";
+// import { IconWrapper } from "./IconWrapper";
+// import { Heading2, Paragraph } from "./typography"; 
+// import { Button } from "./button"; 
+// import { FaPlusCircle } from "react-icons/fa";
+
+// interface EmptyStateProps extends React.HTMLAttributes<HTMLDivElement> {
+//   icon?: React.ReactNode;
+//   title: string;
+//   description?: string;
+//   buttonText?: string;
+//   onButtonClick?: () => void;
+//   iconColor?: "primary-dark" | "secondary" | "accent" | "muted" | "success" | "danger";
+// }
+
+// export const EmptyState = ({
+//   icon,
+//   title,
+//   description,
+//   buttonText,
+//   onButtonClick,
+//   iconColor = "muted", 
+//   className,
+//   ...props
+// }: EmptyStateProps) => {
+//   return (
+//     <div
+//       className={cn(
+//         "flex flex-col items-center justify-center p-8 text-center bg-muted/50 rounded-lg border border-[--color-border]",
+//         className
+//       )}
+//       {...props}
+//     >
+//       {icon && (
+//         <IconWrapper color={iconColor} size="lg" className="mb-4">
+//           {icon}
+//         </IconWrapper>
+//       )}
+//       <Heading2 className="!text-2xl !font-semibold mb-2">{title}</Heading2>
+//       {description && (
+//         <Paragraph className="max-w-md mb-6">{description}</Paragraph>
+//       )}
+//       {buttonText && onButtonClick && (
+//         <Button onClick={onButtonClick} variant="primary-dark">
+//           {buttonText}
+//         </Button>
+//       )}
+//     </div>
+//   );
+// };
+
+// EmptyState.displayName = "EmptyState";
+>>>>>>> 14ad18fed386adbd7cb367985a58061b67a011bb

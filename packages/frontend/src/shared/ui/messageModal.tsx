@@ -28,4 +28,8 @@ export default function MessageModal({ title, message, onClose }: MessageModalPr
         </div>
     );
 }
+<<<<<<< HEAD
 MessageModal.displayName = "MessageModal";
+=======
+MessageModal.displayName = "MessageModal";
+>>>>>>> 14ad18fed386adbd7cb367985a58061b67a011bb

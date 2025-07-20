@@ -31,8 +31,6 @@ import DynamicContentPage from "../../pages/DynamicContentPage";
 import { PublicProfilePage } from "../../pages/PublicProfilePage";
 
 export default function AppRoutes() {
-  const user = useSelector((state: RootState) => state.auth.user);
-  const isLogin = !!user;
   return (
     <div dir="rtl">
       <Routes>
@@ -229,7 +227,7 @@ export default function AppRoutes() {
             path="/personal-projects"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                {/* <ProjectsList userId={user?.id ?? ""} /> */}
+                     {/* <ProjectsList userId={user?.id ?? ""} /> */}
                 <p>ProjectsList</p>
               </RoleProtectedRoute>
             }

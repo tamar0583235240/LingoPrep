@@ -15,10 +15,48 @@ const HomePage = () => {
 
 
   return (
+<<<<<<< HEAD
+    <div dir="rtl">
+      <div>
+        <div onClick={() => { navigate('/Simulation') }}>
+          <button>start simulation</button>
+        </div>
+        <div onClick={() => { navigate('/dashboard') }}>
+          <button>dashboard</button>
+        </div>
+        <div onClick={() => { navigate('/resources') }}>
+          <button>resources</button>
+        </div>
+        <div onClick={() => { navigate('/recordings') }}>
+          <button>recordings</button>
+        </div>
+        <div onClick={() => { navigate('/shared') }}>
+          <button>shared</button>
+        </div>
+      </div>
+      {isManager && (
+        <div>
+          <h2>admin</h2>
+          <div onClick={() => { navigate('/admin/questions') }}>
+            <button>questions</button>
+          </div>
+          <div onClick={() => { navigate('/admin/resources') }}>
+            <button>resources</button>
+          </div>
+          <div onClick={() => { navigate('/admin/users') }}>
+            <button>users</button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+=======
    
     // </GridContainer>
     <div className="flex h-screen">
       <SidebarNavigation />
+>>>>>>> d4bd717e771642befbf637205599dcde848ed652
 
       <div className="flex-1 mr-64">
         {/* Hero Section */}

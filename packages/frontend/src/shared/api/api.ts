@@ -7,7 +7,9 @@ export const api = createApi({
         credentials: 'include',
     }),
     reducerPath: "api",
-    tagTypes: ["Item" ,"Feedback" ,"AiInsights","answers","question","shared_recordings", "InterviewMaterials","users", "questions", "answers", "insights","admin","users","DynamicContents"],
+    tagTypes: [
+      "Item", "Answer", "Feedback", "AiInsights", "answers", "question", "shared_recordings", "InterviewMaterials", "users", "questions", "insights", "admin", "DynamicContents"
+    ],
     endpoints: () => ({}),
   });
 

@@ -1,4 +1,45 @@
 import { pool } from '../config/dbConnection';
+<<<<<<< HEAD
+import { Questions } from '../interfaces/entities/Questions';
+const getAllQuestions = async (): Promise<Questions[]> => {
+  try {
+    const query = `
+      SELECT id, title, content, category, tips, ai_guidance, is_active
+      FROM "questions"
+      WHERE is_active = TRUE
+    `;
+    const result = await pool.query(query);
+    return result.rows as Questions[];
+  } catch (error) {
+    console.error(":x: Error fetching questions:", error);
+    throw error;
+  }
+};
+
+
+const getQuestionsByCategory = async (category_id: string): Promise<Questions[]> => {
+  try {
+    const query = `
+      SELECT q.*
+      FROM questions q
+      JOIN question_categories qc ON qc.question_id = q.id
+      WHERE qc.category_id = $1
+    `;
+    const result = await pool.query(query, [category_id]);
+    return result.rows as Questions[];
+  } catch (error) {
+    console.error(":x: Error fetching questions by category:", error);
+    throw error;
+  }
+};
+
+
+export default { getAllQuestions, getQuestionsByCategory };
+
+
+
+
+=======
 import { Questions } from "../interfaces/entities/Questions";
 import { v4 as uuid4 } from 'uuid';
 
@@ -50,10 +91,16 @@ const getAllQuestions = async (): Promise<Questions[]> => {
     throw error;
   }
 }
+>>>>>>> d4bd717e771642befbf637205599dcde848ed652
 
 
 
 
+<<<<<<< HEAD
+
+
+
+=======
 const updateQuestionById = async (updates: Questions) => {
   const { id, ...fieldsToUpdate } = updates;
   const fields = Object.keys(fieldsToUpdate);
@@ -98,4 +145,5 @@ const deleteQuestionById = async (id: string, is_active: boolean): Promise<strin
   }
 }
 export default { getAllQuestionById, getAllQuestions, deleteQuestionById, addQustion, updateQuestionById };
+>>>>>>> d4bd717e771642befbf637205599dcde848ed652
 

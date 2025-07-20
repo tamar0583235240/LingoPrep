@@ -17,6 +17,16 @@
     "@tanstack/react-query": "^5.83.0",
     "@testing-library/dom": "^10.4.0",
     "@types/node": "^16.18.126",
+<<<<<<< HEAD
+    "@types/pg": "^8.15.4",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
+    "ajv": "^6.12.6",
+    "ajv-keywords": "^3.5.2",
+    "axios": "^1.4.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.19.1",
+=======
     "@types/prop-types": "^15.7.15",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
@@ -29,7 +39,9 @@
     "html2pdf.js": "^0.10.3",
     "jspdf": "^3.0.1",
     "jwt-decode": "^4.0.0",
+>>>>>>> d4bd717e771642befbf637205599dcde848ed652
     "lucide-react": "^0.522.0",
+    "pg": "^8.16.0",
     "prompts": "^2.4.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -41,7 +53,14 @@
     "react-scripts": "^5.0.1",
     "redux-mock-store": "^1.5.5",
     "reflect-metadata": "^0.2.2",
+    "react-scripts": "5.0.1",
+    "redux-persist": "^6.0.0",
     "shadcn": "^2.6.1",
+<<<<<<< HEAD
+    "tailwind-merge": "^3.3.1",
+    "typescript": "^5.8.3",
+    "web-vitals": "^2.1.4"
+=======
     "sweetalert2": "^11.6.13",
     "sweetalert2-react-content": "^5.1.0",
     "tailwind-merge": "^3.3.1",
@@ -75,6 +94,7 @@
     "ts-node": "^10.9.2",
     "typescript": "^4.9.5",
     "zustand": "^5.0.5"
+>>>>>>> d4bd717e771642befbf637205599dcde848ed652
   },
   "scripts": {
     "start": "react-scripts start",
@@ -108,9 +128,24 @@
     "@types/react-dom": "^19.1.6",
     "@types/react-redux": "^7.1.34",
     "@types/react-router-dom": "^5.3.3",
+    "@types/redux-persist": "^4.3.1",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.4",
+<<<<<<< HEAD
+    "tailwindcss": "^3.4.17"
+  },
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "tailwindcss": "^3.4.3"
+=======
     "postcss-value-parser": "^4.2.0",
     "tailwindcss": "^3.4.17"
+>>>>>>> d4bd717e771642befbf637205599dcde848ed652
   }
 }

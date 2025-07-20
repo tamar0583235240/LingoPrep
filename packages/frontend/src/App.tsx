@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import AppRoutes from './shared/routes/appRoutes';
+import './App.css';
+import { MessageModalProvider } from './shared/ui/MessageModalContext';
+=======
 
 import './App.css';
 import { MessageModalProvider } from './shared/ui/MessageModalContext';
@@ -11,6 +18,7 @@ import { loginStart, loginSuccess, logout } from './features/auth/store/authSlic
 import { useRefreshTokenMutation } from './shared/api/authApi';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
+>>>>>>> d4bd717e771642befbf637205599dcde848ed652
 
 function App() {
   const dispatch = useAppDispatch();
@@ -36,6 +44,19 @@ function App() {
  const clientId = '412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com';
  
   return (
+<<<<<<< HEAD
+    <MessageModalProvider>  
+      <BrowserRouter>
+        <div className="App">
+          {/* <header className="App-header">
+            <h1>Project base viewer</h1>
+          </header> */}
+          <main>
+            <AppRoutes />
+          </main>
+        </div>
+      </BrowserRouter>
+=======
     <GoogleOAuthProvider clientId={clientId}>
     <Provider store={store}>
         
@@ -51,10 +72,16 @@ function App() {
   onCancel={() => console.log("Cancelled")}
   /> */}
    </>
+>>>>>>> d4bd717e771642befbf637205599dcde848ed652
     </MessageModalProvider>
 
        </Provider>
            </GoogleOAuthProvider>
   );
 }
+<<<<<<< HEAD
+
 export default App;
+=======
+export default App;
+>>>>>>> d4bd717e771642befbf637205599dcde848ed652
