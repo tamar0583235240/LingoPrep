@@ -39,7 +39,7 @@ const Question: React.FC<QuestionProps> = ({
   if (!questions.length || currentIndex >= questions.length) return <div>אין שאלות להצגה</div>;
 
     return (
-    <div>
+    <div className="bg-transparent">
       {notification && (
         <Notification
           message={notification.message}
@@ -49,7 +49,7 @@ const Question: React.FC<QuestionProps> = ({
         />
       )}
 
-      <div className="flex justify-center items-center min-h-[60vh] bg-[--color-surface] py-8 px-2 direction-rtl">
+      {/* <div className="flex justify-center items-center min-h-[60vh] bg-[--color-surface] py-8 px-2 direction-rtl"> */}
         <div className="bg-white rounded-2xl shadow-md border border-[--color-border] p-8 max-w-xl w-full text-right">
           <div className="flex justify-between items-center mb-2">
             <span className="bg-[--color-background] text-primary-dark text-xs font-semibold px-3 py-1 rounded-full">
@@ -59,6 +59,10 @@ const Question: React.FC<QuestionProps> = ({
 
           
           <div className="text-2xl md:text-3xl font-bold text-text-main mb-6 leading-snug">
+            {currentQuestion.title}
+          </div>
+
+          <div className="text-xl md:text-xl  mb-6 leading-snug">
             {currentQuestion.content}
           </div>
 
@@ -114,7 +118,7 @@ const Question: React.FC<QuestionProps> = ({
             </div>
           </div>
         </div>
-      </div>
+      {/* </div> */}
 
     </div>
   );
