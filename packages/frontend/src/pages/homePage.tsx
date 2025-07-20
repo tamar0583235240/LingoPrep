@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../shared/ui/button";
 import { GridContainer } from "../shared/ui/GridContainer";
 import { store } from "../shared/store/store";
+import { AutoDeleteSettings } from "../features/admin/components/AutoDeleteSettings";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -42,6 +43,11 @@ const HomePage = () => {
           <Button variant="outline" fullWidth onClick={() => navigate("/admin/users")}>
             ניהול משתמשים
           </Button>
+
+          {/* <Button variant="outline" fullWidth onClick={() => navigate("/admin/auto-delete")}>
+  הגדרת מחיקה אוטומטית
+</Button> */}
+<AutoDeleteSettings />
         </>
       )}
     </GridContainer>
