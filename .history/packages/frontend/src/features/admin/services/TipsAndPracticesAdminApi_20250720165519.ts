@@ -7,7 +7,7 @@ export const AdminTipsAndPracticesApi = api.injectEndpoints({
     // טיפים
     addTip: builder.mutation<void, Tip>({
       query: (tip) => ({
-        url: "/tips-manager/addTip",
+        url: "/api/tips-manager/addTip",
         method: "POST",
         body: tip,
       }),

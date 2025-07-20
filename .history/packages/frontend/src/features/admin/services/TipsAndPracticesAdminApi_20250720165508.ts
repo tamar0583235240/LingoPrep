@@ -7,7 +7,7 @@ export const AdminTipsAndPracticesApi = api.injectEndpoints({
     // טיפים
     addTip: builder.mutation<void, Tip>({
       query: (tip) => ({
-        url: "/tips-manager/addTip",
+        url: "/api/tips-manager/addTip",
         method: "POST",
         body: tip,
       }),
@@ -36,19 +36,19 @@ export const AdminTipsAndPracticesApi = api.injectEndpoints({
     // תרגולים
     addPractice: builder.mutation<void, Practice>({
       query: (practice) => ({
-        url: "/practices-manager/addPractice",
+        url: "/api/practices-manager/addPractice",
         method: "POST",
         body: practice,
       }),
       invalidatesTags: [{ type: 'Item', id: 'PRACTICE' }],
     }),
     getAllPractices: builder.query<Practice[], void>({
-      query: () => "/practices-manager",
+      query: () => "/api/practices-manager",
       providesTags: [{ type: 'Item', id: 'PRACTICE' }],
     }),
     updatePractice: builder.mutation<Practice, Partial<Practice>>({
       query: (data) => ({
-        url: "/practices-manager/updatePractice",
+        url: "/api/practices-manager/updatePractice",
         method: "PUT",
         body: data,
       }),
@@ -56,7 +56,7 @@ export const AdminTipsAndPracticesApi = api.injectEndpoints({
     }),
     deletePracticeById: builder.mutation<string, string>({
       query: (id) => ({
-        url: `/practices-manager/deletePracticeById/${id}`,
+        url: `/api/practices-manager/deletePracticeById/${id}`,
         method: "PATCH",
       }),
       invalidatesTags: [{ type: 'Item', id: 'PRACTICE' }],

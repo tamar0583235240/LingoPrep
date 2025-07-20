@@ -7,7 +7,7 @@ export const AdminTipsAndPracticesApi = api.injectEndpoints({
     // טיפים
     addTip: builder.mutation<void, Tip>({
       query: (tip) => ({
-        url: "/tips-manager/addTip",
+        url: "/api/tips-manager/addTip",
         method: "POST",
         body: tip,
       }),
@@ -56,7 +56,7 @@ export const AdminTipsAndPracticesApi = api.injectEndpoints({
     }),
     deletePracticeById: builder.mutation<string, string>({
       query: (id) => ({
-        url: `/practices-manager/deletePracticeById/${id}`,
+        url: `/api/practices-manager/deletePracticeById/${id}`,
         method: "PATCH",
       }),
       invalidatesTags: [{ type: 'Item', id: 'PRACTICE' }],
