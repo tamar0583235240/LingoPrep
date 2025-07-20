@@ -9,13 +9,7 @@
 
 // router.post("/api/reminders/settings", saveUserReminderSettings)
 
-
 // export default router;
-
-
-
-
-
 
 
 import { Router } from 'express';
