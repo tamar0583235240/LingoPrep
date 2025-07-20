@@ -4,33 +4,31 @@ import answerRouter from './src/routes/answerRouts';
 import sharedRecrdingRouter from './src/routes/sharedRecordingRouts';
 import express, { Application } from 'express';
 import cors from 'cors'
-import router from './src/routes/questionRouts';
 import questionRouter from './src/routes/questionRouts';
 import interviewMaterialsHub from '../backend/src/routes/interview-materials-hub'
 import dotenv from 'dotenv';
 import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
 import cookieParser from 'cookie-parser';
-import { createConsumer, kafka } from './src/kafkaService';
 import http from 'http';
 import { Server } from 'socket.io';
+const redis = require('redis');
 
 dotenv.config();
 let io: Server;
 
-const createApp = async (): Promise<Application> => {
+const subscriber = redis.createClient({
+  host: 'host.docker.internal',
+  port: 6379
+});
+
+export const publisher = redis.createClient({
+  host: 'host.docker.internal',
+  port: 6379
+});
+
+const createApp = async (port:any): Promise<Application> => {
   const app = express();
-
-  const consumer = await createConsumer();
-  const run = async () => {
-    await consumer.run({
-      eachMessage: async ({ topic, message }: { topic: string; message: { value: Buffer; } }) => {
-        console.log(`Received message: ${message.value.toString()} from topic: ${topic}`);
-      },
-    });
-  };
-
-  run().catch(console.error);
 
   app.use(cors({
     origin: [
@@ -76,14 +74,45 @@ const createApp = async (): Promise<Application> => {
     });
   });
 
-  const shutdownConsumer = async () => {
-    if (consumer) {
-      await consumer.disconnect();
+  server.listen(port, () => {
+    console.log('listening on *+ ' + port);
+  });
+
+  try {
+    if (!subscriber.isOpen)
+      await subscriber.connect();
+
+    await subscriber.subscribe('questions', (message: string) => {
+      try {
+        const newQuestionsList = JSON.parse(message);
+        console.log('Received message from Redis:', newQuestionsList);
+        io.emit('questionDeleted', newQuestionsList);
+      } catch (error) {
+        console.error('Error parsing message:', error);
+      }
+    });
+  } catch (error) {
+    console.error('Error connecting to Subscriber:', error);
+  }
+
+  const shutdown = async () => {
+    try {
+      if (subscriber.isOpen) {
+        await subscriber.quit();
+        console.log('Subscriber connection closed');
+      }
+      if (publisher.isOpen) {
+        await publisher.quit();
+        console.log('Publisher connection closed');
+      }
+    } catch (error) {
+      console.error('Error closing Redis connections:', error);
     }
   };
 
-  process.on('SIGINT', shutdownConsumer); 
-  process.on('SIGTERM', shutdownConsumer);
+  process.on('SIGINT', shutdown);
+  process.on('SIGTERM', shutdown);
+
   return app;
 };
 export { createApp, io };

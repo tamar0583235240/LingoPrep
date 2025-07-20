@@ -18,7 +18,6 @@ import { useGetAiInsightsQuery } from "../services/AiInsightsApi";
 export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRoles }) => {
     const user = useSelector((state: RootState) => state.auth.user);
     const userId = user?.id ?? '';
-    console.log(user?.id);
     const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
     const { data: allInsights } = useGetAiInsightsQuery();
 

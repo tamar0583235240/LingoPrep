@@ -1,21 +1,14 @@
 import { Request, Response } from 'express';
 import questionRepository from '../reposioty/questionRepository';
 import { Questions } from '../interfaces/entities/Questions';
-import { createProducer,TOPICS } from '../../src/kafkaService';
-import { io } from '../../app'; 
+import { io } from '../../app';
+import { publisher } from '../../app';
 
 export const addQuestion = async (req: Request, res: Response): Promise<Questions | void> => {
   try {
     const question: Questions = req.body;
     const result = await questionRepository.addQustion(question);
     res.status(201).json(result);
-    const producer = await createProducer();
-    await producer.send({
-      topic: TOPICS.QUESTIONS, 
-      messages: [{ value: JSON.stringify(question) }],
-    });
-    await producer.disconnect(); 
-
   } catch (error) {
     console.error('Error adding question:', error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -65,18 +58,17 @@ export const deleteQuestionController = async (req: Request, res: Response): Pro
   try {
     const questionId = req.params.question_id;
     const is_active = false;
-
     await questionRepository.deleteQuestionById(questionId, is_active);
     const newQuestionsList = await questionRepository.getAllQuestions();
+    
+    if (!publisher.isOpen) {
+      await publisher.connect(); 
+    }
+    const message = JSON.stringify(newQuestionsList);
+    await publisher.publish('questions', message);
+    console.log('Published new questions list to Redis:');
+    await publisher.set(`question:${questionId}`, message);
     io.emit('questionDeleted', newQuestionsList);
-
-    const producer = await createProducer();
-    await producer.send({
-      topic: TOPICS.QUESTIONS,
-      messages: [{ value: JSON.stringify({ action: "delete", questionId }) }],
-    });
-    await producer.disconnect();
-
     res.status(200).send("Question deleted successfully");
   } catch (error) {
     console.error('Error in deleteQuestionController:', error);

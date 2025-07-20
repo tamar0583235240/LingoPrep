@@ -3,14 +3,13 @@ import { store } from '../store/store'; // ייבוא ה-store שלך
 import { AdminQuestionApi } from '../../features/admin/services/adminQuestionApi'; // ייבוא ה-RTK Query שלך
 import { userApi } from "./userApi";
 
-const socket = io("http://localhost:5010"); // שנה לכתובת השרת שלך
+const socket = io("http://localhost:5003"); 
 
 socket.on("connect", () => {
     console.log("Connected to server");
 });
 
 socket.on("questionDeleted", (newQuestionsList) => {
-    // עדכון ה-cache ב-Redux
     console.log("I updated the questions cache");
     store.dispatch(AdminQuestionApi.util.updateQueryData('getAllQuestions', undefined, () => newQuestionsList));
 });

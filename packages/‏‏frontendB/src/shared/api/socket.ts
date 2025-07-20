@@ -3,7 +3,7 @@ import { store } from '../store/store'; // ייבוא ה-store שלך
 import { AdminQuestionApi } from '../../features/admin/services/adminQuestionApi'; // ייבוא ה-RTK Query שלך
 import { userApi } from "./userApi";
 
-const socket = io("http://localhost:5011"); // שנה לכתובת השרת שלך
+const socket = io("http://localhost:5002"); 
 
 socket.on("connect", () => {
     console.log("Connected to server");
