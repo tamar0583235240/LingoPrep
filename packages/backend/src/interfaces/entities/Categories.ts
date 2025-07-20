@@ -1,4 +1,4 @@
-import { Column, Entity, Index, OneToMany } from "typeorm";
+import { Column, Entity, Index, JoinTable, ManyToMany } from "typeorm";
 import { Questions } from "./Questions";
 
 @Index("categories_pkey", ["id"], { unique: true })
@@ -14,6 +14,12 @@ export class Categories {
   @Column("text", { name: "name" })
   name: string;
 
-  @OneToMany(() => Questions, (questions) => questions.category_2)
+  @ManyToMany(() => Questions, (questions) => questions.categories)
+  @JoinTable({
+    name: "question_categories",
+    joinColumns: [{ name: "category_id", referencedColumnName: "id" }],
+    inverseJoinColumns: [{ name: "question_id", referencedColumnName: "id" }],
+    schema: "public",
+  })
   questions: Questions[];
 }

@@ -7,11 +7,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { Feedback } from "./Feedback";
-<<<<<<< HEAD
-import { Answers } from "./Answer";
-=======
 import { Answers } from "./Answers";
->>>>>>> d4bd717e771642befbf637205599dcde848ed652
 import { Users } from "./Users";
 
 @Index("shared_recordings_pkey", ["id"], { unique: true })

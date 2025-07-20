@@ -35,6 +35,10 @@ export const ProgressBar = ({
   );
 };
 
+<<<<<<< HEAD
 ProgressBar.displayName = "ProgressBar";
 
 
+=======
+ProgressBar.displayName = "ProgressBar";
+>>>>>>> 14ad18fed386adbd7cb367985a58061b67a011bb

@@ -15,3 +15,4 @@ export const questionsApi = createApi({
 });
 
 export const { useGetAllQuestionsQuery, useGetQuestionsByCategoryQuery } = questionsApi;
+

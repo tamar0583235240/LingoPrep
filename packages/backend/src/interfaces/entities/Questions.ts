@@ -26,9 +26,6 @@ export class Questions {
   @Column("text", { name: "content" })
   content: string;
 
-  @Column("text", { name: "category" })
-  category: string;
-
   @Column("text", { name: "tips" })
   tips: string;
 
@@ -51,8 +48,4 @@ export class Questions {
   @ManyToOne(() => Categories, (categories) => categories.questions)
   @JoinColumn([{ name: "category_id", referencedColumnName: "id" }])
   category_2: Categories;
-=======
-  @OneToMany(() => Answers, (answers) => answers.question)
-  answers: Answers[];
->>>>>>> d4bd717e771642befbf637205599dcde848ed652
 }

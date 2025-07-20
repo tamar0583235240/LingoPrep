@@ -17,11 +17,17 @@
     "lucide-react": "^0.522.0",
     "react": "^19.1.0",
     "react-icons": "^5.5.0",
-    "recharts": "^3.0.2",
     "redux-persist": "^6.0.0",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
+<<<<<<< HEAD
+=======
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@types/redux-persist": "^4.3.1",
+    "@types/redux-persist": "^4.3.1",
+>>>>>>> 14ad18fed386adbd7cb367985a58061b67a011bb
     "tailwindcss": "^3.4.3"
   }
 }

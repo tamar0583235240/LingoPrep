@@ -8,9 +8,6 @@ import { SharedRecordings } from "./SharedRecordings";
 
 @Index("feedback_pkey", ["id"], { unique: true })
 @Entity("feedback", { schema: "public" })
-<<<<<<< HEAD
-@Index("feedback_pkey", ["id"], { unique: true })
-@Entity("feedback", { schema: "public" })
 =======
 >>>>>>> d4bd717e771642befbf637205599dcde848ed652
 export class Feedback {
@@ -30,26 +27,9 @@ export class Feedback {
   @Column("timestamp without time zone", {
     name: "created_at",
     default: () => "now()",
-    name: "created_at",
-    default: () => "now()",
   })
   createdAt: Date;
 
-  @ManyToOne(() => Users, (users) => users.feedbacks, { onDelete: "CASCADE" })
-  @JoinColumn([{ name: "given_by_user_id", referencedColumnName: "id" }])
-  givenByUser: Users;
-=======
-  @Column("timestamp without time zone", {
-    name: "created_at",
-    default: () => "now()",
-  })
-  createdAt: Date;
-
-  @ManyToOne(() => Answers, (answers) => answers.feedbacks)
-  @JoinColumn([{ name: "answer_code", referencedColumnName: "id" }])
-  answerCode: Answers;
-
->>>>>>> d4bd717e771642befbf637205599dcde848ed652
   @ManyToOne(() => Users, (users) => users.feedbacks, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "given_by_user_id", referencedColumnName: "id" }])
   givenByUser: Users;
@@ -58,18 +38,7 @@ export class Feedback {
     () => SharedRecordings,
     (sharedRecordings) => sharedRecordings.feedbacks,
     { onDelete: "CASCADE" }
-<<<<<<< HEAD
-    () => SharedRecordings,
-    (sharedRecordings) => sharedRecordings.feedbacks,
-    { onDelete: "CASCADE" }
   )
   @JoinColumn([{ name: "shared_recording_id", referencedColumnName: "id" }])
   sharedRecording: SharedRecordings;
-  @JoinColumn([{ name: "shared_recording_id", referencedColumnName: "id" }])
-  sharedRecording: SharedRecordings;
-=======
-  )
-  @JoinColumn([{ name: "shared_recording_id", referencedColumnName: "id" }])
-  sharedRecording: SharedRecordings;
->>>>>>> d4bd717e771642befbf637205599dcde848ed652
 }

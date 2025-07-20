@@ -1,13 +1,10 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../shared/hooks/hook";
-import {
-  answerQuestion,
-  nextQuestion,
-  resetQuestion,
-} from "../store/simulationSlice";
-import { RootState } from "../../../shared/store/store";
-import { RotateCcw, Sparkles } from "lucide-react";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../shared/hooks/hook';
+// import { answeredQuestions, nextQuestion, resetQuestion } from '../store/simulationSlice';
+import { RootState } from '../../../shared/store/store';
+import { RotateCcw, Sparkles } from 'lucide-react';
+import { interviewType } from '../types/questionType';
 
 interface ButtonsProps {
   onShowAnalysis: () => void;
@@ -25,55 +22,20 @@ const Buttons: React.FC<ButtonsProps> = ({
   );
   const [showEnd, setShowEnd] = useState(false);
   const currentQuestion = questions[currentIndex];
-  const answeredCount = questions.filter((q: any) => q.answered).length;
+  const answeredCount = questions.filter((q: interviewType) => q.answered).length;
 
-  const handleTextChange = (value: string) => {
-    dispatch(answerQuestion({ index: currentIndex, answer: value }));
-  };
-  const handleReset = () => {
-    dispatch(resetQuestion(currentIndex));
-  };
+  // const handleTextChange = (value: string) => {
+  //   // dispatch(answeredQuestions({ index: currentIndex, answer: value }));
+  // };
+  // const handleReset = () => {
+  //   // dispatch(resetQuestion(currentIndex));
+  // };
+
+
 
   return (
     <div className="flex flex-col items-center gap-4 mt-4">
-      {/* <div className="flex gap-2"> */}
-      {/* <button
-          className="bg-danger text-white px-6 py-2 rounded-lg font-semibold hover:bg-danger/90 transition"
-          onClick={handleReset}
-        >
-          איפוס תשובה
-          <RotateCcw size={20} />
-        </button>
-        {currentIndex === questions.length - 1 ? (
-          <button
-            className="bg-success text-white px-6 py-2 rounded-lg font-semibold hover:bg-success/90 transition"
-            onClick={handleSubmit}
-          >
-            שליחת שאלון
-          </button>
-        ) : (
-          <button
-            className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary/90 transition"
-            onClick={() => {
-              handleTextChange(currentQuestion.answer ?? "");
-              onShowAnalysis();
-            }}
-            disabled={analysisVisible}
-          >
-            אישור
-          </button>
-        )}
-        <button
-          className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary/90 transition flex items-center gap-2"
-          onClick={() => {
-            handleTextChange(currentQuestion.answer ?? "");
-            setTimeout(() => dispatch(nextQuestion()), 300);
-          }}
-        >
-          ניתוח AI
-          <Sparkles />
-        </button>
-      </div> */}
+     
 
       {answeredCount === questions.length && (
         <button

@@ -178,6 +178,10 @@ export const useRecording = () => {
       const result = await uploadAnswer(answerData as any).unwrap();
       dispatch(addAnswer(result));
       dispatch(resetRecording());
+      console.log(result);
+      if (result?.id) {
+        dispatch({ type: 'simulation/setCurrentAnswerId', payload: result.id });
+      }
       audioBlobRef.current = null; // איפוס ה-Blob אחרי שמירה
       setAudioBlob(null); // איפוס גם ב-state
       return result;

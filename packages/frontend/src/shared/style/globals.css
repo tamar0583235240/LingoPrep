@@ -12,6 +12,7 @@
     --color-border: #E5E7EB;
     --color-background: #F7FAFC;
 <<<<<<< HEAD
+<<<<<<< HEAD
     --color-surface: #EEFDF7 ;
   }
 
@@ -22,6 +23,13 @@
   }
 }
 >>>>>>> d4bd717e771642befbf637205599dcde848ed652
+=======
+    --color-surface: #E6FCF6;
+
+  }
+
+   
+>>>>>>> 14ad18fed386adbd7cb367985a58061b67a011bb
   body {
     @apply bg-[--color-background] text-[--color-text];
     font-family: 'Inter', sans-serif;
