@@ -11,7 +11,7 @@ const AuthRedirectPage = () => {
 
   if (user) {
     // אם המשתמש מחובר – הפניה אוטומטית לדף הבית
-    return <Navigate to="/" />;
+    return <Navigate to="/home" />;
   }
 
   return (

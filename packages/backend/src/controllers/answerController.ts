@@ -2,6 +2,14 @@ import { Request, Response } from 'express';
 import  answerRepository  from '../reposioty/answerRepository';
 import { pool } from "../config/dbConnection";
 import { validate as isUuid } from "uuid";  
+import {
+  createAnswer,
+  getAllAnswers,
+  deleteAnswer,
+  updateAnswer,
+  getAnswerById,
+} from '../reposioty/answerRepository';
+
 
 export const answerController = async (req: Request, res: Response): Promise<void> => {
   console.log('answerController called');
@@ -13,8 +21,6 @@ export const answerController = async (req: Request, res: Response): Promise<voi
     res.status(500).json({ error });
   }
 };
-
-
 
 export const getProgressStats = async (req: Request, res: Response) => {
   try {
@@ -59,13 +65,6 @@ export const getProgressStats = async (req: Request, res: Response) => {
 };
 
 
-import {
-  createAnswer,
-  getAllAnswers,
-  deleteAnswer,
-  updateAnswer,
-  getAnswerById,
-} from '../reposioty/answerRepository';
 
 export const createAnswerController = async (req: Request, res: Response) => {
   const userId = req.body.userId || req.body.user_id;
@@ -74,7 +73,6 @@ export const createAnswerController = async (req: Request, res: Response) => {
   const amountFeedbacks = req.body.amountFeedbacks;
   const answerFileName = req.body.answerFileName;
 
-  // בדיקה משופרת לשדות חובה
   if (!userId || !questionId || !fileUrl || amountFeedbacks == null || !answerFileName) {
     console.error('❌ Missing fields:', {
       userId,
@@ -86,7 +84,6 @@ export const createAnswerController = async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  // ודא שמספר הפידבקים הוא מספר
   const amountFeedbacksNum = Number(amountFeedbacks);
   if (isNaN(amountFeedbacksNum)) {
     return res.status(400).json({ error: 'amountFeedbacks must be a number' });
@@ -151,7 +148,6 @@ export const updateAnswerController = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { fileUrl, amountFeedbacks, answerFileName } = req.body;
 
-  // בדוק אילו שדות נמסרו ועדכן רק את השדות הללו
   const updatedFields: Partial<{ fileUrl?: string; amountFeedbacks?: number; answerFileName?: string }> = {};
   if (fileUrl) updatedFields.fileUrl = fileUrl;
   if (amountFeedbacks != null) updatedFields.amountFeedbacks = Number(amountFeedbacks);

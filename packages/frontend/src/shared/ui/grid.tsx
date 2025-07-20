@@ -16,7 +16,7 @@ export const Grid = React.forwardRef<HTMLDivElement, GridProps>(
       <div
         ref={ref}
         className={cn(
-          "grid gap-6 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", // בסיס הגריד + ריווח מותאם
+          "grid gap-6 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
           colClasses[cols],
           className
         )}

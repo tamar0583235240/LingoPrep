@@ -21,7 +21,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 import { api } from "../api/api";
-import { questionsApi } from '../../features/interview/services/questionsApi'; 
+import { questionsApi } from '../../features/interview/services/questionsApi';
 import { categoriesApi } from "../../features/interview/services/categoriesApi";
 
 import authReducer from '../../features/auth/store/authSlice';
@@ -30,11 +30,15 @@ import exampleReducer from '../../features/exampleFeatures/store/exampleSlice';
 import simulationReducer from '../../features/interview/store/simulationSlice';
 import recordingReducer from '../../features/recordings/store/recordingSlice';
 import answeredReducer from '../../features/interview/store/answeredSlice';
+import { profilesApi } from "../../features/profile/services/profileApi";
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
   [questionsApi.reducerPath]: questionsApi.reducer,
   [categoriesApi.reducerPath]: categoriesApi.reducer,
+  [profilesApi.reducerPath]: profilesApi.reducer,
+
+
   auth: authReducer,
   user: userReducer,
   example: exampleReducer,
@@ -67,3 +71,4 @@ export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+export const setupStore = () => store;

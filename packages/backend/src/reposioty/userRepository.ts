@@ -45,7 +45,7 @@ const getUserById = async (id: string): Promise<Users | null> => {
 };
 
 // קבלת משתמש לפי אימייל וסיסמה
-export const getUserByEmailAndPassword = async (
+const getUserByEmailAndPassword = async (
   email: string,
   password: string
 ): Promise<Users | null> => {
@@ -55,20 +55,20 @@ export const getUserByEmailAndPassword = async (
     ]);
     const user = result.rows[0];
 
-    if (!user) throw new Error("Invalid credentials");
+    if (!user) throw new Error("User not found");
 
     const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) throw new Error("Invalid credentials");
+    if (!isMatch) throw new Error("Email or password is incorrect");
 
     return user;
-  } catch {
-    throw new Error("User not found");
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 };
 
-// עדכון סיסמה (עם הצפנה)
-export const updateUserPassword = async (
+// עדכון סיסמה
+const updateUserPassword = async (
   userId: string,
   newPassword: string
 ) => {
@@ -85,21 +85,13 @@ const updateUser = async (
   userData: Partial<Users>
 ): Promise<Users | null> => {
   try {
-    const { firstName, lastName, email, phone, role, isActive, password } =
+    const { firstName, lastName, email, phone, role, isActive, password, slug } =
       userData;
-
-    let hashedPassword = null;
-    if (password) {
-      hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-    }
-
-    const res = await pool.query(
-      `
-        UPDATE users 
-        SET first_name = $1, last_name = $2, email = $3, phone = $4, role = $5, is_active = $6, password = COALESCE($7, password)
-        WHERE id = $8 RETURNING *
-      `,
-      [firstName, lastName, email, phone, role, isActive, hashedPassword, id]
+        const res = await pool.query(`
+            UPDATE users 
+            SET first_name = $1, last_name = $2, email = $3, phone = $4, role = COALESCE($5, role), is_active = COALESCE($6, is_active), password = COALESCE($7, password), slug = COALESCE($8, slug)
+            WHERE id = $9 RETURNING *`,
+      [firstName, lastName, email, phone, role, isActive, password, slug, id]
     );
     return res.rows[0] || null;
   } catch (error) {
@@ -129,18 +121,14 @@ const updateActiveUser = async (id: string): Promise<Users | null> => {
 
 // יצירת משתמש חדש (עם הצפנת סיסמה)
 const createUser = async (user: Users): Promise<Users> => {
-  try {
-    if (!user.password) {
-      throw new Error("Password is required to create a user");
-    }
-    const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
-
-    const res = await pool.query(
-      `
-        INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
-        VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW(), $6, $7)
-        RETURNING *
-      `,
+    try {
+        if (!user.password) {
+            throw new Error("Password is required to create a user");
+        }
+        const res = await pool.query(
+            `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password, slug)
+             VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW(), $6, $7,$8)
+             RETURNING *`,
       [
         user.firstName,
         user.lastName,
@@ -148,7 +136,8 @@ const createUser = async (user: Users): Promise<Users> => {
         user.phone,
         user.role,
         user.isActive ?? true,
-        hashedPassword,
+        user.password,
+        user.slug
       ]
     );
     return res.rows[0];
@@ -168,14 +157,13 @@ const insertUser = async (user: {
   is_active: boolean;
   password: string;
   created_at: Date;
+  slug: string | null;
 }) => {
   const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
   const result = await pool.query(
-    `
-      INSERT INTO users (id, first_name, last_name, email, phone, role, is_active, password, created_at)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-      RETURNING *
-    `,
+    `INSERT INTO users (id, first_name, last_name, email, phone, role, is_active, password, created_at, slug)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9,$10)
+     RETURNING *`,
     [
       user.id,
       user.first_name,
@@ -186,6 +174,7 @@ const insertUser = async (user: {
       user.is_active,
       hashedPassword,
       user.created_at,
+      user.slug
     ]
   );
   return result.rows[0];
@@ -212,7 +201,7 @@ interface ExcelUser {
 }
 
 // הוספת משתמשים מקובץ אקסל עם ולידציה והצפנת סיסמאות
-export const insertUsersFromExcel = async (
+const insertUsersFromExcel = async (
   filePath: string
 ): Promise<{
   insertedUsers: ExcelUser[];
@@ -275,15 +264,14 @@ export const insertUsersFromExcel = async (
 };
 
 export default {
-  getAllUsers,
-  getUserById,
-  getUserByEmailAndPassword,
-  getUserByEmail,
-  updateUserPassword,
-  updateUser,
-  updateActiveUser,
-  createUser,
-  insertUser,
-  deleteUser,
-  insertUsersFromExcel,
+    getAllUsers,
+    getUserById,
+    getUserByEmailAndPassword,
+    getUserByEmail,
+    updateUserPassword,
+    updateUser,
+    createUser,
+    insertUser,
+    deleteUser,
+    insertUsersFromExcel,
 };

@@ -12,8 +12,8 @@ import { UserSessions } from "./entities/UserSessions";
 import { WorkExperiences } from "./entities/WorkExperiences";
 export interface User {
   id: string;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
   phone: string | null;
   role: string;
