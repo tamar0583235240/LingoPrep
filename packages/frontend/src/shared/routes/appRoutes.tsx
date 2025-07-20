@@ -199,6 +199,11 @@ export default function AppRoutes() {
               <p>AdminQuestions</p>
             </AdminQuestions>
           } />
+          <Route path="/admin/reminders" element={
+            <AdminTipsAndPractices allowedRoles={["admin"]}>
+              <p>AdminTipsAndPractices</p>
+            </AdminTipsAndPractices>
+          } />
           <Route path="/admin/users" element={
             <RoleProtectedRoute allowedRoles={["admin"]}>
               <p>AdminUsers</p>
@@ -207,11 +212,6 @@ export default function AppRoutes() {
           <Route path="/admin/resources" element={
             <RoleProtectedRoute allowedRoles={["admin"]}>
               <p>AdminResources</p>
-            </RoleProtectedRoute>
-          } />
-          <Route path="/admin/reminders" element={
-            <RoleProtectedRoute allowedRoles={["admin"]}>
-              <AdminTipsAndPractices />
             </RoleProtectedRoute>
           } />
         </Route>

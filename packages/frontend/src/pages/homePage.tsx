@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../shared/ui/button";
 import { GridContainer } from "../shared/ui/GridContainer";
 import { store } from "../shared/store/store";
-import AdminTipsAndPractices from "../features/admin/components/AdminTipsAndPractices";
 
 const HomePage = () => {
   const navigate = useNavigate();
