@@ -1,18 +1,8 @@
-<<<<<<< HEAD
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-} from "typeorm";
-import { Answers } from "./Answer";
-import { Categories } from "./Categories";
-=======
-import { Column, Entity, Index, OneToMany } from "typeorm";
+
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { Answers } from "./Answers";
->>>>>>> d4bd717e771642befbf637205599dcde848ed652
+import { Categories } from "./Categories";
+
 
 @Index("questions_pkey", ["id"], { unique: true })
 @Entity("questions", { schema: "public" })
@@ -35,7 +25,7 @@ export class Questions {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
-<<<<<<< HEAD
+
   @Column("text", { name: "options", nullable: true, array: true })
   options: string[] | null;
 

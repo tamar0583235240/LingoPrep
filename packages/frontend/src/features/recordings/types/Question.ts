@@ -1,4 +1,4 @@
-export interface Question {
+export interface interview {
     id: string
     title: string
     content: string

@@ -1,11 +1,11 @@
 export interface Answer {
-<<<<<<< HEAD
   id: string; // uuid
   user_id: string; // uuid
   question_id: string; // uuid
   file_url: string; // uuid
   answer_file_name: string; // text
   submitted_at: Date; // timestamp
+  amount_feedbacks?: number; // feedback count (optional)
 }
 
 export interface RecordingState {
@@ -22,13 +22,3 @@ export interface AudioRecorderProps {
   onFinish?: (audioUrl: string, fileName: string) => void;
   onSaveSuccess?: (answerId: string) => void;
 }
-=======
-    id: string
-    user_id: string
-    question_id: string
-    file_url: string,
-    answer_file_name:string,
-    submitted_at: Date
-    amount_feedbacks:number
-}
->>>>>>> d4bd717e771642befbf637205599dcde848ed652

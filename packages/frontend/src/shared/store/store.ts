@@ -1,6 +1,6 @@
+// src/app/store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import { api } from "../api/api";
-<<<<<<< HEAD
 import exampleSlice from '../../features/exampleFeatures/store/exampleSlice'
 import simulationSlice from '../../features/interview/store/simulationSlice';
 import { questionsApi } from '../../features/interview/services/questionsApi'; 
@@ -20,23 +20,6 @@ const rootReducer = combineReducers({
   simulation: simulationSlice, 
   recording: recordingSlice,
   answered: answeredReducer, // הוספת answered
-=======
-import authReducer from '../../features/auth/store/authSlice';
-import userReducer from '../../features/auth/store/userSlice';
-import { profilesApi } from "../../features/profile/services/profileApi";
-
-export const store = configureStore({
-  reducer: {
-    [api.reducerPath]: api.reducer,
-    [profilesApi.reducerPath]: profilesApi.reducer,
-    user: userReducer,
-    auth: authReducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
-      .concat(api.middleware)
-      .concat(profilesApi.middleware),
->>>>>>> d4bd717e771642befbf637205599dcde848ed652
 });
 
 const persistConfig = {
@@ -62,7 +45,6 @@ export const store = configureStore({
 export const persistor = persistStore(store);
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-<<<<<<< HEAD
 
 
 
@@ -72,6 +54,3 @@ export type AppDispatch = typeof store.dispatch;
 
 
 
-=======
-export const setupStore = () => store;
->>>>>>> d4bd717e771642befbf637205599dcde848ed652
