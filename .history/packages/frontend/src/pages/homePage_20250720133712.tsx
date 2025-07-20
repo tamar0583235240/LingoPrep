@@ -45,9 +45,9 @@ const HomePage = () => {
           <Button variant="outline" fullWidth onClick={() => navigate("/admin/users")}>
             ניהול משתמשים
           </Button>
-          <Button variant="outline" fullWidth onClick={() => navigate("/admin/dynamic-content")}>
-            ניהול תכנים דינמיים
-          </Button>
+              <Button variant="outline" fullWidth onClick={() => navigate("/admin/dynamic-content")}>
+      ניהול תכנים דינמיים
+    </Button>
         </>
 
       )}
