@@ -10,11 +10,14 @@
     --color-secondary-text: #64748B;
     --color-border: #E5E7EB;
     --color-background: #F7FAFC;
+    --color-surface: #E6FCF6;
+
   }
 
    
   body {
     @apply bg-[--color-background] text-[--color-text];
     font-family: 'Inter', sans-serif;
+    direction: rtl;
   }
 }

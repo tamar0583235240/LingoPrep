@@ -11,7 +11,6 @@ export const CardSimple=({ className, children }: React.HTMLAttributes<HTMLDivEl
 
 
 
-
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   category?: string;

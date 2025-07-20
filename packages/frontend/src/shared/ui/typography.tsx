@@ -7,6 +7,12 @@ export const Heading1 = ({ className, children, ...props }: HeadingProps) => (
   </h1>
 );
 
+export const Heading2 = ({ className, children, ...props }: HeadingProps) => (
+  <h2 className={cn("text-3xl md:text-4xl font-semibold text-text-main leading-tight", className)} {...props}>
+    {children}
+  </h2>
+);
+
 
 interface ParagraphProps extends React.HTMLAttributes<HTMLParagraphElement> {}
 export const Paragraph = ({ className, children, ...props }: ParagraphProps) => (
