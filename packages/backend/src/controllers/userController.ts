@@ -104,6 +104,7 @@ export const createUser = async (req: Request, res: Response) => {
     }
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
+<<<<<<< HEAD
 const newUser: Users = {
     id: uuidv4(),
     firstName: first_name,
@@ -130,6 +131,26 @@ const newUser: Users = {
     workExperiences: [],
 };
 
+=======
+    const newUser: Users = {
+        id: uuidv4(),
+        firstName: first_name,
+        lastName: last_name,
+        email,
+        phone,
+        password: hashedPassword,
+        role: role || 'student',
+        createdAt: new Date(),
+        isActive: true,
+        answers: [],
+        feedbacks: [],
+        feedbacktypes: [],
+        passwordResetTokens: [],
+        sharedRecordings: [],
+        resources: [],
+        userReminderSettings: []
+    };
+>>>>>>> f459e50e8a6f6d800c0cb3a76c28fffdc787329b
 
     const createdUser = await userRepository.createUser(newUser);
     res.status(201).json(createdUser);

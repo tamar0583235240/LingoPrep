@@ -257,6 +257,7 @@ export const requestSignup = async (req: Request, res: Response) => {
 
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
+<<<<<<< HEAD
 pendingSignups.set(email, {
   userData: {
   id: uuidv4(),
@@ -287,6 +288,31 @@ pendingSignups.set(email, {
   expiresAt,
 });
 
+=======
+  // שמירת פרטי המשתמש והקוד זמנית
+  pendingSignups.set(email, {
+    userData: {
+      id: uuidv4(),
+      firstName,
+      lastName,
+      email,
+      phone,
+      password: hashedPassword,
+      role: "student",
+      isActive: true,
+      answers: [],
+      feedbacks: [],
+      feedbacktypes: [],
+      passwordResetTokens: [],
+      sharedRecordings: [],
+      createdAt: new Date(),
+      resources: [],
+      userReminderSettings: [],
+    },
+    code,
+    expiresAt,
+  });
+>>>>>>> f459e50e8a6f6d800c0cb3a76c28fffdc787329b
 
   await sendVerificationCodeEmail(email, `קוד האימות להרשמה שלך הוא: ${code}`);
 
@@ -357,6 +383,7 @@ const newUser: Users = {
   createdAt: new Date(),
   slug: null,
 
+<<<<<<< HEAD
   contentReports: [],
   experienceThanks: [],
   interviewExperiences: [],
@@ -370,6 +397,26 @@ const newUser: Users = {
   userSessions: [],
   workExperiences: [],
 };
+=======
+  const newUser: Users = {
+    id: uuidv4(),
+    firstName,
+    lastName,
+    email,
+    phone,
+    password: hashedPassword,
+    role: "student",
+    isActive: true,
+    answers: [],
+    feedbacks: [],
+    feedbacktypes: [],
+    passwordResetTokens: [],
+    sharedRecordings: [],
+    createdAt: new Date(),
+    resources: [],
+    userReminderSettings: []
+  };
+>>>>>>> f459e50e8a6f6d800c0cb3a76c28fffdc787329b
 
 
 

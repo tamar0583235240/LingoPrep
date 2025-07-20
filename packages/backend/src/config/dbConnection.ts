@@ -34,7 +34,25 @@ console.log('[DB INIT]', {
 });
 
 
+console.log({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+});
+
+// export const pool = new Pool({
+//   host: process.env.PGHOST,
+//   port: Number(process.env.PGPORT),
+//   user: process.env.PGUSER,
+//   password: process.env.PGPASSWORD,
+//   database: process.env.PGDATABASE,
+//  });
+
+
 export const pool = new Pool({
+<<<<<<< HEAD
   host: String(process.env.DB_HOST),
   port: Number(process.env.DB_PORT),
   user: String(process.env.DB_USER),
@@ -50,4 +68,18 @@ export const pool = new Pool({
 //   password: process.env.PGPASSWORD,
 //   database: process.env.PGDATABASE,
 //  });
+=======
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
+
+>>>>>>> f459e50e8a6f6d800c0cb3a76c28fffdc787329b
 console.log('Database connection pool created');
+
+// export { pool };
+
+
+
