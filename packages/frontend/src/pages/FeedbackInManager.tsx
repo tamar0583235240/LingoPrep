@@ -86,9 +86,9 @@ const {data, isLoading, isError,}=useGetAllFeedbacksQuery()
                         )}
                     </div>
 
-                    <Grid cols={2} className="gap-4">
+                    <Grid cols={2} className="gap-4" > 
                         {data?.map((feedback) => (
-                            <FeedbackCardManager
+                            <FeedbackCardManager 
                                 key={feedback.id}
                                 feedback={feedback}
                                 isReminder={reminders.has(feedback.id)}

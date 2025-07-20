@@ -25,7 +25,6 @@ interface FeedbackItem {
   is_anonymous: boolean
   treatment_status?: "pending" | "in-progress" | "completed" | "rejected"
   createdat: string
-  // This would come from a user lookup
   username?: string
 }
 
