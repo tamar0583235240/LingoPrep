@@ -1,36 +1,30 @@
-// import { Pool } from 'pg';
-// import dotenv from 'dotenv';
-
-// dotenv.config();
-// console.log('Database user:', process.env.PGUSER);
-// console.log('Database host:', process.env.PGHOST);
-// console.log('Database name:', process.env.PGDATABASE);
-// console.log('Database password:', process.env.PGPASSWORD);
-// console.log('Database port:', process.env.PGPORT);
-// const pool = new Pool({
-
-//   user: process.env.PGUSER,
-//   host: process.env.PGHOST,
-//   database: process.env.PGDATABASE,
-//   password: process.env.PGPASSWORD,
-//   port: Number(process.env.PGPORT),
-//  });
-// console.log('Database connection pool created');
-// export {pool}
-
-
-
 import { Pool } from 'pg';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
+
 dotenv.config();
-import { createClient } from '@supabase/supabase-js';
+// Log connection details
+const dbConfig = {
+  user: process.env.DB_USER || 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  database: process.env.DB_NAME || 'lingo-prep',
+  password: process.env.DB_PASSWORD || '661',
+  port: Number(process.env.DB_PORT || 5432)
+};
 
+console.log('🔌 Database configuration:', {
+  ...dbConfig,
+  password: '***' // Hide password in logs
+});
 
-export const pool = new Pool({
-  host: process.env.PGHOST,
-  port: Number(process.env.PGPORT),
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
- });
-console.log('Database connection pool created');
+const pool = new Pool(dbConfig);
+
+// Test the connection
+pool.query('SELECT NOW()')
+  .then(() => console.log('✅ Database connection successful'))
+  .catch(err => console.error('❌ Database connection failed:', err));
+
+// Handle pool errors
+pool.on('error', (err) => {
+  console.error('❌ Unexpected database error:', err);
+});
+export {pool}

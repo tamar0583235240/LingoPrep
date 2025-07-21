@@ -1,5 +1,5 @@
 import { pool } from '../config/dbConnection';
-import { DynamicContent } from '../interfaces/entities/DynamicContents';
+import { DynamicContents } from '../interfaces/entities/DynamicContents';
 
 const getAllDynamicContents = async (): Promise<DynamicContent[]> => {
   try {

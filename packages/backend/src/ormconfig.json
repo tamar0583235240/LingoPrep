@@ -1,0 +1,18 @@
+[
+  {
+    "name": "default",
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "postgres",
+    "password": "661",
+    "database": "lingo-prep",
+    "synchronize": true,
+    "entities": ["src/entities/*.ts"],
+    "migrations": ["src/migrations/*.ts"],
+    "cli": {
+      "entitiesDir": "src/entities",
+      "migrationsDir": "src/migrations"
+    }
+  }
+]

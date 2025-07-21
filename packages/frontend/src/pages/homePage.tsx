@@ -8,7 +8,6 @@ const HomePage = () => {
   const isManager: boolean = store.getState().auth.isAdmin;
   console.log(store.getState().auth.user?.role);
 
-
   return (
     <GridContainer maxWidth="md" gridClasses="grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-4" mt="mt-4" mb="mb-4">
       <Button variant="primary-dark" fullWidth onClick={() => navigate("/simulation")}>
@@ -27,7 +26,6 @@ const HomePage = () => {
         משותף
       </Button>
 
-
       {isManager && (
         <>
           <div className="col-span-full mt-6 text-right">
@@ -40,17 +38,10 @@ const HomePage = () => {
             ניהול משאבים
           </Button>
           <Button variant="outline" fullWidth onClick={() => navigate("/admin/users")}>
-            ניהול משתמשים
-          </Button>
-              <Button variant="outline" fullWidth onClick={() => navigate("/admin/dynamic-content")}>
-      ניהול תכנים דינמיים
-    </Button>
+            ניהול משתמשים          </Button>
         </>
-
-        
       )}
     </GridContainer>
-
   );
 };
 

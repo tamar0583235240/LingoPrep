@@ -14,40 +14,44 @@ import { SharedRecordings } from "./SharedRecordings";
 @Index("answers_pkey", ["id"], { unique: true })
 @Entity("answers", { schema: "public" })
 export class Answers {
-  @Column("uuid", { primary: true, name: "id" })
-  id: string;
+  @Column("uuid", {
+    primary: true,
+    name: "id",
+    default: () => "uuid_generate_v4()",
+  })
+  id!: string;
 
   @Column("text", { name: "file_url" })
-  fileUrl: string;
+  fileUrl!: string;
+
+  @Column("text", { name: "answer_file_name", nullable: true })
+  answerFileName!: string | null;
 
   @Column("timestamp without time zone", {
     name: "submitted_at",
     default: () => "now()",
   })
-  submittedAt: Date;
+  submittedAt!: Date;
 
-  @Column("text", { name: "answer_file_name" })
-  answerFileName: string;
-
-  @Column("integer", { name: "amount_feedbacks", default: () => "0" })
-  amountFeedbacks: number;
+  @Column("integer", { name: "amount_feedbacks", nullable: true })
+  amountFeedbacks!: number | null;
 
   @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)
-  aiInsights: AiInsights[];
+  aiInsights!: AiInsights[];
 
   @ManyToOne(() => Questions, (questions) => questions.answers, {
     onDelete: "CASCADE",
   })
   @JoinColumn([{ name: "question_id", referencedColumnName: "id" }])
-  question: Questions;
+  question!: Questions;
 
   @ManyToOne(() => Users, (users) => users.answers, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
-  user: Users;
+  user!: Users;
 
   @OneToMany(
     () => SharedRecordings,
     (sharedRecordings) => sharedRecordings.answer
   )
-  sharedRecordings: SharedRecordings[];
+  sharedRecordings!: SharedRecordings[];
 }

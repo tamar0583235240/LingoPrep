@@ -1,30 +1,37 @@
-import { Column, Entity, Index, OneToMany } from "typeorm";
+import { Column, Entity, Index, ManyToMany, OneToMany } from "typeorm";
 import { Answers } from "./Answers";
+import { Categories } from "./Categories";
 
 @Index("questions_pkey", ["id"], { unique: true })
 @Entity("questions", { schema: "public" })
 export class Questions {
   @Column("uuid", { primary: true, name: "id" })
-  id: string;
+  id!: string;
 
   @Column("text", { name: "title" })
-  title: string;
+  title!: string;
 
   @Column("text", { name: "content" })
-  content: string;
-
-  @Column("text", { name: "category" })
-  category: string;
+  content!: string;
 
   @Column("text", { name: "tips" })
-  tips: string;
+  tips!: string;
 
   @Column("text", { name: "ai_guidance" })
-  aiGuidance: string;
+  aiGuidance!: string;
 
   @Column("boolean", { name: "is_active", default: () => "true" })
-  isActive: boolean;
+  isActive!: boolean;
+
+  @Column("text", { name: "options", nullable: true, array: true })
+  options!: string[] | null;
+
+  @Column("text", { name: "question_type", nullable: true })
+  questionType!: string | null;
 
   @OneToMany(() => Answers, (answers) => answers.question)
-  answers: Answers[];
+  answers!: Answers[];
+
+  @ManyToMany(() => Categories, (categories) => categories.questions)
+  categories!: Categories[];
 }

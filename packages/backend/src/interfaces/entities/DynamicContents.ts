@@ -1,19 +1,25 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: 'dynamic_contents' })
-export class DynamicContent {
-  @PrimaryGeneratedColumn()
+@Index("dynamic_contents_pkey", ["id"], { unique: true })
+@Index("dynamic_contents_key_name_key", ["keyName"], { unique: true })
+@Entity("dynamic_contents", { schema: "public" })
+export class DynamicContents {
+  @PrimaryGeneratedColumn({ type: "integer", name: "id" })
   id!: number;
 
-  @Column({ unique: true })
-  key_name!: string;
+  @Column("character varying", { name: "key_name", unique: true, length: 255 })
+  keyName!: string;
 
-  @Column('text')
+  @Column("text", { name: "content" })
   content!: string;
 
-  @Column({ type: 'text', nullable: true })
-  description?: string;
+  @Column("text", { name: "description", nullable: true })
+  description!: string | null;
 
-  @UpdateDateColumn({ type: 'timestamp' })
-  updated_at!: Date;
+  @Column("timestamp without time zone", {
+    name: "updated_at",
+    nullable: true,
+    default: () => "now()",
+  })
+  updatedAt!: Date | null;
 }
