@@ -132,7 +132,8 @@ const InterviewPage = () => {
   return (
     <div className="min-h-screen ">
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="w-full max-w-screen-xl mx-auto px-4 py-8">
+
         {/* Category Dropdown */}
         <div className="flex justify-center mb-8">
           <div className="w-full max-w-sm">
@@ -140,37 +141,37 @@ const InterviewPage = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-8">
-              <Sidebar
-                questions={questionsWithStatus}
-                currentIndex={currentIndex}
-                onNavigate={(index) => dispatch(goToQuestion(index))}
-              />
-            </div>
-          </div>
+<div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+  {/* Sidebar */}
+  <div className="lg:col-span-3">
+    <div className="sticky top-8">
+      <Sidebar
+        questions={questionsWithStatus}
+        currentIndex={currentIndex}
+        onNavigate={(index) => dispatch(goToQuestion(index))}
+      />
+    </div>
+  </div>
 
-          {/* Main Question Area */}
-          <div className="lg:col-span-2">
-            <div className="space-y-6">
+  {/* Main Question Area */}
+  <div className="lg:col-span-9">
+    <div className="space-y-6">
+      {questionsWithStatus[currentIndex] ? (
+        <div className="p-4 md:p-6 lg:p-8">
+          <Question
+            question={questionsWithStatus[currentIndex]}
+            onFinishRecording={() => setShowTips(true)}
+            onAnswerSaved={handleAnswerSaved}
+            onNavigate={(index) => dispatch(goToQuestion(index))}
+          />
+        </div>
+      ) : (
+        <div className="p-8 text-center">
+          <p className="text-red-500 text-lg">אין שאלות להצגה</p>
+        </div>
+      )}
               
-              {/* Question */}
-              {questionsWithStatus[currentIndex] ? (
-                <div className="p-8">
-                  <Question
-                    question={questionsWithStatus[currentIndex]}
-                    onFinishRecording={() => setShowTips(true)}
-                    onAnswerSaved={handleAnswerSaved}
-                  />
-                </div>
-              ) : (
-                <div className="p-8 text-center">
-                  <p className="text-red-500 text-lg">אין שאלות להצגה</p>
-                </div>
-              )}
+
 
                {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
