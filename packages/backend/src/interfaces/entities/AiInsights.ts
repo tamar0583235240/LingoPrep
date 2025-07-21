@@ -24,4 +24,5 @@ export class AiInsights {
   })
   @JoinColumn([{ name: "answer_id", referencedColumnName: "id" }])
   answer: Answers;
+
 }
