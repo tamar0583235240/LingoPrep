@@ -20,11 +20,22 @@ const colors = {
   }
 };
 
-const Notification: React.FC<NotificationProps> = ({ message, type = "success", onClose, icon }) => {
+const Notification: React.FC<NotificationProps> = ({
+  message,
+  type = "success",
+  onClose,
+  icon
+}) => {
   const color = colors[type];
+
   return (
     <div
-      className={`fixed bottom-6 left-6 z-50 max-w-xs w-full shadow-lg rounded-lg border px-4 py-3 flex items-center gap-2 animate-fade-in ${color.bg} ${color.border} ${color.text}`}
+      className={`
+        fixed bottom-6 left-1/2 transform -translate-x-1/2
+        z-50 max-w-xs w-full shadow-lg rounded-lg border
+        px-4 py-3 flex items-center gap-2 animate-fade-in
+        ${color.bg} ${color.border} ${color.text}
+      `}
       role="alert"
       style={{ minWidth: 280 }}
     >

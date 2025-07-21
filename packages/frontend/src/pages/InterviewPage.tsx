@@ -20,6 +20,7 @@ import MagicLoader from "../features/interview/components/MagicLoader";
 import EndSurvey from "../features/interview/components/endSurvey";
 import CategoryDropdown from "../features/interview/components/showCategories";
 import { skipToken } from "@reduxjs/toolkit/query";
+import { CheckCircle2 } from "lucide-react";
 
 const InterviewPage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -42,6 +43,14 @@ const InterviewPage = () => {
   const [showTips, setShowTips] = useState(false);
   const [showAnswerAI, setShowAnswerAI] = useState(false);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
+
+  const [notification, setNotification] = useState<{
+  message: string;
+  type: "success" | "error";
+  icon?: React.ReactNode;
+} | null>(null);
+
+const [notificationOpen, setNotificationOpen] = useState(false);
 
   const answeredQuestionIds = useMemo(() => {
     return answeredAnswers.map((a: { question: { id: any; }; }) => a.question.id);
@@ -81,21 +90,37 @@ const InterviewPage = () => {
     }
   }, [questions, dispatch]);
 
+  useEffect(() => {
+  if (currentAnswerId) {
+    setIsLoadingAI(true); // בזמן התחלת פתיחה
+  }
+}, [currentAnswerId]);
+
   if (isLoading) return <p className="p-8 text-center">טוען שאלות...</p>;
 
   const handleAnswerSaved = (answerId: string) => {
-    const q = questions[currentIndex];
-    dispatch(
-      addAnsweredAnswer({
-        id: answerId,
-        question: { id: String(q.id), text: q.title || q.text },
-      })
-    );
-    dispatch(setCurrentAnswerId(answerId)); // עדכון הסטייט של currentAnswerId
-    setIsLoadingAI(true);
-    setTimeout(() => {
-      setIsLoadingAI(false);
-    }, 800);
+     const q = questions[currentIndex];
+  dispatch(
+    addAnsweredAnswer({
+      id: answerId,
+      question: { id: String(q.id), text: q.title || q.text },
+    })
+  );
+
+  // הצגת ההודעה
+  setNotification({
+    message: "התשובה נשמרה בהצלחה!",
+    type: "success",
+    icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
+  });
+  setNotificationOpen(true); // נפתח פופאפ
+
+  // נעלים אחרי 3.5 שניות ואז נתחיל AI
+  setTimeout(() => {
+    setNotification(null);
+    setNotificationOpen(false);
+    dispatch(setCurrentAnswerId(answerId));
+  }, 3500);
   };
 
 return (
@@ -136,9 +161,33 @@ return (
  
     </div>
           </div>
-              <div className="mt-8 w-full max-w-2xl">
-          <EndSurvey showEndButton={allAnswered} answeredCount={answeredCount} totalQuestions={totalQuestions} />
-        </div> 
+            <div className="mt-8 w-full flex justify-center">
+  <div className="w-full max-w-2xl">
+    <EndSurvey
+      showEndButton={allAnswered}
+      answeredCount={answeredCount}
+      totalQuestions={totalQuestions}
+    />
+  </div>
+</div>
+
+{isCurrentQuestionAnswered && !currentAnswerId && !notificationOpen && (
+  <div className="flex justify-center mt-4">
+    <button
+      onClick={() => {
+        const answered = answeredAnswers.find(
+          (a) => a.question.id === questionsWithStatus[currentIndex].id
+        );
+        if (answered) {
+          dispatch(setCurrentAnswerId(answered.id));
+        }
+      }}
+      className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+    >
+      הצג ניתוח AI
+    </button>
+  </div>
+)}
 
     {/* אזור טיפים קבוע בתחתית שמאל */}
     <div className="fixed bottom-4 left-4 w-[350px] z-30">
@@ -165,19 +214,34 @@ return (
       )}
     </div>
 
+    
+
     {/* פופאפ ל-AI */}
-    {currentAnswerId && (
+    {currentAnswerId && !notificationOpen && (
       <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-        <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl mx-4 p-6 relative">
-          <button
-            onClick={() => dispatch(setCurrentAnswerId(null))}
-            className="absolute top-2 left-2 text-gray-500 hover:text-gray-800 text-xl"
-          >
-            ×
-          </button>
-          <AnswerAI answerId={currentAnswerId} />
-        </div>
+  <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl mx-4 p-6 relative min-h-[200px] flex items-center justify-center">
+    {isLoadingAI ? (
+      <div className="text-center">
+        <h3 className="text-lg font-bold text-purple-800 mb-3">מנתח תשובה...</h3>
+        <MagicLoader />
       </div>
+    ) : (
+      <>
+        <button
+          onClick={() => dispatch(setCurrentAnswerId(null))}
+          className="absolute top-2 left-2 text-gray-500 hover:text-gray-800 text-xl"
+        >
+          ×
+        </button>
+        <AnswerAI
+          answerId={currentAnswerId}
+          onClose={() => dispatch(setCurrentAnswerId(null))}
+          onLoaded={() => setIsLoadingAI(false)}
+        />
+      </>
+    )}
+  </div>
+</div>
     )}
   </div>
 );

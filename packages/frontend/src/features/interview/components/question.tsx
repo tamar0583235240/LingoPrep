@@ -50,7 +50,7 @@ const Question: React.FC<QuestionProps> = ({
       )}
 
       {/* <div className="flex justify-center items-center min-h-[60vh] bg-[--color-surface] py-8 px-2 direction-rtl"> */}
-<div className="bg-white rounded-2xl shadow-md border border-[--color-border] p-4 max-w-xl w-full text-right">
+        <div className="bg-white rounded-2xl shadow-md border border-[--color-border] p-4 max-w-xl w-full text-right">
           <div className="flex justify-between items-center mb-2">
             <span className="bg-[--color-background] text-primary-dark text-xs font-semibold px-3 py-1 rounded-full">
               שאלה {currentIndex + 1} 
@@ -82,11 +82,17 @@ const Question: React.FC<QuestionProps> = ({
                       answerFileName: fileName,
                     }).unwrap();
                     setNotification({
-                      message: "הקובץ נשמר בהצלחה!",
-                      type: "success",
-                      icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
-                    });
-                    setTimeout(() => setNotification(null), 3500);
+                    message: "הקובץ נשמר בהצלחה!",
+                    type: "success",
+                    icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
+                  });
+
+                  setTimeout(() => {
+                    setNotification(null);
+                    if (answer?.id) {
+                      onAnswerSaved(answer.id); // כאן ייפתח ה-AI רק לאחר סגירת ההודעה
+                    }
+                  }, 3500);
                     if (answer?.id) onAnswerSaved(answer.id);
                   } catch (e) {
                     setNotification({
@@ -114,6 +120,7 @@ const Question: React.FC<QuestionProps> = ({
                 answered={question.answered}
                 onFinish={onFinishRecording}
                 onSaveSuccess={onAnswerSaved}
+                setNotification={setNotification}
               />
             </div>
           </div>
