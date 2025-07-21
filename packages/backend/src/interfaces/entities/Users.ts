@@ -1,11 +1,11 @@
-import { Column, Entity, Index, OneToMany } from "typeorm";
+import { Column, Entity, Index, OneToMany, OneToOne } from "typeorm";
 import { ContentReports } from "./ContentReports";
 import { ExperienceThanks } from "./ExperienceThanks";
 import { InterviewExperiences } from "./InterviewExperiences";
 import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
-import { Resources } from "./Resources";
+import { Profiles } from "./Profiles";
 import { SharedRecordings } from "./SharedRecordings";
 import { UserActivity } from "./UserActivity";
 import { UserReminderSettings } from "./UserReminderSettings";
@@ -77,8 +77,8 @@ export class Users {
   )
   passwordResetTokens: PasswordResetTokens[];
 
-  @OneToMany(() => Resources, (resources) => resources.user)
-  resources: Resources[];
+  @OneToOne(() => Profiles, (profiles) => profiles.user)
+  profiles: Profiles;
 
   @OneToMany(
     () => SharedRecordings,

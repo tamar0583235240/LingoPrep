@@ -5,7 +5,7 @@ import { cn } from "../utils/cn";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
   variant?: "primary-dark" | "danger" | "outline" | "ghost" | "transparent";
-  size?: "sm" | "md" | "lg" | "extra-wide"; 
+  size?: "sm" | "md" | "lg" | "extra-wide";
   isLoading?: boolean;
   icon?: React.ReactNode;
   iconPosition?: "left" | "right";
@@ -29,6 +29,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const variantClasses = {
+      // "black": "bg-black text-white hover:bg-gray-800 focus:ring-black",
       "primary-dark": "bg-primary-dark text-white hover:bg-primary-dark/90 focus:ring-primary-dark",
       danger: "bg-danger text-white hover:bg-danger/90 focus:ring-danger",
       outline: "bg-white text-text-main border border-border hover:bg-muted focus:ring-gray-300",
@@ -40,7 +41,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       sm: "px-4 py-1.5 text-sm",
       md: "px-6 py-2.5 text-base",
       lg: "px-8 py-3.5 text-lg",
-      "extra-wide": "px-16 py-3 text-base", 
+      "extra-wide": "px-16 py-3 text-base",
     };
 
     const isDisabled = disabled || isLoading;
@@ -54,8 +55,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           "focus:outline-none focus:ring-2 focus:ring-opacity-50",
           "gap-2",
           variantClasses[variant],
-          sizeClasses[size], 
-          fullWidth && "w-full", 
+          sizeClasses[size],
+          fullWidth && "w-full",
           isDisabled && "opacity-70 cursor-not-allowed",
           className
         )}
@@ -67,12 +68,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ) : (
           icon && iconPosition === "left" && icon
         )}
-        
+
         {isLoading ? "טוען..." : children}
         {!isLoading && icon && iconPosition === "right" && icon}
       </button>
     );
   }
-);
+)
 
 Button.displayName = "Button";

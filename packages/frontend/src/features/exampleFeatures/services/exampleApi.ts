@@ -7,6 +7,8 @@ export const exampleApi = api.injectEndpoints({
     getItems: builder.query<exampleType[], void>({
       query: () => "items",
       providesTags: ["Reminders"],
+      query: () => "users",
+      providesTags: ["users"],
     }),
     addItem: builder.mutation<exampleType, Partial<exampleType>>({
       query: (item) => ({
@@ -15,6 +17,7 @@ export const exampleApi = api.injectEndpoints({
         body: item,
       }),
       invalidatesTags: ["Reminders"],
+      invalidatesTags: ["users"],
     }),
     deleteItem: builder.mutation<void, string>({
       query: (id) => ({
@@ -22,6 +25,7 @@ export const exampleApi = api.injectEndpoints({
         method: "DELETE",
       }),
       invalidatesTags: ["Reminders"],
+      invalidatesTags: ["users"],
     }),
   }),
 });

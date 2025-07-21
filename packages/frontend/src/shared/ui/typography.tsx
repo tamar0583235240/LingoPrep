@@ -13,7 +13,6 @@ export const Heading2 = ({ className, children, ...props }: HeadingProps) => (
   </h2>
 );
 
-
 interface ParagraphProps extends React.HTMLAttributes<HTMLParagraphElement> {}
 export const Paragraph = ({ className, children, ...props }: ParagraphProps) => (
   <p className={cn("text-base text-text-secondary leading-relaxed", className)} {...props}>

@@ -24,8 +24,8 @@ export const MainDashboard: React.FC = () => {
   // המרה של המשתמש ל-camelCase
 const user = authState.user
   ? {
-      firstName: (authState.user as any).first_name ?? authState.user.firstName,
-      lastName: (authState.user as any).last_name ?? authState.user.lastName,
+      firstName: (authState.user as any).first_name ?? authState.user.first_name,
+      lastName: (authState.user as any).last_name ?? authState.user.last_name,
     }
   : null;
 

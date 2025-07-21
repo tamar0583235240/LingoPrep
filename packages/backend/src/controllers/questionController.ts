@@ -66,4 +66,3 @@ export const deleteQuestionController = async (req: Request, res: Response): Pro
     res.status(500).json({ error });
   }
 };
-
