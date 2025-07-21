@@ -17,16 +17,20 @@ const EndSurvey: React.FC<EndSurveyProps> = ({ showEndButton, answeredCount, tot
   if (!showEndButton) return null; // לא מציגים כלל אם לא כולם נענו
 
   return (
-    <div className="flex flex-col items-center gap-4 mt-4">
-      <Button
-        variant="primary-dark"
-        size="md"
-        icon={<Sparkles className="w-5 h-5" />}
-        iconPosition="left"
-        onClick={() => setShowEnd(true)}
-      >
-        סיום השאלון
-      </Button>
+
+<>
+  <Button
+    variant="primary-dark"
+    size="md"
+    icon={<Sparkles className="w-5 h-5" />}
+    iconPosition="left"
+    onClick={() => setShowEnd(true)}
+    className="hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+  >
+    סיום השאלון
+  </Button>
+
+
 
       {showEnd && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
@@ -79,7 +83,7 @@ const EndSurvey: React.FC<EndSurveyProps> = ({ showEndButton, answeredCount, tot
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
