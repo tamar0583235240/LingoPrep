@@ -29,6 +29,7 @@ import InterviewMaterialPage from "../../features/knowledge-base/components/inte
 import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import DynamicContentPage from "../../pages/DynamicContentPage";
 import { PublicProfilePage } from "../../pages/PublicProfilePage";
+import DownloadExtension from "../../pages/DownloadExtension";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -159,6 +160,14 @@ export default function AppRoutes() {
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <ProfileList />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/browser-extension"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <DownloadExtension/>
               </RoleProtectedRoute>
             }
           />
