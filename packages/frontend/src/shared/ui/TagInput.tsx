@@ -2,7 +2,8 @@ import * as React from "react";
 import { cn } from "../utils/cn";
 import { Input } from "./input";
 import { Button } from "./button";
-import { FaPlus, FaTimes } from "react-icons/fa";
+// import { FaPlus, FaTimes } from "react-icons/fa";
+import { FaPlus,FaTimes } from "react-icons/fa";
 
 export interface GenericTag {
   id: string | number;
