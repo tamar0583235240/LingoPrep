@@ -15,7 +15,6 @@ import { Server } from 'socket.io';
 const redis = require('redis');
 
 dotenv.config();
-let io: Server;
 
 const subscriber = redis.createClient({
   host: 'host.docker.internal',
@@ -26,6 +25,8 @@ export const publisher = redis.createClient({
   host: 'host.docker.internal',
   port: 6379
 });
+
+export const sendIo = (io:Server) =>  io;
 
 const createApp = async (port:any): Promise<Application> => {
   const app = express();
@@ -49,7 +50,7 @@ const createApp = async (port:any): Promise<Application> => {
   app.use('/interview-materials-hub', interviewMaterialsHub);
 
   const server = http.createServer(app);
-  io = new Server(server, {
+  const io = new Server(server, {
     cors: {
       origin: [
         'http://localhost:3000',
@@ -77,7 +78,7 @@ const createApp = async (port:any): Promise<Application> => {
   server.listen(port, () => {
     console.log('listening on *+ ' + port);
   });
-
+  sendIo(io);
   try {
     if (!subscriber.isOpen)
       await subscriber.connect();
@@ -115,7 +116,7 @@ const createApp = async (port:any): Promise<Application> => {
 
   return app;
 };
-export { createApp, io };
+export { createApp };
 
 
 

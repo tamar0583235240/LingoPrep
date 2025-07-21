@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import questionRepository from '../reposioty/questionRepository';
 import { Questions } from '../interfaces/entities/Questions';
-import { io } from '../../app';
+import { sendIo } from '../../app';
 import { publisher } from '../../app';
+import { Server } from 'http';
 
 export const addQuestion = async (req: Request, res: Response): Promise<Questions | void> => {
   try {
@@ -66,8 +67,8 @@ export const deleteQuestionController = async (req: Request, res: Response): Pro
     }
     const message = JSON.stringify(newQuestionsList);
     await publisher.publish('questions', message);
-    console.log('Published new questions list to Redis:');
     await publisher.set(`question:${questionId}`, message);
+    const io = sendIo as unknown as Server;
     io.emit('questionDeleted', newQuestionsList);
     res.status(200).send("Question deleted successfully");
   } catch (error) {
