@@ -39,11 +39,14 @@ const HomePage = () => {
                 
               </div>
             </div>
-            <Button variant="outline" fullWidth onClick={() => navigate("/admin/questions")}>
+            <Button variant="outline" fullWidth onClick={() => navigate("/manager/questions")}>
               ניהול שאלות
             </Button>
             <Button variant="outline" fullWidth onClick={() => navigate("/admin/resources")}>
               ניהול משאבים
+            </Button>
+            <Button variant="outline" fullWidth onClick={() => navigate("/reminders")}>
+              ניהול תזכורות
             </Button>
             <Button variant="outline" fullWidth onClick={() => navigate("/admin/users")}>
               ניהול משתמשים
@@ -51,6 +54,7 @@ const HomePage = () => {
             <Button variant="outline" fullWidth onClick={() => navigate("/admin/dynamic-content")}>
               ניהול תכנים דינמיים
             </Button>
+
           </div>
         </div>
       </div>

@@ -15,9 +15,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
 
-  { label: "Reminders", href: "/reminders" },
-  { label: "Manage Tips & Practices", href: "/admin/reminders" },
-
+  { label: "תזכורות", href: "/tipsAndPractices" },
   { label: "סימולציה", href: "/simulation" },
   { label: "לוח בקרה", href: "/dashboard" },
   { label: "ההקלטות שלי", href: "/recordings" },
@@ -30,6 +28,7 @@ const navItems: NavItem[] = [
   { label: "ניהול משאבים", href: "/manager/resources", adminOnly: true },
   { label: "ניהול חומרים", href: "/manager/interview-materials", adminOnly: true, },
   { label: "מרכז חומרי ראיונות", href: "/interviewMaterialsHub", adminOnly: true },
+  { label: "ניהול תזכורות", href: "/reminders", adminOnly: true }
 ];
 
 const SidebarNavigation = () => {

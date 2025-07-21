@@ -23,10 +23,11 @@ const navItems: NavItem[] = [
   { label: "מרכז חומרי ראיונות", href: "/interviewMaterialsHub" },
   { label: "מנהל", href: "", isSectionTitle: true, adminOnly: true },
   { label: "ניהול שאלות", href: "/manager/questions", adminOnly: true },
-  { label: "ניהול תזכורות", href: "/manager/reminders", adminOnly: true },
+  { label: "ניהול תזכורות", href: "/manager/tipsAndPractices", adminOnly: true },
   { label: "ניהול משתמשים", href: "/manager/users", adminOnly: true },
   { label: "ניהול משאבים", href: "/manager/resources", adminOnly: true },
   { label: "ניהול חומרים", href: "/manager/interview-materials", adminOnly: true },
+  { label: "ניהול תזכורות", href: "/manager/reminders", adminOnly: true },
 ];
 
 const SidebarNavigation = () => {

@@ -6,8 +6,8 @@ const addTip = async (tip: Tips): Promise<Tips> => {
   try {
     const id = uuid4();
     const query = `
-      INSERT INTO tips (id, content, sequence_number)
-      VALUES ($1, $2, 1)
+      INSERT INTO tips (id, content, created_at)
+      VALUES ($1, $2, NOW())
       RETURNING *;
     `;
     const result = await pool.query(query, [id, tip.content]);

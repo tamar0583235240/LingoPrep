@@ -157,6 +157,14 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+                    <Route
+            path="/tipsAndPractices"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <RemindersPage />
+              </RoleProtectedRoute>
+            }
+          />
           <Route
             path="/profiles"
             element={

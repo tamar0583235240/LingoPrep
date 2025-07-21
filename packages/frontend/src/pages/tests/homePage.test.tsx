@@ -6,6 +6,7 @@ import { MemoryRouter, useNavigate } from "react-router-dom";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 
+
 // Mock useNavigate
 jest.mock("react-router-dom", () => {
   const actual = jest.requireActual("react-router-dom");

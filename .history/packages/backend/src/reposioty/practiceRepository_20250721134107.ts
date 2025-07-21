@@ -6,8 +6,8 @@ const addPractice = async (practice: Practices): Promise<Practices> => {
   try {
     const id = uuid4();
     const query = `
-      INSERT INTO practices (id, content, sequence_number)
-      VALUES ($1, $2, 1)
+      INSERT INTO practices (id, content, created_at)
+      VALUES ($1, $2, NOW())
       RETURNING *;
     `;
     const result = await pool.query(query, [id, practice.content]);

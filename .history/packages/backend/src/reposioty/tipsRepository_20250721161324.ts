@@ -6,7 +6,7 @@ const addTip = async (tip: Tips): Promise<Tips> => {
   try {
     const id = uuid4();
     const query = `
-      INSERT INTO tips (id, content, sequence_number)
+      INSERT INTO tips (id, content, created_at)
       VALUES ($1, $2, 1)
       RETURNING *;
     `;
