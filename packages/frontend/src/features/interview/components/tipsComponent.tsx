@@ -37,7 +37,12 @@ const TipsComponent: React.FC = () => {
   return (
     <div className="text-right" dir="rtl">
       <div className="bg-blue-100/50 rounded-lg p-4 text-blue-900 leading-relaxed">
+<<<<<<< HEAD
         <span className="block text-sm font-medium mb-2 text-blue-800">💡 עצה מומלצת:</span>
+=======
+        <span className="block text-sm font-medium mb-2 text-blue-800">
+          💡 עצה מומלצת:</span>
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
         <p className="text-sm leading-6">
           {currentQuestion.tips}
         </p>
@@ -46,4 +51,8 @@ const TipsComponent: React.FC = () => {
   );
 };
 
+<<<<<<< HEAD
 export default TipsComponent;
+=======
+export default TipsComponent;
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568

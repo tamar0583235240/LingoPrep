@@ -9,17 +9,33 @@ import { useSelector } from 'react-redux';
 import type { RecordingState } from '../types/Answer';
 import RecordButton from './RecordButton';
 import { RootState } from "../../../shared/store/store";
+<<<<<<< HEAD
+=======
+import { CheckCircle2, XCircle } from 'lucide-react';
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
 
 type AudioRecorderProps = {
   answered?: boolean;
   onFinish?: () => void;
   onSaveSuccess?: (answerId: string) => void;
+<<<<<<< HEAD
+=======
+  setNotification?: (notification: {
+    message: string;
+    type: "success" | "error";
+    icon?: React.ReactNode;
+  }) => void;
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
 };
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
   answered,
   onFinish,
   onSaveSuccess,
+<<<<<<< HEAD
+=======
+  setNotification
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
 }) => {
   const { questions, currentIndex, currentUserId } = useSelector((state: RootState) => state.simulation);
   const currentQuestion = questions[currentIndex];
@@ -28,11 +44,18 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     currentRecording,
     isLoading,
     startRecording,
+<<<<<<< HEAD
     stopRecording,
     pauseRecording,
     resumeRecording,
     restartRecording,
     deleteRecording,
+=======
+    pauseRecording,
+    resumeRecording,
+    stopRecording,
+    restartRecording,
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
     saveRecording,
     audioBlobRef,
   } = useRecording() as ReturnType<typeof useRecording> & {
@@ -48,6 +71,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   const handleMainButtonClick = () => {
     if (recordingPhase === 'idle' || recordingPhase === 'finished') {
+<<<<<<< HEAD
       startNewRecording();
     } else if (recordingPhase === 'recording') {
       handleStopRecording();
@@ -60,12 +84,23 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       setRecordingPhase('recording');
     } catch (error) {
       console.error('Failed to start recording:', error);
+=======
+      restartRecording();
+      setRecordingPhase('recording');
+    } else if (recordingPhase === 'recording') {
+      pauseRecording();
+      setRecordingPhase('paused');
+    } else if (recordingPhase === 'paused') {
+      resumeRecording();
+      setRecordingPhase('recording');
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
     }
   };
 
   const handleStopRecording = () => {
     stopRecording();
     setRecordingPhase('finished');
+<<<<<<< HEAD
   };
 
   const handleDeleteRecording = () => {
@@ -73,10 +108,14 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     setRecordingPhase('idle');
     setFileName('');
     setShowSaveModal(false);
+=======
+    onFinish?.();
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
   };
 
   const handleSaveRecording = async () => {
     try {
+<<<<<<< HEAD
       if (!fileName.trim()) {
         console.error('שם קובץ ריק');
         return;
@@ -109,6 +148,33 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       console.error('שגיאה בשמירה:', error);
       // הצג הודעת שגיאה למשתמש כאן
     }
+=======
+    setShowRecordingModal(false);
+    const answer = await saveRecording(currentUserId, String(currentQuestion.id), fileName);
+    setShowSaveModal(false);
+    setFileName('');
+
+    if (onSaveSuccess && answer?.id) {
+      onSaveSuccess(answer.id);
+    }
+
+    setNotification?.({
+      message: "ההקלטה נשמרה בהצלחה!",
+      type: "success",
+      icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
+    });
+    setTimeout(() => setNotification?.({ message: "", type: "success" }), 3500);
+
+  } catch (error) {
+    console.error('שגיאה בשמירה:', error);
+    setNotification?.({
+      message: "שגיאה בשמירת ההקלטה",
+      type: "error",
+      icon: <XCircle className="w-6 h-6 text-red-500" />,
+    });
+    setTimeout(() => setNotification?.({ message: "", type: "success" }), 3500);
+  }
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
   };
 
   const downloadRecording = () => {
@@ -128,7 +194,11 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     <div className="space-y-4 w-full">
       {/* כפתור ראשי תמיד מוצג */}
       <>
+<<<<<<< HEAD
         {!showRecordingModal && (
+=======
+        
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
           <button
             className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white rounded-xl px-6 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={() => {
@@ -141,7 +211,11 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
             <FiIcons.FiMic size={20} />
             התחל הקלטה
           </button>
+<<<<<<< HEAD
         )}
+=======
+        
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
         <RecordButton
           open={showRecordingModal}
           onClose={() => setShowRecordingModal(false)}
@@ -160,6 +234,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         />
       </>
 
+<<<<<<< HEAD
       {/* מונה זמן - מוצג רק כשהפופאפ פתוח */}
       {showRecordingModal && (recordingPhase === 'recording' || recordingPhase === 'paused') && (
         <div className="flex flex-col items-center gap-2">
@@ -198,6 +273,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         </div>
       )}
 
+=======
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
       {/* מודאל להזנת שם קובץ */}
       {showSaveModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">

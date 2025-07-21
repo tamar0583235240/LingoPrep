@@ -58,10 +58,17 @@ const FileUpload: React.FC<FileUploadProps> = ({
     if (!file) return;
     setIsUploading(true);
     const formData = new FormData();
+<<<<<<< HEAD
+=======
+    formData.append("userId", userId);
+    formData.append("title", file.name);
+    formData.append("description", "");
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
     formData.append("file", file);
 
     try {
       const res = await uploadRecording(formData).unwrap();
+<<<<<<< HEAD
       if (res.url) {
         onUploaded(res.url, file.name);
         handleRemove();
@@ -70,6 +77,11 @@ const FileUpload: React.FC<FileUploadProps> = ({
       }
     } catch (e) {
       console.error('Upload error:', e);
+=======
+      onUploaded(res.url, file.name);
+      handleRemove();
+    } catch (e) {
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
       onError?.(e);
     } finally {
       setIsUploading(false);

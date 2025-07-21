@@ -5,6 +5,7 @@ import multerConfig from '../config/multerConfig';
 
 const router = Router();
 
+<<<<<<< HEAD
 // הגדרת מגבלות העלאת קבצים
 const upload = multer({
   ...multerConfig,
@@ -40,3 +41,7 @@ router.post('/uploadRecord',
 );
 
 export default router;
+=======
+router.post('/upload', upload.single('file'), uploadRecording);
+export default router;
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568

@@ -22,4 +22,8 @@ export const useInterviewAnalysis = () => {
   };
 
   return { analyze, analysis, loading, error };
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568

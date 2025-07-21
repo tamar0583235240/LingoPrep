@@ -1,7 +1,8 @@
-@tailwind base;
+ @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* הגדרות בסיס */
 @layer base {
   :root {
     --color-primary: #00D6AD;
@@ -10,14 +11,23 @@
     --color-secondary-text: #64748B;
     --color-border: #E5E7EB;
     --color-background: #F7FAFC;
-    --color-surface: #E6FCF6;
-
+    --color-surface: #E6FCF6
+    --font-hand: 'Fredoka', sans-serif;
   }
-
-   
+}
   body {
     @apply bg-[--color-background] text-[--color-text];
     font-family: 'Inter', sans-serif;
     direction: rtl;
+  }
+/* הוספת utility מותאם אישית ל־scrollbar */
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
   }
 }

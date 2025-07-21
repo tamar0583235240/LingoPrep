@@ -14,7 +14,14 @@ export const getUserAnsweredQuestionsControler = async (req: Request, res: Respo
 
     return res.status(200).json(questions);
   } catch (error) {
+<<<<<<< HEAD
     console.error('❌ Controller error:', error);
     return res.status(500).json({ message: 'Server error fetching answered questions' });
   }
 };
+=======
+    console.error(' Controller error:', error);
+    return res.status(500).json({ message: 'Server error fetching answered questions' });
+  }
+};
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568

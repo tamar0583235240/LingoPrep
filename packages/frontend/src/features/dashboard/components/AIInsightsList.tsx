@@ -1,6 +1,7 @@
 import { FileText } from "lucide-react";
 import { useGetAiInsightsQuery } from '../services/aiInsightsApi';
 import { CardWrapper } from "./CardWrapper";
+import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
 
 const AIInsightsList: React.FC = () => {
   const { data: insights = [], isLoading, isError } = useGetAiInsightsQuery();
@@ -20,7 +21,7 @@ const AIInsightsList: React.FC = () => {
         style={{ maxHeight: "13rem" }}
       >
         <ul className="list-inside space-y-3 text-[--color-text] text-base">
-          {insights.map((insight) => (
+          {insights.map((insight: { id: Key | null | undefined; summary: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }) => (
             <li key={insight.id} className="flex items-center gap-3 text-[--color-text] bg-white p-2 rounded-lg">
               <span>{insight.summary}</span>
             </li>

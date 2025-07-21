@@ -2,6 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { interviewType } from "../types/questionType";
 import { InitialState } from "../types/initialState";
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
 // מצב התחלתי
 const initialState: InitialState = {
   questions: [],
@@ -9,8 +14,12 @@ const initialState: InitialState = {
   loading: false,
   currentAnswerId: "", //מזהה תשובה נוכחית
   currentCategoryId: "",
+<<<<<<< HEAD
   // currentUserId: "00000000-0000-0000-0000-000000000000", //מזהה משתמש נוכחי (הערך המקורי)
   currentUserId: "11111111-1111-1111-1111-111111111111", //מזהה משתמש נוכחי (לבדיקות בלבד)
+=======
+  currentUserId: " ", //מזהה משתמש נוכחי
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
 };
 
 // יצירת הסלייס
@@ -88,6 +97,10 @@ export const {
 } = simulationSlice.actions;
 
 // יצוא ברירת מחדל של הרידוסר
+<<<<<<< HEAD
 export default simulationSlice.reducer;
 
 
+=======
+export default simulationSlice.reducer;
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568

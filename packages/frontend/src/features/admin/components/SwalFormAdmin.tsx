@@ -23,9 +23,24 @@ const SwalForm = () => {
     const fullUser: user = {
       id: Math.random().toString(36).substring(2, 15),
       ...data,
+      first_name: data.firstName,
+      last_name: data.lastName,
       phone: data.phone || '',
       createdAt: new Date(),
       isActive: false,
+      slug: null, // או תוכלי ליצור לפי שם
+  contentReports: [],
+  experienceThanks: [],
+  interviewExperiences: [],
+  answers: [],
+  feedbacks: [],
+  passwordResetTokens: [],
+  resources: [],
+  sharedRecordings: [],
+  userActivities: [],
+  userReminderSettings: [],
+  userSessions: [],
+  workExperiences: [],
     };
     try {
       await createUser(fullUser).unwrap();

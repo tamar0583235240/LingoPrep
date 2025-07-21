@@ -1,4 +1,5 @@
 import { Pool } from 'pg';
+<<<<<<< HEAD
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -10,6 +11,11 @@ const dbConfig = {
   password: process.env.DB_PASSWORD || '661',
   port: Number(process.env.DB_PORT || 5432)
 };
+=======
+import dotenv from 'dotenv';
+import { createClient } from '@supabase/supabase-js';
+dotenv.config();
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
 
 console.log('🔌 Database configuration:', {
   ...dbConfig,

@@ -1,11 +1,10 @@
 // components/common/EditableListItem.tsx
 import * as React from "react";
 import { cn } from "../utils/cn";
-import { CardSimple } from "./card"; 
-import { Button } from "./button"; 
-import { Input } from "./input"; 
-import { ToggleSwitch } from "./ToggleSwitch"; 
-import { FaEdit, FaTrashAlt, FaSave, FaTimes } from "react-icons/fa"; 
+import { CardSimple } from "./card";
+import { Button } from "./button";
+import { ToggleSwitch } from "./ToggleSwitch";
+import { FaEdit, FaTrashAlt, FaSave, FaTimes } from "react-icons/fa";
 
 interface EditableListItemProps<T> extends React.HTMLAttributes<HTMLDivElement> {
   itemData: T; 
@@ -100,6 +99,7 @@ export function EditableListItem<T extends { id?: string | number }>({
 }
 
 EditableListItem.displayName = "EditableListItem";
+<<<<<<< HEAD
 // import * as React from "react";
 // import { cn } from "../utils/cn";
 // import { CardSimple } from "./card";
@@ -210,3 +210,5 @@ EditableListItem.displayName = "EditableListItem";
 // }
 
 // EditableListItem.displayName = "EditableListItem";
+=======
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568

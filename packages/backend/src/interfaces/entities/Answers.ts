@@ -19,7 +19,11 @@ export class Answers {
     name: "id",
     default: () => "uuid_generate_v4()",
   })
+<<<<<<< HEAD
   id!: string;
+=======
+  id: string;
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
 
   @Column("text", { name: "file_url" })
   fileUrl!: string;
@@ -27,14 +31,26 @@ export class Answers {
   @Column("text", { name: "answer_file_name", nullable: true })
   answerFileName!: string | null;
 
+  @Column("text", { name: "answer_file_name", nullable: true })
+  answerFileName: string | null;
+
   @Column("timestamp without time zone", {
     name: "submitted_at",
     default: () => "now()",
   })
   submittedAt!: Date;
 
+<<<<<<< HEAD
   @Column("integer", { name: "amount_feedbacks", nullable: true })
   amountFeedbacks!: number | null;
+=======
+  @Column("integer", {
+    name: "amount_feedbacks",
+    nullable: true,
+    default: () => "0",
+  })
+  amountFeedbacks: number | null;
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
 
   @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)
   aiInsights!: AiInsights[];

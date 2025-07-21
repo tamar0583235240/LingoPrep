@@ -6,8 +6,12 @@ import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
 import { Profiles } from "./Profiles";
+<<<<<<< HEAD
 import { Resources } from "./Resources";
+=======
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
 import { SharedRecordings } from "./SharedRecordings";
+import { UserActivity } from "./UserActivity";
 import { UserReminderSettings } from "./UserReminderSettings";
 import { UserSessions } from "./UserSessions";
 import { WorkExperiences } from "./WorkExperiences";
@@ -47,6 +51,7 @@ export class Users {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive!: boolean;
 
+<<<<<<< HEAD
   @Column("text", { name: "slug", nullable: true, unique: true })
   slug!: string | null;
 
@@ -64,6 +69,28 @@ export class Users {
     (interviewExperiences) => interviewExperiences.user
   )
   interviewExperiences!: InterviewExperiences[];
+=======
+  @Column("text", { name: "password", nullable: true })
+  password: string | null;
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
+
+  @Column("text", { name: "slug", nullable: true, unique: true })
+  slug: string | null;
+
+  @OneToMany(() => ContentReports, (contentReports) => contentReports.user)
+  contentReports: ContentReports[];
+
+  @OneToMany(
+    () => ExperienceThanks,
+    (experienceThanks) => experienceThanks.user
+  )
+  experienceThanks: ExperienceThanks[];
+
+  @OneToMany(
+    () => InterviewExperiences,
+    (interviewExperiences) => interviewExperiences.user
+  )
+  interviewExperiences: InterviewExperiences[];
 
   @OneToMany(() => Answers, (answers) => answers.user)
   answers!: Answers[];
@@ -80,8 +107,13 @@ export class Users {
   @OneToOne(() => Profiles, (profiles) => profiles.user)
   profiles!: Profiles;
 
+<<<<<<< HEAD
   @OneToMany(() => Resources, (resources) => resources.user)
   resources!: Resources[];
+=======
+  @OneToOne(() => Profiles, (profiles) => profiles.user)
+  profiles: Profiles;
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
 
   @OneToMany(
     () => SharedRecordings,
@@ -89,10 +121,14 @@ export class Users {
   )
   sharedRecordings!: SharedRecordings[];
 
+  @OneToMany(() => UserActivity, (userActivity) => userActivity.user)
+  userActivities: UserActivity[];
+
   @OneToMany(
     () => UserReminderSettings,
     (userReminderSettings) => userReminderSettings.user
   )
+<<<<<<< HEAD
   userReminderSettings!: UserReminderSettings[];
 
   @OneToMany(() => UserSessions, (userSessions) => userSessions.user)
@@ -101,3 +137,13 @@ export class Users {
   @OneToMany(() => WorkExperiences, (workExperiences) => workExperiences.user)
   workExperiences!: WorkExperiences[];
 }
+=======
+  userReminderSettings: UserReminderSettings[];
+
+  @OneToMany(() => UserSessions, (userSessions) => userSessions.user)
+  userSessions: UserSessions[];
+
+  @OneToMany(() => WorkExperiences, (workExperiences) => workExperiences.user)
+  workExperiences: WorkExperiences[];
+}
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568

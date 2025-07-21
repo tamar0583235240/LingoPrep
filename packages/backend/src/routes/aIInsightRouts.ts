@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import * as express from 'express';
 import upload from '../config/multerConfig';
 import {
@@ -8,15 +9,35 @@ import {
   getAllInsightsController,
   analyzeAndSaveInsight
 } from '../controllers/aIInsightController';
+=======
+import { Router } from "express";
+import {
+    getAiInsights, getAiInsightsByAnswerId, createInsightController,
+    deleteInsightController,
+    updateInsightController,
+    getInsightByIdController,
+    getAllInsightsController,
+} from "../controllers/aIInsightController";
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
 
 const router = express.Router();
 
+<<<<<<< HEAD
 // נתיבי API בסיסיים
 router.get('/', getAllInsightsController);             // שליפת כל התובנות
 router.get('/:id', getInsightByIdController);          // שליפת תובנה לפי מזהה
 router.post('/', createInsightController);             // יצירת תובנה
 router.put('/:id', updateInsightController);           // עדכון תובנה
 router.delete('/:id', deleteInsightController);        // מחיקת תובנה
+=======
+AiInsightsRouter.get('/AiInsights/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
+AiInsightsRouter.get('/AiInsights/getAiInsights', getAiInsights);
+AiInsightsRouter.get('/', getAllInsightsController);
+AiInsightsRouter.post('/', createInsightController);            
+AiInsightsRouter.get('/:id', getInsightByIdController);         
+AiInsightsRouter.put('/:id', updateInsightController);           
+AiInsightsRouter.delete('/:id', deleteInsightController);        
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
 
 // נתיב להעלאת קובץ אודיו וניתוח
 router.post('/analyze', 

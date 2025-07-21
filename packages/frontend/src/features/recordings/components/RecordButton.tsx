@@ -50,7 +50,10 @@ const RecordButton: React.FC<RecordButtonProps> = ({
           <p className="text-[var(--color-secondary-text)] text-sm">הקלט את התשובה שלך</p>
         </div>
 
+<<<<<<< HEAD
         {/* Idle */}
+=======
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
         {recordingPhase === "idle" && (
           <div className="space-y-6">
             <div className="flex flex-col items-center">
@@ -162,4 +165,8 @@ const RecordButton: React.FC<RecordButtonProps> = ({
   );
 };
 
+<<<<<<< HEAD
 export default RecordButton;
+=======
+export default RecordButton;
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568

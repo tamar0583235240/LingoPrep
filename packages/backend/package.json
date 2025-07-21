@@ -4,11 +4,18 @@
   "description": "Backend API server",
   "main": "dist/index.js",
   "scripts": {
+<<<<<<< HEAD
     "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
     "build": "tsc --project tsconfig.json",
     "start": "node dist/index.js",
     "clean": "rimraf dist",
     "lint": "eslint . --ext .ts",
+=======
+    "dev": "nodemon --exec ts-node index.ts",
+    "build": "tsc",
+    "start": "node index.js",
+    "clean": "rm -rf dist",
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
     "test": "jest"
   },
   "dependencies": {
@@ -18,25 +25,40 @@
     "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+<<<<<<< HEAD
     "dotenv": "^16.6.1",
     "express": "^4.18.2",
+=======
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
     "google-auth-library": "^10.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^7.0.3",
     "path": "^0.12.7",
     "pg": "^8.16.0",
+<<<<<<< HEAD
     "reflect-metadata": "^0.2.2",
+=======
+    "react-icons": "^5.5.0",
+    "reflect-metadata": "^0.2.2",
+    "supertest": "^7.1.1",
+    "transliteration": "^2.3.5",
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
     "typeorm": "^0.3.25",
     "uuid": "^11.1.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",
+    "@types/dotenv": "^8.2.3",
     "@types/express": "^4.17.23",
     "@types/hapi__joi": "^17.1.15",
+<<<<<<< HEAD
     "@types/jest": "^29.5.12",
     "@types/joi": "^17.2.3",
     "@types/jsonwebtoken": "^9.0.10",
@@ -55,6 +77,22 @@
     "rimraf": "^5.0.5",
     "supertest": "^6.3.4",
     "ts-jest": "^29.1.2",
+=======
+    "@types/jest": "^30.0.0",
+    "@types/joi": "^17.2.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^20.19.6",
+    "@types/nodemailer": "^6.4.17",
+    "@types/pg": "^8.15.4",
+    "@types/supertest": "^6.0.3",
+    "@types/transliteration": "^1.6.1",
+    "@types/uuid": "^10.0.0",
+    "@types/xlsx": "^0.0.36",
+    "@types/yup": "^0.32.0",
+    "nodemon": "^3.0.1",
+    "ts-jest": "^29.4.0",
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
     "ts-node": "^10.9.1",
     "typescript": "^5.0.0"
   }

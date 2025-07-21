@@ -6,6 +6,7 @@
     "port": 5432,
     "username": "postgres",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "password": "rut1558",
 =======
     "password": "sp215113762",
@@ -13,5 +14,12 @@
     "database": "",
     "synchronize": false,
     "entities": ["entities/*.js"]
+=======
+    "password": "huser",
+    "database": "lingo-prep",
+    "synchronize": true,
+    "logging": true,
+    "entities": ["dist/entities/*.js"]
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
   }
 ]

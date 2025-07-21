@@ -1,4 +1,5 @@
-import { User } from "../../../../../backend/src/interfaces/User";
+// import { Users } from "../../../../../backend/src/interfaces/entities/Users";
+import {User} from "../../../../../backend/src/interfaces/User";
 export interface user extends User {
   isSelected?: boolean; // שדה פנימי לצרכי UI בלבד
 }
@@ -21,4 +22,15 @@ export interface UploadResponse {
     last_name?: string;
     reason: string;
   }[];
+// }export interface User {
+//   id: string;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   phone: string;
+//   password: string;
+//   role: 'student' | 'manager';
+//   isActive: boolean;
+//   createdAt?: Date;
+//   isSelected?: boolean; // שדה UI בלבד
 }

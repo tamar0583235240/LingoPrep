@@ -11,4 +11,8 @@ export const statusService = createApi({
   }),
 });
 
+<<<<<<< HEAD
 export const { useGetStatusByUserIdQuery } = statusService;
+=======
+export const { useGetStatusByUserIdQuery } = statusService;
+>>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
