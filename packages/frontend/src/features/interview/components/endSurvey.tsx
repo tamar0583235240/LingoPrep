@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from '../../../shared/hooks/reduxHooks';
 import { Certificate } from '../../dashboard/components/Certificate';
+
 interface EndSurveyProps {
   showEndButton: boolean;
   answeredCount: number;
@@ -15,6 +16,7 @@ const EndSurvey: React.FC<EndSurveyProps> = ({ showEndButton, answeredCount, tot
   const [showCertificate, setShowCertificate] = useState(false);
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
+
   if (!showEndButton) return null; // לא מציגים כלל אם לא כולם נענו
   return (
 <>
