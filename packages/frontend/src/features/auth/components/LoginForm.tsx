@@ -29,7 +29,7 @@ const LoginForm = () => {
     dispatch(loginStart());
     setErrorMessage("");
     try {
-      const res = await login({ email, password }).unwrap();
+      const res = await login({ email, password, rememberMe}).unwrap();
       setTempEmail(email);
       setShowValidation(true);
       successfulLogin(res);

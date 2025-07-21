@@ -5,19 +5,15 @@ import { FaBehance, FaCodepen, FaDev, FaDribbble, FaExternalLinkAlt, FaFileAlt, 
 import { ExternalLink, Profile } from "../features/profile/types/profileTypes";
 import { useGetProfileByIdQuery } from "../features/profile/services/profileApi";
 import CopyLinkButton from "../features/profile/components/copyLinkButton";
-
 const MyProfileViewPage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
-
   // Fetch profile data from RTK Query using useGetProfileByIdQuery
   const { data: profile, error, isLoading } = useGetProfileByIdQuery(user?.id ?? "", {
     skip: !user, // Skip the query if no user
   });
-
   // If no user exists, return null immediately (do not render the profile view)
   if (!user) return <p>לא נמצא פרופיל.</p>;
-
   const getIconForLink = (url: string) => {
     if (url.includes("linkedin.com")) return <FaLinkedin />;
     if (url.includes("github.com")) return <FaGithub />;
@@ -32,14 +28,11 @@ const MyProfileViewPage = () => {
     if (url.startsWith("http")) return <FaGlobe />;
     return <FaExternalLinkAlt />;
   };
-
   const getFullName = (profile: Profile) => `${profile.first_name} ${profile.last_name}`;
-
   // Conditional rendering based on the loading, error, or profile state
   if (isLoading) return <p>טוען פרופיל...</p>;
   if (error) return <p className="text-red-500">שגיאה בטעינת פרופיל.</p>;
   if (!profile) return <p>לא נמצא פרופיל.</p>;
-
   return (
     <div className="max-w-xl mx-auto bg-white rounded-2xl shadow-md p-6 flex flex-col items-center text-center">
       {profile.image_url ? (
@@ -51,7 +44,6 @@ const MyProfileViewPage = () => {
       ) : (
         <FaUserCircle className="w-24 h-24 text-gray-300 mb-4" />
       )}
-
       <h2 className="text-xl font-semibold mb-1">{getFullName(profile)}</h2>
       <p className="text-sm text-gray-500">{profile.location}</p>
       <p className="text-sm text-gray-600 mt-2">
@@ -60,7 +52,6 @@ const MyProfileViewPage = () => {
       <p className="text-sm text-gray-600">
         <span className="font-medium">סוג משרה:</span> {profile.preferred_job_type}
       </p>
-
       {Array.isArray(profile.external_links) && profile.external_links.length > 0 && (
         <div className="flex flex-wrap justify-center gap-3 mt-4">
           {profile.external_links.map((link: ExternalLink, i: number) => {
@@ -81,16 +72,20 @@ const MyProfileViewPage = () => {
           })}
         </div>
       )}
-
       <button
         onClick={() => navigate("/my-profile/edit")}
         className="mt-6 bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark"
       >
         ערוך פרופיל
       </button>
-      <CopyLinkButton slug={user.slug} /> 
+      <CopyLinkButton slug={user.slug} />
     </div>
   );
 };
-
 export default MyProfileViewPage;
+
+
+
+
+
+

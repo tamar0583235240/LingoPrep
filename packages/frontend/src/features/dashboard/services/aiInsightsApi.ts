@@ -3,30 +3,19 @@ import { aiInsightsType } from "../types/aiInsightsType";
 
 export const aiInsightsApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getItems: builder.query<aiInsightsType[], void>({
-      query: () => "/aiInsight",
+    getAiInsights: builder.query<aiInsightsType[], void>({
+      query: () => "/AiInsights/getAiInsights",
       providesTags: ["users"],
     }),
-    addItem: builder.mutation<aiInsightsType, Partial<aiInsightsType>>({
-      query: (item) => ({
-        url: "/insights",
-        method: "GET",
-        body: item,
-      }),
-      invalidatesTags: ["users"],
-    }),
-    deleteItem: builder.mutation<void, string>({
-      query: (id) => ({
-        url: `items/${id}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: ["users"],
+    getAiInsightsByAnswerId: builder.query<aiInsightsType[], string>({
+      query: (answerId) => `/AiInsights/getAiInsightsByAnswerId/${answerId}`,
+      providesTags: ["users"],
     }),
   }),
 });
 
 export const {
-  useGetItemsQuery,
-  useAddItemMutation,
-  useDeleteItemMutation,
+  useGetAiInsightsQuery,
+  useGetAiInsightsByAnswerIdQuery,
 } = aiInsightsApi;
+

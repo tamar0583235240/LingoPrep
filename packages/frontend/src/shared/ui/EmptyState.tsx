@@ -2,7 +2,7 @@
 import * as React from "react";
 import { cn } from "../utils/cn";
 import { IconWrapper } from "./IconWrapper";
-import { Heading2, Paragraph } from "./typography"; 
+import { Heading1, Paragraph } from "./typography"; 
 import { Button } from "./button"; 
 import { FaPlusCircle } from "react-icons/fa";
 
@@ -38,7 +38,7 @@ export const EmptyState = ({
           {icon}
         </IconWrapper>
       )}
-      <Heading2 className="!text-2xl !font-semibold mb-2">{title}</Heading2>
+      <Heading1 className="!text-2xl !font-semibold mb-2">{title}</Heading1>
       {description && (
         <Paragraph className="max-w-md mb-6">{description}</Paragraph>
       )}

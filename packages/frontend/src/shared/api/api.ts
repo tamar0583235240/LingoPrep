@@ -7,12 +7,8 @@ export const api = createApi({
         credentials: 'include',
     }),
     reducerPath: "api",
-    tagTypes: ["Item" ,"Feedback" ,"AiInsights","answers","question","shared_recordings", "InterviewMaterials","users", "questions", "answers", "insights"],
-    endpoints: (builder) => ({
-    getProgressStats: builder.query<ProgressStats, string>({
-      query: (userId) => `questions/progress/${userId}`,
-    }),
-  }),
-});
+    tagTypes: ["Item" ,"Feedback" ,"AiInsights","answers","question","shared_recordings", "InterviewMaterials","users", "questions", "answers", "insights","admin","users","DynamicContents"],
+    endpoints: () => ({}),
+  });
 
-export const { useGetProgressStatsQuery } = api;
+export const { } = api;

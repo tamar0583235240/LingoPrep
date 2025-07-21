@@ -1,6 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
+import { RecordingsList } from "../../features/recordings/components/recordingsList";
+import { SearchComponents } from "../../features/recordings/components/searchComponents";
+import { FilteringComponents } from "../../features/recordings/components/filteringComponents";
+import { SortComponents } from "../../features/recordings/components/sortComponents";
+import { AdminQuestions } from "../../features/admin/components/adminQuestions";
+import AdminUser from '../../pages/AdminUser';
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import SignupForm from "../../features/auth/components/SignupForm";
 import Dashboard from '../../pages/dashboard';
@@ -10,32 +16,39 @@ import LandingPage from "../../pages/LandingPage";
 import LoginPage from "../../pages/LoginPage";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
-import AdminUser from "../../pages/AdminUser";
 import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
-import InterviewMaterialsView from "../../features/knowledge-base/components/InterviewMaterialsView";
-import ProjectsList from "../../features/profile/components/projects";
+// import InterviewMaterialsView from "../../features/knowledge-base/components/InterviewMaterialsView";
+// import ProjectsList from "../../features/profile/components/projects";
 import { WorkExperienceTab } from "../../features/profile/components/WorkExperienceTab";
 import ProfileList from "../../features/profile/components/ProfileList";
 import MyProfileViewPage from "../../pages/my-profile-view";
 import ProfileAccordionPage from "../../pages/ProfileAccordionPage";
+import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
+import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
+import NotAuthorizedPage from "../components/NotAuthorizedPage";
+import DynamicContentPage from "../../pages/DynamicContentPage";
 import { PublicProfilePage } from "../../pages/PublicProfilePage";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
   const isLogin = !!user;
-
   return (
     <div dir="rtl">
       <Routes>
         {/* Routes without sidebar */}
         <Route path="/" element={<LandingPage />} />
+     
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-
-        {/* Routes with header (DashboardLayout) */}
+        <Route
+          path="/reset-password"
+          element={
+              <ResetPassword />
+          }
+        />
+        {/* Routes with header */}
         <Route element={<DashboardLayout />}>
           <Route
             path="/home"
@@ -85,8 +98,24 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+
+<Route
+  path="/dashboard"
+  element={
+    <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+      <Dashboard />
+    </RoleProtectedRoute>
+  }
+/>
+
+
           <Route
-            path="/dashboard"
+            path="/recordings"
+            element={<RecordingsList allowedRoles={["student", "manager"]} />}
+          />
+
+          <Route
+            path="/shared"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <Dashboard />
@@ -121,7 +150,7 @@ export default function AppRoutes() {
             path="/interviewMaterialsHub"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <InterviewMaterialsView />
+                <InterviewMaterialsHub />
               </RoleProtectedRoute>
             }
           />
@@ -137,7 +166,9 @@ export default function AppRoutes() {
             path="/manager/questions"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <p>AdminQuestions</p>
+                <AdminQuestions allowedRoles={["manager"]}>
+                  <p>AdminQuestions</p>
+                </AdminQuestions>
               </RoleProtectedRoute>
             }
           />
@@ -151,6 +182,35 @@ export default function AppRoutes() {
           />
           <Route
             path="/manager/resources"
+            element = {
+            <RoleProtectedRoute allowedRoles={["manager"]}>
+                <p>InterviewMaterialsHub</p>
+            </RoleProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/questions"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <AdminQuestions allowedRoles={["manager"]}>
+                  <p>AdminQuestions</p>
+                </AdminQuestions>
+              </RoleProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/users"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <AdminUser />
+              </RoleProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/resources"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
                 <p>AdminResources</p>
@@ -161,7 +221,7 @@ export default function AppRoutes() {
             path="/manager/interview-materials"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <InterviewMaterialsView />
+                <InterviewMaterialPage />
               </RoleProtectedRoute>
             }
           />
@@ -169,7 +229,8 @@ export default function AppRoutes() {
             path="/personal-projects"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <ProjectsList userId={user?.id ?? ""} />
+                {/* <ProjectsList userId={user?.id ?? ""} /> */}
+                <p>ProjectsList</p>
               </RoleProtectedRoute>
             }
           />
@@ -177,13 +238,23 @@ export default function AppRoutes() {
             path="/work-experience"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                {/* <WorkExperienceTab userId={user?.id ?? ""} /> */}
-                <WorkExperienceTab />
+                     <WorkExperienceTab  />
+              </RoleProtectedRoute>
+            }
+          />
 
+
+          <Route
+            path="/admin/dynamic-content"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <DynamicContentPage />
               </RoleProtectedRoute>
             }
           />
         </Route>
+
+        <Route path="/not-authorized" element={<NotAuthorizedPage />} />
         <Route path="/u/:slug" element={<PublicProfilePage/>} />
       </Routes>
     </div>

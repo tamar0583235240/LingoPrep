@@ -1,33 +1,48 @@
-import { useState } from 'react';
 import Swal from 'sweetalert2';
+import { useState, useEffect } from 'react';
 import withReactContent from 'sweetalert2-react-content';
-import UserCard from './components/UserCard';
-import AddUserWithSwal from './components/AddNewUser';
-import { UploadUsers } from './components/UploadUsers';
-import UserUpdateForm from './components/UserUpdateForm';
-import { user } from './types/userTypes';
-import { useGetUsersQuery, useDeleteUserMutation, useUpdateUserMutation, } from './services/adminApi';
+import UserCard from './components/UserCardAdmin';
+import AddUserWithSwal from './components/AddNewUserAdmin';
+import { UploadUsers } from './components/UploadUsersAdmin';
+import UserUpdateForm from './components/UserUpdateFormAdmin';
+import { user } from './types/userType';
+import {
+  useGetUsersQueryAdmin,
+  useDeleteUserMutationAdmin,
+  useUpdateUserMutationAdmin,
+  useCreateUserMutationAdmin,
+} from '../../shared/api/adminApi';
 import { createRoot } from 'react-dom/client';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import { AdminUsersTitle } from './components/AdminQuestionsTitle';
 
 const MySwal = withReactContent(Swal);
-
 const UserList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
-
   const {
     data: users = [],
     isLoading,
-  } = useGetUsersQuery();
+    isError,
+    error,
+  } = useGetUsersQueryAdmin();
 
-  const [deleteUser] = useDeleteUserMutation();
-  const [updateUser] = useUpdateUserMutation();
+  useEffect(() => {
+    console.log("✅ users data:", users);
+    if (isError) {
+      console.log("❌ שגיאה בשליפת המשתמשים:", error);
+    }
+  }, [users, isError, error]);
+
+  const [deleteUser] = useDeleteUserMutationAdmin();
+  const [updateUser] = useUpdateUserMutationAdmin();
 
   const filteredUsers = users.filter((user) => {
+    const firstName = user.first_name || "";
+    const lastName = user.last_name || "";
     const matchName =
-      user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.last_name.toLowerCase().includes(searchTerm.toLowerCase());
+      firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      lastName.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchStatus =
       statusFilter === 'all' ||
@@ -48,7 +63,6 @@ const UserList = () => {
       cancelButtonText: 'בטל',
       confirmButtonColor: '#00B894'
     });
-
     if (result.isConfirmed) {
       try {
         await deleteUser(id).unwrap();
@@ -105,28 +119,26 @@ const UserList = () => {
         text: 'אירעה שגיאה בעדכון',
         icon: 'error',
         iconColor: '#64748B',
-        confirmButtonColor: '#e74c3c',
+        confirmButtonColor: '#E74C3C',
       });
     }
   }
 
   return (
     <div className="max-w-7xl mx-auto my-8 px-4">
-      <h2 className="text-center text-2xl font-bold mb-8">רשימת משתמשים</h2>
-
+      <div className="text-center mb-8"><AdminUsersTitle /></div>
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6 rtl">
         <div className="flex flex-wrap gap-4 items-center">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive')}
             className="border rounded px-3 py-2 w-40 text-right"
-            dir="rtl"  // או style={{ direction: 'rtl' }}
+            dir="rtl"
           >
             <option value="all">הצג את כולם</option>
             <option value="active">משתמשים פעילים</option>
             <option value="inactive">משתמשים לא פעילים</option>
           </select>
-
           <div className="relative">
             <input
               type="text"
@@ -143,13 +155,11 @@ const UserList = () => {
             </div>
           </div>
         </div>
-
         <div className="flex gap-4 items-center">
           <UploadUsers />
           <AddUserWithSwal />
         </div>
       </div>
-
       {isLoading ? (
         <p className="text-center">...טוען</p>
       ) : (

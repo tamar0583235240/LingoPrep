@@ -4,5 +4,5 @@ export interface feedbackType {
     given_by_user_id: string
     comment: string
     rating: number | undefined
-    created_at: Date
+    created_dat: Date
 }

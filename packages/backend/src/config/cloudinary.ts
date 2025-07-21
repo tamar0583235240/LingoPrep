@@ -1,5 +1,5 @@
-import dotenv from 'dotenv';
-import { v2 as cloudinary } from 'cloudinary';
+import dotenv from "dotenv";
+import { v2 as cloudinary } from "cloudinary";
 
 dotenv.config();
 
@@ -9,21 +9,30 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
-export const uploadFileToCloudinary = (file: Express.Multer.File, folder: string) => {
-  let resourceType: 'image' | 'video' | 'raw' = 'raw';
+export const uploadFileToCloudinary = (
+  file: Express.Multer.File,
+  folder: string
+) => {
+  let resourceType: "image" | "video" | "raw" = "raw";
 
-  if (file.mimetype.startsWith('image/')) {
-    resourceType = 'image';
-  } else if (file.mimetype.startsWith('video/')) {
-    resourceType = 'video';
+  if (file.mimetype.startsWith("image/")) {
+    resourceType = "image";
+  } else if (file.mimetype.startsWith("video/")) {
+    resourceType = "video";
   } else {
-    resourceType = 'raw';
+    resourceType = "raw";
   }
 
   return new Promise<any>((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
-      { resource_type: resourceType, folder },
-      (error: any, result: any) => {
+      {
+        resource_type: resourceType,
+        folder,
+        use_filename: true,
+        unique_filename: true,
+        overwrite: true,
+      },
+      (error, result) => {
         if (error || !result) {
           reject(error);
         } else {
@@ -35,7 +44,6 @@ export const uploadFileToCloudinary = (file: Express.Multer.File, folder: string
   });
 };
 export const deleteFileFromCloudinary = (publicId: string) => {
-  
   return new Promise<void>((resolve, reject) => {
     cloudinary.uploader.destroy(publicId, (error: any, result: any) => {
       if (error) {

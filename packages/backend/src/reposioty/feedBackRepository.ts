@@ -4,7 +4,8 @@ import { getSharedRecordingIdByAnswerId } from './sharedRecordingRpository';
 export const getFeedbackByAnswerCode= async (answerCode:string): Promise<Feedback[]> => {
   
   try{
-    const query = 'SELECT id, shared_recording_id, given_by_user_id, comment,rating, created_at,answer_code FROM feedback WHERE answer_code = \$1';
+
+    const query = 'SELECT id, shared_recording_id, given_by_user_id, comment,rating, created_dat,answer_code FROM feedback WHERE answer_code = \$1';
     const values = [answerCode];
     const { rows } = await pool.query(query,values); 
     return rows as Feedback[];

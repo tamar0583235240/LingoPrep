@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../shared/store/store";
-import { WorkExperienceTab } from "../features/profile/components/WorkExperienceTab";
+// import { WorkExperienceTab } from "../features/profile/components/WorkExperienceTab";
 const ProfilePage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
 

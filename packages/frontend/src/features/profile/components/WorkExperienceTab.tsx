@@ -7,11 +7,11 @@ import {
   useCreateWorkExperienceMutation,
   useUpdateWorkExperienceMutation,
   useDeleteWorkExperienceMutation,
-} from "../../profile/services/workExperienceApi";
+} from "../services/workExperienceApi";
 import { GridContainer } from "../../../shared/ui/GridContainer";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../shared/store/store";
-import { IconButton } from "../../../shared/ui/IconButon";
+// import { IconButton } from "../../../shared/ui/IconButon";
 
 export interface WorkExperienceItem {
   id: string;

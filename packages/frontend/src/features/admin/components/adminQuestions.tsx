@@ -9,7 +9,7 @@ import { UpdateQuestion } from "./updateQuestion";
 import { Question } from "../types/Question";
 import { AddQuestion } from "./addQuestion";
 import { SearchComponents } from "./searchComponents";
-
+import { useDynamicContents } from "../../dynamicContent/hooks/useDynamicContents";
 
 type AdminQuestionsProps = {
   allowedRoles: string[];
@@ -46,7 +46,6 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
     );
 
   if (!data)
-
     return (
       <div className="min-h-screen bg-[--color-background]" dir="rtl">
         <GridContainer className="py-12">
@@ -79,11 +78,6 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
         </GridContainer>
       </div>
     );
-  console.log(data);
-
-
-
-
 
   const activeQuestions = filteredQuestions
     .filter(question => question.is_active === true)
@@ -97,19 +91,15 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
     setQuestionToDelete(idQuestion);
   };
 
-
-
-
-
   return (
     <div className="min-h-screen bg-[--color-background]" dir="rtl">
       <div className="bg-white border-b border-[--color-border]">
         <GridContainer className="py-8" style={{ marginBottom: "0px" }}>
           <div className="text-center">
-            <Heading1 className="text-[--color-text] mb-2">ניהול שאלות</Heading1>
+            <AdminQuestionsTitle />
           </div>
           <SearchComponents searchText={searchText} setSearchText={setSearchText} />
-          <AddQuestion></AddQuestion>
+          <AddQuestion />
         </GridContainer>
       </div>
 
@@ -161,14 +151,9 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
                     variant="outline"
                     onClick={() => setQuestionToEdit(question)}
                     size="sm"
-                    icon={
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                    }
+                    icon={<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>}
                     iconPosition="right"
-                  >                    
-                  </Button>
+                  />
                   {questionToEdit?.id === question.id && (
                     <UpdateQuestion
                       question={questionToEdit}
@@ -179,14 +164,9 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
                     variant="danger"
                     size="sm"
                     onClick={() => deleteClick(question.id)}
-                    icon={
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    }
+                    icon={<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>}
                     iconPosition="right"
-                  >
-                  </Button>
+                  />
                 </div>
               </CardSimple>
             ))}
@@ -202,4 +182,33 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
       </GridContainer>
     </div>
   );
-}
+};
+
+// 👇 קומפוננטת כותרת מופרדת, עם return מסודר
+export const AdminQuestionsTitle: React.FC = () => {
+  const { contents, loading, error } = useDynamicContents();
+
+  if (loading) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-gray-500">טוען כותרת...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
+  }
+
+  const titleItem = contents.find(item => item.key_name === "admin_questions_title");
+
+  return (
+    <Heading1 className="text-[--color-text] mb-2">
+      {titleItem ? titleItem.content : "ניהול שאלות"}
+    </Heading1>
+  );
+};

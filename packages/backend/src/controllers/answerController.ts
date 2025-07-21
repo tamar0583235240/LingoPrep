@@ -1,7 +1,20 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
+import  answerRepository  from '../reposioty/answerRepository';
 import { pool } from "../config/dbConnection";
 import { validate as isUuid } from "uuid";  
-import  answerRepository  from '../reposioty/answerRepository';
+
+export const answerController = async (req: Request, res: Response): Promise<void> => {
+  console.log('answerController called');
+  try {
+    const items = await answerRepository.getAllAnswersByIdUser(req.params.user_id);
+    res.json(items);
+  } catch (error) {
+    console.error('Error in answerController:', error);
+    res.status(500).json({ error });
+  }
+};
+
+
 
 export const getProgressStats = async (req: Request, res: Response) => {
   try {
@@ -42,17 +55,5 @@ export const getProgressStats = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("שגיאה בשליפת סטטיסטיקות:");
     res.status(500).json({ error: "אירעה שגיאה בעת שליפת סטטיסטיקות ההתקדמות" });
-  }
-};
-
-
-export const answerController = async (req: Request, res: Response): Promise<void> => {
-  console.log('answerController called');
-  try {
-    const items = await answerRepository.getAllAnswersByIdUser(req.params.user_id);
-    res.json(items);
-  } catch (error) {
-    console.error('Error in answerController:', error);
-    res.status(500).json({ error });
   }
 };

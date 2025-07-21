@@ -7,7 +7,7 @@ import { ChevronDown } from "lucide-react";
 
 interface Props {
   user: user;
-  onSubmit: (data: Partial<user>) => Promise<void>;
+  onSubmit: (data: UserFormFields) => Promise<void>; // טיפוס פשוט יותר
 }
 
 const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
@@ -18,10 +18,10 @@ const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
   } = useForm<UserFormFields>({
     defaultValues: {
       firstName: user.first_name,
-      lastName: user.first_name,
+      lastName: user.last_name, // ✅ תוקן
       email: user.email,
       phone: user.phone ?? '',
-      password: user.password,
+      password: user.password || '', // ✅ אם password לא קיים
       role: user.role === 'manager' ? 'manager' : 'student',
     },
     resolver: yupResolver(userSchema),
@@ -29,13 +29,10 @@ const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
   });
 
   const submitAndClose: SubmitHandler<UserFormFields> = async (data) => {
-    const preparedData: Partial<user> = {
-      ...user,
+    await onSubmit({
       ...data,
-      phone: data.phone === '' ? undefined : data.phone,
-    };
-
-    await onSubmit(preparedData);
+      phone: data.phone ?? '', // ✅ ניקוי טלפון ריק
+    });
     Swal.close();
   };
 

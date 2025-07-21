@@ -1,5 +1,4 @@
 import { pool } from "../config/dbConnection";
-
 export const getAllProfiles = async () => {
   const result = await pool.query(`
     SELECT profiles.*, users.first_name, users.last_name, users.email, users.phone
@@ -9,8 +8,6 @@ export const getAllProfiles = async () => {
   `);
   return result.rows;
 };
-
-
 export const getProfileById = async (profileId: string) => {
   const result = await pool.query(
     `
@@ -21,10 +18,8 @@ export const getProfileById = async (profileId: string) => {
   `,
     [profileId]
   );
-
   return result.rows[0] || null;
 };
-
 export const getProfileByUserId = async (userId: string) => {
   const result = await pool.query(
     `
@@ -35,10 +30,8 @@ export const getProfileByUserId = async (userId: string) => {
   `,
     [userId]
   );
-
   return result.rows[0] || null;
 };
-
 export const createProfile = async (userId: string, data: any) => {
   const {
     image_url,
@@ -48,7 +41,6 @@ export const createProfile = async (userId: string, data: any) => {
     preferred_job_type,
     is_public,
   } = data;
-
   const result = await pool.query(
     `
     INSERT INTO profiles (
@@ -66,10 +58,8 @@ export const createProfile = async (userId: string, data: any) => {
       is_public,
     ]
   );
-
   return result.rows[0];
 };
-
 export const updateProfile = async (profileId: string, data: any) => {
   const {
     image_url,
@@ -79,7 +69,6 @@ export const updateProfile = async (profileId: string, data: any) => {
     preferred_job_type,
     is_public,
   } = data;
-
   const cleanedLinks = Array.isArray(external_links)
     ? external_links
         .filter((link) => link.url?.trim())
@@ -88,7 +77,6 @@ export const updateProfile = async (profileId: string, data: any) => {
           label: link.label.trim(),
         }))
     : [];
-
   const result = await pool.query(
     `
     UPDATE profiles SET
@@ -112,6 +100,5 @@ export const updateProfile = async (profileId: string, data: any) => {
       profileId,
     ]
   );
-
   return result.rows[0] || null;
 };

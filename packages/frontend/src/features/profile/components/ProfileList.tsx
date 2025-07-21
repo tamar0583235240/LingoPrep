@@ -17,7 +17,6 @@ import {
 } from "react-icons/fa";
 import { RootState } from "../../../shared/store/store";
 import { Profile } from "../types/profileTypes";
-
 /* ---------- helper that returns the matching icon ---------- */
 const getIconForLink = (url: string) => {
   const u = url.toLowerCase();
@@ -34,25 +33,19 @@ const getIconForLink = (url: string) => {
   if (u.startsWith("http")) return <FaGlobe />;
   return <FaExternalLinkAlt />;
 };
-
 const ProfileList = () => {
   const user     = useSelector((state: RootState) => state.auth.user);
   const isAdmin  = "manager".includes((user?.role ?? "").toLowerCase().trim());
-
   const { data: profiles, error, isLoading } = useGetProfilesQuery();
-
   if (isLoading) return <div>טוען פרופילים…</div>;
   if (error)     return <div>שגיאה בטעינת פרופילים</div>;
   if (!profiles || profiles.length === 0) return <div>לא נמצאו פרופילים</div>;
-
   const shownProfiles = profiles.filter((p) => (isAdmin ? true : p.is_public));
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
       {shownProfiles.length ? (
         shownProfiles.map((profile: Profile) => {
           const fullName = `${profile.first_name} ${profile.last_name}`;
-
           return (
             <div
               key={profile.id}
@@ -61,7 +54,6 @@ const ProfileList = () => {
               <p className="self-start text-right text-sm text-gray-500">
                 {profile.is_public ? "פרופיל ציבורי" : "פרופיל פרטי"}
               </p>
-
               {profile.image_url ? (
                 <img
                   src={profile.image_url}
@@ -71,10 +63,8 @@ const ProfileList = () => {
               ) : (
                 <FaUserCircle className="w-24 h-24 text-gray-300 mb-4" />
               )}
-
               <h2 className="text-xl font-semibold mb-1">{fullName}</h2>
               <p className="text-sm text-gray-500">{profile.location}</p>
-
               <p className="text-sm text-gray-600 mt-2">
                 <span className="font-medium">סטטוס:</span> {profile.status}
               </p>
@@ -82,7 +72,6 @@ const ProfileList = () => {
                 <span className="font-medium">סוג משרה מועדף:</span>{" "}
                 {profile.preferred_job_type}
               </p>
-
               {/* ---------- links section (only if present) ---------- */}
               {Array.isArray(profile.external_links) &&
                 profile.external_links.length > 0 && (
@@ -93,7 +82,6 @@ const ProfileList = () => {
                         typeof link === "string"
                           ? url.replace(/^https?:\/\//, "") // fallback label
                           : link.label || url;
-
                       return (
                         <a
                           key={idx}
@@ -122,5 +110,4 @@ const ProfileList = () => {
     </div>
   );
 };
-
 export default ProfileList;

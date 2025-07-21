@@ -57,9 +57,10 @@ export const CreateInterviewMaterialsForm = ({
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const onValid = (data: any) => {
+
     const formData = new FormData();
     formData.append("title", data.title);
-    formData.append("shortDescription", data.shortDescription);
+    formData.append("short_description", data.short_description);
     if (data.thumbnail?.length) {
       formData.append("thumbnail", data.thumbnail[0]);
     }
@@ -85,11 +86,20 @@ export const CreateInterviewMaterialsForm = ({
         </p>
       )}
       <div>
-        <label className="block mb-1 font-semibold text-sm text-text-main" htmlFor="title">
+        <label
+          className="block mb-1 font-semibold text-sm text-text-main"
+          htmlFor="title"
+        >
           כותרת
         </label>
-        <Input id="title" {...register("title")} aria-invalid={!!errors.title} />
-        {errors.title && <p className="text-sm text-red-600 mt-1">{errors.title.message}</p>}
+        <Input
+          id="title"
+          {...register("title")}
+          aria-invalid={!!errors.title}
+        />
+        {errors.title && (
+          <p className="text-sm text-red-600 mt-1">{errors.title.message}</p>
+        )}
       </div>
       <div>
         <label
@@ -108,11 +118,16 @@ export const CreateInterviewMaterialsForm = ({
           rows={3}
         />
         {errors.short_description && (
-          <p className="text-sm text-red-600 mt-1">{errors.short_description.message}</p>
+          <p className="text-sm text-red-600 mt-1">
+            {errors.short_description.message}
+          </p>
         )}
       </div>
       <div>
-        <label className="block mb-1 font-semibold text-sm text-text-main" htmlFor="thumbnail">
+        <label
+          className="block mb-1 font-semibold text-sm text-text-main"
+          htmlFor="thumbnail"
+        >
           תמונה ממוזערת (אופציונלי)
         </label>
         <input
@@ -122,10 +137,17 @@ export const CreateInterviewMaterialsForm = ({
           {...register("thumbnail")}
           className="w-full text-sm"
         />
-        {errors.thumbnail && <p className="text-sm text-red-600 mt-1">{errors.thumbnail.message}</p>}
+        {errors.thumbnail && (
+          <p className="text-sm text-red-600 mt-1">
+            {errors.thumbnail.message}
+          </p>
+        )}
       </div>
       <div>
-        <label className="block mb-1 font-semibold text-sm text-text-main" htmlFor="file">
+        <label
+          className="block mb-1 font-semibold text-sm text-text-main"
+          htmlFor="file"
+        >
           צרף קובץ (PDF, Word, אודיו וכו’)
         </label>
         <input
@@ -134,16 +156,21 @@ export const CreateInterviewMaterialsForm = ({
           {...register("file")}
           className="w-full text-sm"
         />
-        {errors.file && <p className="text-sm text-red-600 mt-1">{errors.file.message}</p>}
+        {errors.file && (
+          <p className="text-sm text-red-600 mt-1">{errors.file.message}</p>
+        )}
       </div>
       <div className="flex gap-4">
         <Button type="submit" disabled={isSubmitting} className="flex-1">
-          {isSubmitting ?
-            <span>"שולח"<div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-700"></div> </span>
-            : "שמור"}
-
+          {isSubmitting ? (
+            <span>
+              "שולח"
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-700"></div>{" "}
+            </span>
+          ) : (
+            "שמור"
+          )}
         </Button>
-
         {onCancel && (
           <Button
             type="button"

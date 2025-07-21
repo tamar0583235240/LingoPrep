@@ -1,10 +1,10 @@
-import express from "express";
-import { getProgressStats, answerController } from "../controllers/answerController";
+import { Router } from 'express';
+import { answerController } from '../controllers/answerController';
+import { getProgressStats } from "../controllers/answerController";
 
-const router = express.Router();
 
+const router = Router();
+router.get('/getAllAnswersByIdUser/:user_id' ,answerController);
 router.get("/progress/:userId", getProgressStats);
-router.get('/getAllAnswersByIdUser/:user_id', answerController);
-
 
 export default router;

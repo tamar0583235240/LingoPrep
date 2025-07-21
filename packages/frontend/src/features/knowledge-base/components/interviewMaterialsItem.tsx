@@ -8,10 +8,16 @@ interface InterviewMaterialsItemProps {
   onDelete: (id: string) => void;
 }
 
-export const InterviewMaterialsItem = ({ item, onEdit, onDelete }: InterviewMaterialsItemProps) => {
+export const InterviewMaterialsItem = ({
+  item,
+  onEdit,
+  onDelete,
+}: InterviewMaterialsItemProps) => {
   return (
     <div className="grid grid-cols-6 items-center gap-4 p-4 bg-white rounded-2xl shadow-sm border border-gray-100 text-right">
-      <div className="col-span-2 font-semibold text-gray-800 text-sm truncate">{item.title}</div>
+      <div className="col-span-2 font-semibold text-gray-800 text-sm truncate">
+        {item.title}
+      </div>
 
       <div className="col-span-2 text-gray-600 text-sm truncate">
         {item.short_description || "אין תיאור"}
@@ -34,8 +40,7 @@ export const InterviewMaterialsItem = ({ item, onEdit, onDelete }: InterviewMate
       <div className="col-span-1 flex items-center justify-end gap-3">
         {item.file_url && (
           <a
-            href={item.file_url}
-            download={item.title}
+            href={`http://localhost:5000/manager/interview-materials/download/${item.id}`} 
             className="flex items-center gap-1 text-blue-600 hover:text-blue-700 transition text-sm"
             title="הורד קובץ"
           >

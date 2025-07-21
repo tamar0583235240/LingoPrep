@@ -1,7 +1,5 @@
-// In your profilesApi.ts RTK Query slice
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Profile } from "../types/profileTypes";
-
 export const profilesApi = createApi({
   reducerPath: "profilesApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/" }),
@@ -21,7 +19,6 @@ export const profilesApi = createApi({
     }),
   }),
 });
-
 export const {
   useGetProfilesQuery,
   useGetProfileByIdQuery,

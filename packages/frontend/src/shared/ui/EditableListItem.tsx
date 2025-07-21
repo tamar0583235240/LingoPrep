@@ -7,16 +7,16 @@ import { ToggleSwitch } from "./ToggleSwitch";
 import { FaEdit, FaTrashAlt, FaSave, FaTimes } from "react-icons/fa";
 
 interface EditableListItemProps<T> extends React.HTMLAttributes<HTMLDivElement> {
-  itemData: T;
+  itemData: T; 
   isEditing: boolean;
   onEdit: (id: string | number) => void;
   onDelete: (id: string | number) => void;
   onSave: (id: string | number, updatedData: T) => void;
   onCancelEdit: () => void;
-  onToggleVisibility: (id: string | number) => void;
+  onToggleVisibility: (id: string | number, isVisible: boolean) => void;
   isPubliclyVisible: boolean;
-  renderDisplay: (data: T) => React.ReactNode;
-  renderEditForm: (data: T, onChange: (key: keyof T, value: any) => void) => React.ReactNode;
+  renderDisplay: (data: T) => React.ReactNode; 
+  renderEditForm: (data: T, onChange: (key: keyof T, value: any) => void) => React.ReactNode; 
   itemIdKey?: keyof T;
 }
 
@@ -38,7 +38,7 @@ export function EditableListItem<T extends { id?: string | number }>({
   const [editedData, setEditedData] = React.useState<T>(itemData);
 
   React.useEffect(() => {
-    setEditedData(itemData);
+    setEditedData(itemData); // עדכן את ה-state כאשר itemData משתנה מבחוץ
   }, [itemData]);
 
   const handleInputChange = (key: keyof T, value: any) => {
@@ -50,16 +50,17 @@ export function EditableListItem<T extends { id?: string | number }>({
   return (
     <CardSimple
       className={cn(
-        "relative flex flex-col gap-6 p-6 rounded-lg shadow-md",
+        "relative flex flex-col gap-4",
+        isEditing ? "p-6" : "p-4",
         className
       )}
       {...props}
     >
-      {/* Switch (top left corner) */}
       <div className="absolute top-4 left-4 flex items-center gap-2">
         <ToggleSwitch
           checked={isPubliclyVisible}
-          onToggle={() => onToggleVisibility(itemId)}
+          onToggle={() => onToggleVisibility(itemId, !isPubliclyVisible)}
+          label={isPubliclyVisible ? "מוצג לציבור" : "פרטי"}
         />
         {!isPubliclyVisible && (
           <span className="text-xs text-text-secondary">
@@ -68,19 +69,11 @@ export function EditableListItem<T extends { id?: string | number }>({
         )}
       </div>
 
-      {/* Display or Edit Form */}
-      <div className="mt-4">
-        {isEditing
-          ? renderEditForm(editedData, handleInputChange)
-          : renderDisplay(itemData)}
-      </div>
-
-      {/* Action Buttons - moved to bottom */}
       <div className="flex justify-end gap-2">
         {isEditing ? (
           <>
             <Button size="sm" variant="primary-dark" onClick={() => onSave(itemId, editedData)}>
-              <FaSave /> שמור
+             {FaSave && <FaSave />}שמור
             </Button>
             <Button size="sm" variant="outline" onClick={onCancelEdit}>
               <FaTimes /> בטל
@@ -96,6 +89,10 @@ export function EditableListItem<T extends { id?: string | number }>({
             </Button>
           </>
         )}
+      </div>
+
+      <div className="mt-8"> 
+        {isEditing ? renderEditForm(editedData, handleInputChange) : renderDisplay(itemData)}
       </div>
     </CardSimple>
   );

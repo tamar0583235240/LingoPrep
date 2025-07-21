@@ -6,17 +6,20 @@ export class InterviewMaterialsSub {
   @PrimaryGeneratedColumn({ type: "integer", name: "id" })
   id: number;
 
-  @Column("text", { name: "title" })
+  @Column("text", { name: "title", nullable: true })
   title: string;
 
-  @Column("text", { name: "thumbnail" })
+  @Column("text", { name: "thumbnail", nullable: true })
   thumbnail: string;
 
   @Column("text", { name: "short_description", nullable: true })
-  short_description: string | null;
+  shortDescription: string | null;
 
   @Column("text", { name: "file_url" })
   fileUrl: string;
+
+  @Column("text", { name: "original_file_name", nullable: true })
+  originalFileName: string;
 
   @Column("integer", {
     name: "downloads_count",
