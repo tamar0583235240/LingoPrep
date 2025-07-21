@@ -5,9 +5,10 @@
     "host": "localhost",
     "port": 5432,
     "username": "postgres",
-    "password": "214787673",
-    "database": "",
-    "synchronize": false,
-    "entities": ["entities/*.js"]
+    "password": "huser",
+    "database": "lingo-prep",
+    "synchronize": true,
+    "logging": true,
+    "entities": ["dist/entities/*.js"]
   }
 ]

@@ -16,32 +16,45 @@ export const ToggleSwitch = ({
   className,
 }: ToggleSwitchProps) => {
   return (
-    <div className={cn("flex items-center gap-3", className)}>
+    <div className={cn("flex items-center gap-4", className)}>
       {label && (
-        <span className="text-sm font-medium text-text-main">{label}</span>
+        <label className="text-sm font-medium" style={{ color: "var(--color-text)" }}>
+          {label}
+        </label>
       )}
-
-      <button
-        type="button"
-        role="switch"
-        aria-checked={checked}
-        disabled={disabled}
-        onClick={() => {
-          if (!disabled) onToggle();
-        }}
-        className={cn(
-          "relative w-9 h-5 flex items-center rounded-full transition-colors duration-300",
-          checked ? "bg-primary-dark" : "bg-border",
-          disabled && "opacity-60 cursor-not-allowed"
-        )}
-      >
-        <span
+      <div className="flex items-center gap-2">
+        <span className="text-sm font-medium">
+          {checked ? "ציבורי" : "פרטי"}
+        </span>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={checked}
+          disabled={disabled}
+          onClick={() => {
+            if (!disabled) onToggle();
+          }}
+          style={{
+            backgroundColor: checked
+              ? "var(--color-primary)"
+              : "var(--color-border)",
+            transition: "background-color 0.3s",
+          }}
           className={cn(
-            "absolute top-[2px] left-[2px] h-[14px] w-[14px] rounded-full bg-white shadow-md transition-transform duration-300",
-            checked ? "translate-x-[1rem]" : "translate-x-0"
+            "relative w-10 h-6 flex items-center rounded-full",
+            disabled && "opacity-60 cursor-not-allowed"
           )}
-        />
-      </button>
+        >
+          <span
+            style={{
+              right: checked ? 4 : "auto",
+              left: checked ? "auto" : 4,
+              transition: "right 0.3s, left 0.3s",
+            }}
+            className="absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-md"
+          />
+        </button>
+      </div>
     </div>
   );
 };

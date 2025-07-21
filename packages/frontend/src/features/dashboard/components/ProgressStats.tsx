@@ -3,6 +3,7 @@ import { BarChart2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../shared/store/store";
 import { useGetProgressStatsQuery } from "../../../shared/api/progressStatsApi";
+// import { useGetProgressStatsQuery } from "../../../shared/api/progressStatsApi";
 const ProgressStats: React.FC = () => {
 const user = useSelector((state: RootState) => state.auth.user);
 // כל הקריאות ל-Hooks חייבות להיות כאן, לפני תנאי return

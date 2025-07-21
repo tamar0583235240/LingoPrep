@@ -31,7 +31,7 @@ npm run dev
 
 **That's it!** 🎉
 - Frontend: http://localhost:3000
-- Backend API: http://localhost:3001/api
+- Backend API: http://localhost:3000/api
 - Health check: http://localhost:3001/api/health
 
 ## 📋 Table of Contents

@@ -5,8 +5,8 @@ import { exampleType } from "../types/exampleType";
 export const exampleApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getItems: builder.query<exampleType[], void>({
-      query: () => "items",
-      providesTags: ["Item"],
+      query: () => "users",
+      providesTags: ["users"],
     }),
     addItem: builder.mutation<exampleType, Partial<exampleType>>({
       query: (item) => ({
@@ -14,14 +14,14 @@ export const exampleApi = api.injectEndpoints({
         method: "POST",
         body: item,
       }),
-      invalidatesTags: ["Item"],
+      invalidatesTags: ["users"],
     }),
     deleteItem: builder.mutation<void, string>({
       query: (id) => ({
         url: `items/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Item"],
+      invalidatesTags: ["users"],
     }),
   }),
 });

@@ -33,7 +33,11 @@ export class Answers {
   })
   submittedAt: Date;
 
-  @Column("integer", { name: "amount_feedbacks", nullable: true })
+  @Column("integer", {
+    name: "amount_feedbacks",
+    nullable: true,
+    default: () => "0",
+  })
   amountFeedbacks: number | null;
 
   @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)

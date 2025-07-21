@@ -2,20 +2,21 @@ import { Request, Response } from 'express';
 import { Users } from '../interfaces/entities/Users';
 import userRepository from '../reposioty/userRepository';
 import bcrypt from 'bcrypt';
+import { generateUniqueSlug } from '../utils/generateSlug';
 import { pool } from '../config/dbConnection';
 import { v4 as uuidv4 } from 'uuid';
-import { insertUsersFromExcel } from '../reposioty/userRepository';
+// import { insertUsersFromExcel } from '../reposioty/userRepository';
 import { createUserByAdminSchema , updateUserByAdminSchema  } from '../validations/userValidations';
+import { insertUsersFromExcel } from '../reposioty/userRpository';
 
 const SALT_ROUNDS = 10;
 
 export const getAllUsers = async (req: Request, res: Response) => {
-    // טען את המשתמשים כולל הקשרים (relations) שצריך - זה צריך להיעשות בתוך ה-repository
-    const users = await userRepository.getAllUsers();
-    if (!users || users.length === 0) {
-        return res.status(404).json({ message: 'No users found' });
-    }
-    res.json(users);
+  const users = await userRepository.getAllUsers();
+  if (!users || users.length === 0) {
+    return res.status(404).json({ message: 'No users found' });
+  }
+  res.json(users);
 };
 
 function mapUserRowToCamelCase(row: any) {
@@ -27,7 +28,7 @@ function mapUserRowToCamelCase(row: any) {
     phone: row.phone,
     role: row.role,
     password: row.password,
-    createdAt: row.created_dat,
+    createdAt: row.created_at,
     isActive: row.is_active,
   };
 }
@@ -68,92 +69,111 @@ export const getAllUsersByAdmin = async (req: Request, res: Response) => {
   }
 };
 export const getMe = async (req: Request, res: Response) => {
-    const userId = (req as any).user?.id;
+  const userId = (req as any).user?.id;
+  if (!userId) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
 
-    if (!userId) {
-        return res.status(401).json({ message: 'Unauthorized' });
-    }
+  const user = await userRepository.getUserById(userId);
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
 
-    const user = await userRepository.getUserById(userId);
-    if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.json({ user });
+  res.json({ user });
 };
 
 export const getUserById = async (req: Request, res: Response) => {
-    const userId = req.params.id;
-    const user = await userRepository.getUserById(userId);
-    if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-    }
-    res.json(user);
+  const userId = req.params.id;
+  const user = await userRepository.getUserById(userId);
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+  res.json(user);
 };
 
 export const createUser = async (req: Request, res: Response) => {
-    const { first_name, last_name, email, phone, password, role } = req.body;
+  const { first_name, last_name, email, phone, password, role } = req.body;
 
-    const existing = (await userRepository.getAllUsers()).find(user => user.email === email);
-    if (existing) {
-        return res.status(409).json({ message: 'אימייל כבר קיים' });
-    }
+  const existing = (await userRepository.getAllUsers()).find((user: Users) => user.email === email);
+  if (existing) {
+    return res.status(409).json({ message: 'אימייל כבר קיים' });
+  }
 
-    if (!password) {
-        return res.status(400).json({ message: 'Password is required' });
-    }
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+  if (!password) {
+    return res.status(400).json({ message: 'Password is required' });
+  }
 
-const newUser: Users = {
+  const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+  const slug = await generateUniqueSlug(first_name, last_name);
+
+  const newUser: Users = {
     id: uuidv4(),
     firstName: first_name,
     lastName: last_name,
+    slug,
     email,
     phone,
     password: hashedPassword,
     role: role || 'student',
     createdAt: new Date(),
     isActive: true,
-    slug: null,  // הוספת שדה slug, אפשר גם slug: '' או slugify(email)
-
-    contentReports: [],
-    experienceThanks: [],
-    interviewExperiences: [],
     answers: [],
     feedbacks: [],
     passwordResetTokens: [],
-    resources: [],
     sharedRecordings: [],
-    userActivities: [],
+    contentReports: [],
+    experienceThanks: [],
+    interviewExperiences: [],
     userReminderSettings: [],
     userSessions: [],
+    userActivities: [],
     workExperiences: [],
-};
+    profiles: {
+      id: uuidv4(),
+      userId: '',
+      imageUrl: null,
+      location: null,
+      externalLinks: null,
+      status: null,
+      preferredJobType: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      isPublic: false,
+      user: {} as Users // This will be set after the user is created
+      
+    }
 
+  };
 
-    const createdUser = await userRepository.createUser(newUser);
-    res.status(201).json(createdUser);
+  const createdUser = await userRepository.createUser(newUser);
+  res.status(201).json(createdUser);
 };
 
 export const updateUser = async (req: Request, res: Response) => {
-    const userId = req.params.id;
-    const userData: Partial<Users> = req.body;
+  const userId = req.params.id;
+  const userData: Partial<Users> = req.body;
 
-    if (userData.password) {
-        userData.password = await bcrypt.hash(userData.password, 10);
-    }
+  if (userData.password) {
+    userData.password = await bcrypt.hash(userData.password, SALT_ROUNDS);
+  }
 
-    const updatedUser: Users | null = await userRepository.updateUser(userId, userData);
-    if (!updatedUser) {
-        return res.status(404).json({ message: 'User not found' });
-    }
-    res.json(updatedUser);
+  if (userData.firstName || userData.lastName) {
+    const slug = await generateUniqueSlug(userData.firstName || '', userData.lastName || '');
+    // userData.slug = slug;
+  }
+
+  const updatedUser: Users | null = await userRepository.updateUser(userId, userData);
+  if (!updatedUser) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  res.json(updatedUser);
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
-    const userId = req.params.id;
-    await userRepository.deleteUser(userId);
-    res.status(204).send();
+  const userId = req.params.id;
+  await userRepository.deleteUser(userId);
+  res.status(204).send();
 };
 
 export const createUserByAdmin = async (req: Request, res: Response) => {
@@ -184,7 +204,7 @@ export const createUserByAdmin = async (req: Request, res: Response) => {
 
     // הכנסת המשתמש לבסיס
     const result = await pool.query(
-      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_dat, is_active, password)
+      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
        VALUES ($1, $2, $3, $4, $5, $6, $7, true, $8)
        RETURNING *`,
       [id, firstName, lastName, email, phone, role || 'student', createdAt, hashedPassword]
