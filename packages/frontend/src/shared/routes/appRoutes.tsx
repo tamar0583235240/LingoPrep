@@ -9,7 +9,7 @@ import { AdminQuestions } from "../../features/admin/components/adminQuestions";
 import AdminTipsAndPractices from "../../features/admin/components/AdminTipsAndPractices";
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import SignupForm from "../../features/auth/components/SignupForm";
-import Dashboard from '../../pages/dashboard';
+import dashboard from '../../pages/dashboard';
 import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
 import LandingPage from "../../pages/LandingPage";
@@ -31,6 +31,8 @@ import DynamicContentPage from "../../pages/DynamicContentPage";
 import RemindersPage from "../../pages/remindersPage";
 
 import Dashboard from "../../pages/dashboard"
+import AdminUser from "../../pages/AdminUser";
+import { PublicProfilePage } from "../../pages/PublicProfilePage";
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
   const isLogin = !!user;
@@ -194,9 +196,9 @@ export default function AppRoutes() {
             path="/reminders"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <AdminQuestions allowedRoles={["manager"]}>
-                  <p>AdminQuestions</p>
-                </AdminQuestions>
+                <AdminTipsAndPractices allowedRoles={["manager"]}>
+                  <p>AdminTipsAndPractices</p>
+                </AdminTipsAndPractices>
               </RoleProtectedRoute>
             }
           />

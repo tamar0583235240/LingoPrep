@@ -1,7 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ProgressStats } from "../../features/dashboard/types/aiInsightsType";
-
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ReminderSelection, ReminderType } from '../../features/reminders/types/reminderType';
 
 interface SaveReminderSettingsRequest {

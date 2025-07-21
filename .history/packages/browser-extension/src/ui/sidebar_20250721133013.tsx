@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import React from "react";
 import { ExitButton } from "../../features/auth/components/ExitButton";
 
-const FaGraduationCap = FaIcons.FaGraduationCap;
+const FaGraduationCap = FaIcons.FaGraduationCap as unknown as React.FC;
 
 interface NavItem {
   label: string;
@@ -23,10 +23,12 @@ const navItems: NavItem[] = [
   { label: "מרכז חומרי ראיונות", href: "/interviewMaterialsHub" },
   { label: "מנהל", href: "", isSectionTitle: true, adminOnly: true },
   { label: "ניהול שאלות", href: "/manager/questions", adminOnly: true },
-  { label: "ניהול תזכורות", href: "/manager/reminders", adminOnly: true },
+   <Button variant="primary-dark" fullWidth onClick={() => navigate("/reminders")}>
+                  תזכורות
+                </Button>
   { label: "ניהול משתמשים", href: "/manager/users", adminOnly: true },
   { label: "ניהול משאבים", href: "/manager/resources", adminOnly: true },
-  { label: "ניהול חומרים", href: "/manager/interview-materials", adminOnly: true },
+  { label: "ניהול חומרים", href: "/manager/interview-materials", adminOnly: true, },
 ];
 
 const SidebarNavigation = () => {
@@ -50,17 +52,17 @@ const SidebarNavigation = () => {
       <nav className="flex flex-col gap-2">
         {navItems
           .filter((item) => !item.adminOnly || (item.adminOnly && isAdmin))
-          .map(({ label, href, isSectionTitle }, index) =>
+          .map(({ label, href, isSectionTitle }) =>
             isSectionTitle ? (
               <div
-                key={`section-${index}`}
+                key={label}
                 className="pl-4 pr-2 py-6 text-text-secondary text-lg font-semibold "
               >
                 {label}
               </div>
             ) : (
               <NavLink
-                key={`link-${index}`}
+                key={label}
                 to={href}
                 className={({ isActive }) =>
                   cn(
