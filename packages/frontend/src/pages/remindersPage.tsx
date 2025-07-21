@@ -8,8 +8,12 @@ import { ReminderType, ReminderSelection } from "../features/reminders/types/rem
 import { Button } from "../shared/ui/button";
 import { GridContainer } from "../shared/ui/GridContainer";
 
-export default function RemindersPage() {
-  const userId = "63b3ab3c-e4d7-485d-ba3e-36748208835e"; // להחליף ל־auth דינמי
+type RemindersPageProps = {
+  allowedRoles: string[];
+};
+
+export default function RemindersPage({ allowedRoles }: RemindersPageProps) {
+  const userId = "a40dc000-b446-409a-aa7b-3e778e8f4467"; // להחליף ל־auth דינמי
   const { data: savedData, isLoading } = useGetUserReminderSettingsQuery(userId);
   const [saveSettings, { isLoading: isSaving }] = useSaveUserReminderSettingsMutation();
 

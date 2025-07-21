@@ -5,7 +5,7 @@ import { store } from "../shared/store/store";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const isManager: boolean = store.getState().auth.isAdmin;
+  const isManager: boolean = store.getState().auth!.isAdmin;
   console.log(store.getState().auth.user?.role);
 
   return (
@@ -18,6 +18,9 @@ const HomePage = () => {
       </Button>
       <Button variant="primary-dark" fullWidth onClick={() => navigate("/resources")}>
         משאבים
+      </Button>
+      <Button variant="primary-dark" fullWidth onClick={() => navigate("/reminders")}>
+        תזכורות
       </Button>
       <Button variant="primary-dark" fullWidth onClick={() => navigate("/recordings")}>
         הקלטות

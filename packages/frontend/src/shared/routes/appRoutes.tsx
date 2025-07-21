@@ -130,6 +130,7 @@ import ResetPassword from "../../features/auth/components/ResetPassword";
 import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import DynamicContentPage from "../../pages/DynamicContentPage";
 import Dashboard from "../../pages/dashboard"
+import RemindersPage from "../../pages/remindersPage";
 export default function AppRoutes() {
   return (
     <div dir="rtl">
@@ -153,14 +154,14 @@ export default function AppRoutes() {
             }
           />
 
-<Route
-  path="/dashboard"
-  element={
-    <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-      <Dashboard />
-    </RoleProtectedRoute>
-  }
-/>
+          <Route
+            path="/dashboard"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <Dashboard />
+              </RoleProtectedRoute>
+            }
+          />
 
 
           <Route
@@ -192,6 +193,13 @@ export default function AppRoutes() {
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <p>InterviewMaterialsHub</p>
               </RoleProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/reminders"
+            element={
+              <RemindersPage allowedRoles={["student", "manager"]} />
             }
           />
           <Route path="/admin/questions" element={

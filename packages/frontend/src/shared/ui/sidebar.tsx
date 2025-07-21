@@ -18,6 +18,7 @@ const navItems: NavItem[] = [
   { label: "Simulation", href: "/simulation" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "My Recordings", href: "/recordings" },
+  { label: "Reminders", href: "/reminders" },
   { label: "Shared Recordings", href: "/shared" },
   { label: "Resources", href: "/resources" },
   { label: "Admin", href: "", isSectionTitle: true },
