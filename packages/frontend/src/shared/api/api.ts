@@ -1,13 +1,12 @@
 // shared/api/api.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-<<<<<<< HEAD
-import { ProgressStats } from "../../features/dashboard/types/progress";
+import { ProgressStats } from "../../features/dashboard/types/progress"; // השתמשי בקובץ התקני שלך
 
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api", // שמור על הכתובת עם /api בסוף
-    credentials: 'include', // חשוב להעביר credentials אם משתמשים בעוגיות או session
+    baseUrl: "http://localhost:5000/api",
+    credentials: 'include', // חשוב כדי לאפשר שימוש בעוגיות
   }),
   tagTypes: [
     "Item",
@@ -18,35 +17,15 @@ export const api = createApi({
     "shared_recordings",
     "admin",
     "users",
-    "DynamicContents"
+    "DynamicContents",
+    "insights"
   ],
   endpoints: (builder) => ({
     getProgressStats: builder.query<ProgressStats, string>({
       query: (userId) => `questions/progress/${userId}`,
     }),
-    // אפשר להוסיף כאן עוד endpoints בעתיד
+    // כאן אפשר להוסיף endpoints בעתיד
   }),
 });
 
 export const { useGetProgressStatsQuery } = api;
-=======
-import { ProgressStats } from "../../features/dashboard/types/aiInsightsType";
-
-export const api = createApi({
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api",
-
-  }),
-  reducerPath: "api",
-  tagTypes: ["users", "questions", "answers", "insights"],
-  endpoints: () => ({}),
-});
-
-
-
-
-
-
-
-
->>>>>>> Activity-Monitoring

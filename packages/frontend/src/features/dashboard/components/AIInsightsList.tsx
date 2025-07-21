@@ -1,17 +1,9 @@
 import { FileText } from "lucide-react";
-<<<<<<< HEAD
 import { useGetAiInsightsQuery } from '../services/aiInsightsApi';
 import { CardWrapper } from "./CardWrapper";
 
 const AIInsightsList: React.FC = () => {
   const { data: insights = [], isLoading, isError } = useGetAiInsightsQuery();
-=======
-import { useGetItemsQuery } from "../services/aiInsightsApi";
-import { CardWrapper } from "./CardWrapper";
-
-const AIInsightsList: React.FC = () => {
-  const { data: insights = [], isLoading, isError } = useGetItemsQuery();
->>>>>>> Activity-Monitoring
 
   if (isLoading) return <p>טוען מסקנות...</p>;
   if (isError) return <p>אירעה שגיאה בשליפה.</p>;
@@ -29,14 +21,10 @@ const AIInsightsList: React.FC = () => {
       >
         <ul className="list-inside space-y-3 text-[--color-text] text-base">
           {insights.map((insight) => (
-<<<<<<< HEAD
             <li
               key={insight.id}
               className="flex items-center gap-3 text-[--color-text] bg-white p-2 rounded-lg"
             >
-=======
-            <li key={insight.id} className="flex items-center gap-3 text-[--color-text] bg-white p-2 rounded-lg">
->>>>>>> Activity-Monitoring
               <span>{insight.summary}</span>
             </li>
           ))}

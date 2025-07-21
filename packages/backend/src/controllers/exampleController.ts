@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // import { Request, Response } from 'express';
 // import exampleRepository from '../reposioty/exampleReposioty';
 
@@ -12,5 +11,3 @@
 //     res.status(500).json({ error });
 //   }
 // };
-=======
->>>>>>> Activity-Monitoring

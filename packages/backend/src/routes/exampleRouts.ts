@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Router, Request, Response, NextFunction } from 'express';
 
 const router = Router();
@@ -17,5 +16,3 @@ const exampleController = (req: Request, res: Response) => {
 router.get('/exampleURL', exampleMiddleware, exampleController);
 
 export default router;
-=======
->>>>>>> Activity-Monitoring

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // <<<<<<< HEAD
 // import { create } from 'zustand';
 
@@ -35,8 +34,6 @@
 //   setUserId: (id) => set({ userId: id }),
 // >>>>>>> 2d36eb4 (עדכון קבצים בפרויקט Group3)
 // }));
-=======
->>>>>>> Activity-Monitoring
 import { create } from 'zustand';
 
 interface UserState {

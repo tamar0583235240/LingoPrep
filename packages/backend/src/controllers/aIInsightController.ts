@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-<<<<<<< HEAD
 import aiInsightsRepository from '../reposioty/AiInsightsReposiory';
 
 export const getAiInsights = async (req: Request, res: Response): Promise<void> => {
@@ -22,16 +21,3 @@ export const getAiInsightsByAnswerId = async (req: Request, res: Response): Prom
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-=======
-import aiInsigthRepository from '../reposioty/aiInsigthRepository';
-
-export const getAiInsigths = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const items = await aiInsigthRepository.getAiInsights();
-        res.json(items);
-    } catch (error) {
-        console.error('Error in ai insigth controller:', error);
-        res.status(500).json({ error });
-    }
-};
->>>>>>> Activity-Monitoring

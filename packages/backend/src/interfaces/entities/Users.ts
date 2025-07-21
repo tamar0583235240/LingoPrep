@@ -1,13 +1,14 @@
 import { Column, Entity, Index, OneToMany } from "typeorm";
-<<<<<<< HEAD
-import { ContentReports } from "./ContentReports";
-import { ExperienceThanks } from "./ExperienceThanks";
-import { InterviewExperiences } from "./InterviewExperiences";
 import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
-import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
+
+// נוספים מ-HEAD
+import { ContentReports } from "./ContentReports";
+import { ExperienceThanks } from "./ExperienceThanks";
+import { InterviewExperiences } from "./InterviewExperiences";
+import { Resources } from "./Resources";
 import { UserActivity } from "./UserActivity";
 import { UserReminderSettings } from "./UserReminderSettings";
 import { UserSessions } from "./UserSessions";
@@ -16,15 +17,6 @@ import { WorkExperiences } from "./WorkExperiences";
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
 @Index("users_slug_key", ["slug"], { unique: true })
-=======
-import { Answers } from "./Answers";
-import { Feedback } from "./Feedback";
-import { PasswordResetTokens } from "./PasswordResetTokens";
-import { SharedRecordings } from "./SharedRecordings";
-
-@Index("users_email_key", ["email"], { unique: true })
-@Index("users_pkey", ["id"], { unique: true })
->>>>>>> Activity-Monitoring
 @Entity("users", { schema: "public" })
 export class Users {
   @Column("uuid", { primary: true, name: "id" })
@@ -54,31 +46,11 @@ export class Users {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
-<<<<<<< HEAD
-  @Column("text", { name: "password", nullable: true })
+  @Column("text", { name: "password", nullable: true }) // יתמוך גם ב-null כמו ב-HEAD
   password: string | null;
 
   @Column("text", { name: "slug", nullable: true, unique: true })
   slug: string | null;
-
-  @OneToMany(() => ContentReports, (contentReports) => contentReports.user)
-  contentReports: ContentReports[];
-
-  @OneToMany(
-    () => ExperienceThanks,
-    (experienceThanks) => experienceThanks.user
-  )
-  experienceThanks: ExperienceThanks[];
-
-  @OneToMany(
-    () => InterviewExperiences,
-    (interviewExperiences) => interviewExperiences.user
-  )
-  interviewExperiences: InterviewExperiences[];
-=======
-  @Column("text", { name: "password" })
-  password: string;
->>>>>>> Activity-Monitoring
 
   @OneToMany(() => Answers, (answers) => answers.user)
   answers: Answers[];
@@ -86,39 +58,34 @@ export class Users {
   @OneToMany(() => Feedback, (feedback) => feedback.givenByUser)
   feedbacks: Feedback[];
 
-  @OneToMany(
-    () => PasswordResetTokens,
-    (passwordResetTokens) => passwordResetTokens.user
-  )
+  @OneToMany(() => PasswordResetTokens, (tokens) => tokens.user)
   passwordResetTokens: PasswordResetTokens[];
 
-<<<<<<< HEAD
+  @OneToMany(() => SharedRecordings, (recording) => recording.owner)
+  sharedRecordings: SharedRecordings[];
+
+  // --- יחסים נוספים ---
+  @OneToMany(() => ContentReports, (contentReports) => contentReports.user)
+  contentReports: ContentReports[];
+
+  @OneToMany(() => ExperienceThanks, (expThanks) => expThanks.user)
+  experienceThanks: ExperienceThanks[];
+
+  @OneToMany(() => InterviewExperiences, (interviews) => interviews.user)
+  interviewExperiences: InterviewExperiences[];
+
   @OneToMany(() => Resources, (resources) => resources.user)
   resources: Resources[];
 
-=======
->>>>>>> Activity-Monitoring
-  @OneToMany(
-    () => SharedRecordings,
-    (sharedRecordings) => sharedRecordings.owner
-  )
-  sharedRecordings: SharedRecordings[];
-<<<<<<< HEAD
-
-  @OneToMany(() => UserActivity, (userActivity) => userActivity.user)
+  @OneToMany(() => UserActivity, (activity) => activity.user)
   userActivities: UserActivity[];
 
-  @OneToMany(
-    () => UserReminderSettings,
-    (userReminderSettings) => userReminderSettings.user
-  )
+  @OneToMany(() => UserReminderSettings, (settings) => settings.user)
   userReminderSettings: UserReminderSettings[];
 
-  @OneToMany(() => UserSessions, (userSessions) => userSessions.user)
+  @OneToMany(() => UserSessions, (sessions) => sessions.user)
   userSessions: UserSessions[];
 
-  @OneToMany(() => WorkExperiences, (workExperiences) => workExperiences.user)
+  @OneToMany(() => WorkExperiences, (workExp) => workExp.user)
   workExperiences: WorkExperiences[];
-=======
->>>>>>> Activity-Monitoring
 }

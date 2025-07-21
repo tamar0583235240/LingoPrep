@@ -1,28 +1,13 @@
-<<<<<<< HEAD
-// src/routes/aIInsightRouter.ts
-import { Router } from "express";
-import { getAiInsights, getAiInsightsByAnswerId } from "../controllers/aIInsightController";
-
-const AiInsightsRouter = Router();
-
-// נתיב שמחזיר את כל התובנות
-// AiInsightsRouter.get('/AiInsights/getAiInsights', getAiInsights);
-
-// נתיב שמחזיר תובנות לפי מזהה תשובה
-// AiInsightsRouter.get('/AiInsights/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
-
-AiInsightsRouter.get('/getAiInsights', getAiInsights);
-AiInsightsRouter.get('/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
-
-export default AiInsightsRouter;
-=======
 import { Router } from 'express';
-import { getAiInsigths} from '../controllers/aIInsightController';
+import { getAiInsights, getAiInsightsByAnswerId } from '../controllers/aIInsightController';
 
 const router = Router();
 
-router.get('/',getAiInsigths);
-router.get('/aiInsight',getAiInsigths);
+// שליפת כל התובנות
+router.get('/', getAiInsights);
+router.get('/getAiInsights', getAiInsights);
+
+// שליפת תובנות לפי מזהה תשובה
+router.get('/byAnswer/:answerId', getAiInsightsByAnswerId); // לדוגמה: GET /aiInsights/byAnswer/1234
 
 export default router;
->>>>>>> Activity-Monitoring

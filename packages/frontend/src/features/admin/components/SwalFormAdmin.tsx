@@ -2,9 +2,10 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Swal from 'sweetalert2';
 import { userSchema } from '../validation/userSchema';
-import { UserFormFields, user } from '../types/userType';
+import { UserFormFields,user} from '../types/userType';
 import { useCreateUserMutationAdmin } from '../../../shared/api/adminApi';
 import { ChevronDown } from "lucide-react";
+
 const SwalForm = () => {
   const [createUser] = useCreateUserMutationAdmin();
   const {

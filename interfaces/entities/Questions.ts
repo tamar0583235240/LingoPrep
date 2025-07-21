@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 import { Column, Entity, Index, OneToMany, OneToOne } from "typeorm";
 import { Answers } from "./Answers";
 import { QuestionAnswersCount } from "./QuestionAnswersCount";
-=======
-import { Column, Entity, Index, OneToMany } from "typeorm";
-import { Answers } from "./Answers";
->>>>>>> Activity-Monitoring
 
 @Index("questions_pkey", ["id"], { unique: true })
 @Entity("questions", { schema: "public" })
@@ -33,13 +28,10 @@ export class Questions {
 
   @OneToMany(() => Answers, (answers) => answers.question)
   answers: Answers[];
-<<<<<<< HEAD
 
   @OneToOne(
     () => QuestionAnswersCount,
     (questionAnswersCount) => questionAnswersCount.question
   )
   questionAnswersCount: QuestionAnswersCount;
-=======
->>>>>>> Activity-Monitoring
 }

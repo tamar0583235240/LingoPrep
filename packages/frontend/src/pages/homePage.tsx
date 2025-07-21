@@ -3,13 +3,10 @@ import { Button } from "../shared/ui/button";
 import { GridContainer } from "../shared/ui/GridContainer";
 import { store } from "../shared/store/store";
 
-
 const HomePage = () => {
   const navigate = useNavigate();
-<<<<<<< HEAD
   const isManager: boolean = store.getState().auth.isAdmin;
   console.log(store.getState().auth.user?.role);
-
 
   return (
     <GridContainer maxWidth="md" gridClasses="grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-4" mt="mt-4" mb="mb-4">
@@ -29,77 +26,40 @@ const HomePage = () => {
         משותף
       </Button>
 
-
       {isManager && (
-  <>
-    <div className="col-span-full mt-6 text-right">
-      <h2 className="text-xl font-bold text-text-main">מנהל מערכת</h2>
-    </div>
-    <Button variant="outline" fullWidth onClick={() => navigate("/admin/questions")}>
-      ניהול שאלות
-    </Button>
-    <Button variant="outline" fullWidth onClick={() => navigate("/admin/resources")}>
-      ניהול משאבים
-    </Button>
-    <Button variant="outline" fullWidth onClick={() => navigate("/admin/users")}>
-      ניהול משתמשים
-    </Button>
-    <Button variant="outline" fullWidth onClick={() => navigate("/admin/dynamic-content")}>
-      ניהול תכנים דינמיים
-    </Button>
-    <Button variant="outline" fullWidth onClick={() => navigate("/admin/activity-monitoring")}>
-      ניטור פעילות
-    </Button>
-  </>
-)}
-
-
-        
-     
+        <>
+          <div className="col-span-full mt-6 text-right">
+            <h2 className="text-xl font-bold text-text-main">מנהל מערכת</h2>
+          </div>
+          <Button variant="outline" fullWidth onClick={() => navigate("/admin/questions")}>
+            ניהול שאלות
+          </Button>
+          <Button variant="outline" fullWidth onClick={() => navigate("/admin/resources")}>
+            ניהול משאבים
+          </Button>
+          <Button variant="outline" fullWidth onClick={() => navigate("/admin/users")}>
+            ניהול משתמשים
+          </Button>
+          <Button variant="outline" fullWidth onClick={() => navigate("/admin/dynamic-content")}>
+            ניהול תכנים דינמיים
+          </Button>
+          <Button variant="outline" fullWidth onClick={() => navigate("/admin/activity-monitoring")}>
+            ניטור פעילות
+          </Button>
+          <Button variant="outline" fullWidth onClick={() => navigate("/admin/monitoring")}>
+           נתוני זמן שהייה
+          </Button>
+          <Button variant="outline" fullWidth onClick={() => navigate("/admin/category-stats")}>
+           קטגוריה
+          </Button>
+          <Button variant="outline" fullWidth onClick={() => navigate("/admin/FunnelDiagram")}>
+           משפך זמן
+          </Button>
+        </>
+      )}
     </GridContainer>
-
   );
 };
 
 export default HomePage;
-=======
-  const user = { role: 'student' }
-  const isManager = user?.role === 'manager'
-  return (
-    <div dir="rtl">
-      <div>
-        <div onClick={() => { navigate('/simulation') }}>
-          <button>start simulation</button>
-        </div>
-        <div onClick={() => { navigate('/dashboard') }}>
-          <button>dashboard</button>
-        </div>
-        <div onClick={() => { navigate('/resources') }}>
-          <button>resources</button>
-        </div>
-        <div onClick={() => { navigate('/recordings') }}>
-          <button>recordings</button>
-        </div>
-        <div onClick={() => { navigate('/shared') }}>
-          <button>shared</button>
-        </div>
-      </div>
-      {isManager && (
-        <div>
-          <h2>admin</h2>
-          <div onClick={() => { navigate('/admin/questions') }}>
-            <button>questions</button>
-          </div>
-          <div onClick={() => { navigate('/admin/resources') }}>
-            <button>resources</button>
-          </div>
-          <div onClick={() => { navigate('/admin/users') }}>
-            <button>users</button>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
-export default HomePage
->>>>>>> Activity-Monitoring
+

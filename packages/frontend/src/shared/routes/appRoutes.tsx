@@ -1,10 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
-<<<<<<< HEAD
 import { RecordingsList } from "../../features/recordings/components/recordingsList";
 import { AdminQuestions } from "../../features/admin/components/adminQuestions";
-import AdminUser from '../../pages/AdminUser';
+import AdminUser from "../../pages/AdminUser";
 import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import LoginForm from "../../features/auth/components/LoginForm";
 import SignupForm from "../../features/auth/components/SignupForm";
@@ -14,18 +13,21 @@ import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import DynamicContentPage from "../../pages/DynamicContentPage";
 import Dashboard from "../../pages/dashboard";
 import Activity_Monitoring from "../../pages/Activity_Monitoring";
+import StatsDashboard from "../../pages/StatsDashboard";
+import CategoryStats from "../../features/activity-Moonitoring/components/CategoryStats";
+import FunnelDiagram from "../../features/activity-Moonitoring/components/FunnelDiagram.tsx";
 
 export default function AppRoutes() {
   return (
     <div dir="rtl">
       <Routes>
-        {/* Routes ללא סיידבר */}
+        {/* 🟢 ללא סיידבר */}
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* Routes עם סיידבר */}
+        {/* 🔵 עם סיידבר */}
         <Route element={<DashboardLayout />}>
           <Route path="/" element={<HomePage />} />
 
@@ -107,7 +109,13 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
-
+        <Route 
+            path="/admin/monitoring" element={
+                <RoleProtectedRoute allowedRoles={["manager"]}>
+                {/* {<Activity_Monitoring />} */}
+                {<StatsDashboard/>}
+                </RoleProtectedRoute>
+            } />
           <Route
             path="/admin/dynamic-content"
             element={
@@ -116,13 +124,27 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
-
-          {/* ✅ הנתיב החדש לפעילות */}
           <Route 
+            path="/admin/category-stats"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <CategoryStats/>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
             path="/admin/activity-monitoring"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
                 <Activity_Monitoring />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/FunnelDiagram"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <FunnelDiagram />
               </RoleProtectedRoute>
             }
           />
@@ -133,61 +155,3 @@ export default function AppRoutes() {
     </div>
   );
 }
-=======
-import AdminUser from "../../pages/AdminUser"; 
-import Dashboard from '../../pages/dashboard';
-
-export default function AppRoutes() {
-    return (
-        <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<p>login</p>} />
-            <Route path="/simulation" element={
-                <RoleProtectedRoute allowedRoles={["student"]}>
-                    <p>Simulation</p>
-                </RoleProtectedRoute>
-            } />
-            <Route path="/dashboard" element={
-                <RoleProtectedRoute allowedRoles={["student"]}>
-                    <Dashboard />
-                </RoleProtectedRoute>
-            } />
-            <Route path="/recordings" element={
-                <RoleProtectedRoute allowedRoles={["student"]}>
-                    <p>Recordings</p>
-                </RoleProtectedRoute>
-            } />
-            <Route path="/shared" element={
-                <RoleProtectedRoute allowedRoles={["student"]}>
-                    <p>SharedRecordings</p>
-                </RoleProtectedRoute>
-            } />
-            <Route path="/resources" element={
-                <RoleProtectedRoute allowedRoles={["student"]}>
-                    <p>Resources</p>
-                </RoleProtectedRoute>
-            } />
-            <Route path="/admin/questions" element={
-                <RoleProtectedRoute allowedRoles={["admin"]}>
-                    <p>AdminQuestions</p>
-                </RoleProtectedRoute>
-            } />
-            <Route path="/admin/users" element={
-                <RoleProtectedRoute allowedRoles={["admin"]}>
-                    <AdminUser />
-                </RoleProtectedRoute>
-            } />
-            <Route path="/admin/resources" element={
-                <RoleProtectedRoute allowedRoles={["admin"]}>
-                    <p>AdminResources</p>
-                </RoleProtectedRoute>
-            } />
-            <Route path="/admin/monitoring" element={
-                <RoleProtectedRoute allowedRoles={["admin"]}>
-                    <p>Monitoring</p>
-                </RoleProtectedRoute>
-            } />
-        </Routes>
-    );
-}
->>>>>>> Activity-Monitoring

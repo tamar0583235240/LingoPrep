@@ -1,6 +1,5 @@
 import express, { Application } from 'express';
 import cors from 'cors';
-<<<<<<< HEAD
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
@@ -10,23 +9,20 @@ import answerRouter from './src/routes/answerRouts';
 import questionRoute from './src/routes/questionRouts';
 import sharedRecordingRouter from './src/routes/sharedRecordingRouts';
 import interviewMaterialsHub from './src/routes/interview-materials-hub';
-import userRouts from '../backend/src/routes/userRouts';
+import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
-import usedynamicContentRouter from './src/routes/DynamicContentRoutes';
+import usedynamicContentRouter from './src/routes/dynamicContentRoutes';
 import userAdminRouts from './src/routes/userAdminRouts';
 import popularQuestionsRoute from './src/routes/popularQuestionsRoute';
 import exampleRouts from './src/routes/exampleRouts';
-
-// אם אתה רוצה להשתמש בסופבייס (supabase), תייבא אותו כאן:
-// import { supabase } from './src/config/dbConnection';
-
-// אם יש לך ראוטרים נוספים מה-backend, תייבא אותם בהתאם
-// import usersRoutes from '../backend/src/routes/userRouts';
-// import answerRouts from '../backend/src/routes/answerRouts';
+import activity_MonitoringRoutes from './src/routes/StatsDateRangePickerRoutes';
+import userStatsRoutes from './src/routes/userStatsRouts';
 
 dotenv.config();
 
 const app: Application = express();
+
+console.log('✅ i am here in app');
 
 const corsOptions = {
   origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
@@ -39,7 +35,10 @@ app.use(cookieParser());
 
 // רישום ראוטים
 app.use('/api/feedback', feedbackRouter);
+// app.use('/api/AiInsights', AiInsightsRouter);
+// app.use('/api/aiInsight', AiInsightsRouter); // אם את רוצה שם פשוט ואחיד
 app.use('/api/AiInsights', AiInsightsRouter);
+
 app.use('/api/shared-recordings', sharedRecordingRouter);
 app.use('/api/answers', answerRouter);
 app.use('/api/questions', questionRoute); 
@@ -50,31 +49,9 @@ app.use('/api/admin', userAdminRouts);
 app.use('/api/dynamic-contents', usedynamicContentRouter);
 app.use('/api/popular-questions', popularQuestionsRoute); 
 app.use('/api/example', exampleRouts);
-
-// אם תרצה להוסיף ראוטים נוספים מה-backend, תוכל לעשות זאת פה
-// app.use('/users', usersRoutes);
-// app.use('/questions', answerRouts);
-=======
-import usersRoutes from './src/routes/userRouts';
-import answerRoutes from './src/routes/answerRouts';
-import aiInsightRoutes from './src/routes/aIInsightRouts';
-import activity_MonitoringRoutes from './src/routes/activity-MonitoringRoutes'
-import { pool } from './src/config/dbConnection';
-
-const app: Application = express();
-
-console.log('✅ i am here in app');
-
-app.use(cors());
-app.use(express.json());
-
-// רישום הראוטים
-app.use("/api/users", usersRoutes);
-app.use("/api/questions", answerRoutes);
-app.use("/api/aiInsight", aiInsightRoutes);
 app.use("/api/monitoringh", activity_MonitoringRoutes);
 app.use("/api/activity", activity_MonitoringRoutes);
-
->>>>>>> Activity-Monitoring
+app.use("/api/monitoring", activity_MonitoringRoutes);
+app.use('/api', userStatsRoutes);
 
 export default app;

@@ -7,12 +7,3 @@ const AdminUser= () => {
   )
 }
 export default AdminUser
-<<<<<<< HEAD
-=======
-
-
-
-
-
-
->>>>>>> Activity-Monitoring

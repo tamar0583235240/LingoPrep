@@ -1,12 +1,12 @@
 import React from 'react'
-import PopularQuestions from '../features/activity-Moonitoring/components/activity-Monitoring';
+import CategoryStats from '../features/activity-Moonitoring/components/CategoryStats';
 // אם בעתיד תעדיפי להחליף לרכיב אחר: 
 // import PopularQuestions from '../features/activity-Monitoring/components/PopularQuestions';
 
 const Activity_Monitoring = () => {
   return (
     <div>
-      <PopularQuestions />
+      <CategoryStats/>
     </div>
   )
 }

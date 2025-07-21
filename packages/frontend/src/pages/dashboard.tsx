@@ -6,12 +6,3 @@ const dashboard= () => {
 
   }
 export default dashboard
-<<<<<<< HEAD
-=======
-
-
-
-
-
-
->>>>>>> Activity-Monitoring

@@ -5,18 +5,9 @@
     "host": "localhost",
     "port": 5432,
     "username": "postgres",
-<<<<<<< HEAD
     "password": "214787673",
     "database": "",
     "synchronize": false,
     "entities": ["entities/*.js"]
   }
 ]
-=======
-    "password": "SARI9577",
-    "database": "diversitech",
-    "synchronize": false,
-    "entities": ["entities/*.ts"]
-  }
-]
->>>>>>> Activity-Monitoring

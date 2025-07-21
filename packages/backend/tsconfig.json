@@ -1,14 +1,11 @@
 {
-<<<<<<< HEAD
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": [
-      "ES2020"
-    ],
+    "lib": ["ES2020"],
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
@@ -21,39 +18,11 @@
     "sourceMap": true,
     "baseUrl": "./src",
     "paths": {
-      "@interfaces/*": [
-        "interfaces/*"
-      ]
-=======
-    "compilerOptions": {
-      "target": "ES2020",
-      "module": "commonjs",
-      "lib": ["ES2020"],
-      "outDir": "./dist",
-      "rootDir": "./",
-      "strict": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true,
-      "resolveJsonModule": true,
-      "declaration": true,
-      "declarationMap": true,
-      "sourceMap": true
-    },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules", "dist"],
-    "ts-node": {
-      "esm": false
->>>>>>> Activity-Monitoring
+      "@interfaces/*": ["interfaces/*"]
     }
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"],
   "ts-node": {
     "esm": false
   }
