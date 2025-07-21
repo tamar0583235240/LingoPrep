@@ -16,7 +16,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const percentage = Math.round((answeredCount / questions.length) * 100);
 
   return (
-<div className="flex flex-col items-center py-4 px-2 h-full w-64 ">
+<div className="flex flex-col items-center py-4 px-1 h-full w-64 ">
       {/* סטטוס שאלה */}
       <div className="text-center text-lg font-semibold text-primary mb-3">
         {`${currentIndex + 1} מתוך ${questions.length}`}

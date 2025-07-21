@@ -98,40 +98,47 @@ const InterviewPage = () => {
     }, 800);
   };
 
-
 return (
-  
-  <div className="min-h-screen bg-[#f7faff] flex flex-row relative">
-
-    {/* Sidebar מימין */}
-    <aside className="">
-      <Sidebar
-        questions={questionsWithStatus}
-        currentIndex={currentIndex}
-        onNavigate={(index) => dispatch(goToQuestion(index))}
-      />
-    </aside>
-
-    {/* תוכן מרכזי */}
-    <main className="flex-1 flex flex-col items-center justify-start px-4 py-12 relative">
-          <div className="mb-4 w-full max-w-sm self-center">
+  <div className="min-h-screen bg-[#f7faff] flex flex-col relative">
+    {/* Dropdown בחלק העליון */}
+    <div className="w-full flex justify-center py-6">
+      <div className="w-full max-w-sm px-6">
         <CategoryDropdown />
       </div>
+    </div>
+
+    {/* תוכן עיקרי: Sidebar ושאלה */}
+    <div className="flex  flex-row items-stretch px-2 gap-2">
+      {/* Sidebar */}
+      <div className="flex-1 flex justify-center items-start">
+        <Sidebar
+          questions={questionsWithStatus}
+          currentIndex={currentIndex}
+          onNavigate={(index) => dispatch(goToQuestion(index))}
+        />
+      </div>
+
       {/* שאלה */}
-      {isLoading ? (
-        <p className="p-8 text-center">טוען שאלות...</p>
-      ) : questionsWithStatus[currentIndex] ? (
-        <div className="p-10 max-w-4xl w-full">
-          <Question
-            question={questionsWithStatus[currentIndex]}
-            onFinishRecording={() => setShowTips(true)}
-            onAnswerSaved={handleAnswerSaved}
-          />
-        </div>
-      ) : (
-        <p className="text-red-500 text-center mt-10">אין שאלות להצגה</p>
-      )}
-    </main>
+      <div className="flex-1 flex justify-center items-start">
+        {isLoading ? (
+          <p className="p-8 text-center">טוען שאלות...</p>
+        ) : questionsWithStatus[currentIndex] ? (
+          <div className="p-10 max-w-4xl w-full">
+            <Question
+              question={questionsWithStatus[currentIndex]}
+              onFinishRecording={() => setShowTips(true)}
+              onAnswerSaved={handleAnswerSaved}
+            />
+          </div>
+        ) : (
+          <p className="text-red-500 text-center mt-10">אין שאלות להצגה</p>
+        )}
+ 
+    </div>
+          </div>
+              <div className="mt-8 w-full max-w-2xl">
+          <EndSurvey showEndButton={allAnswered} answeredCount={answeredCount} totalQuestions={totalQuestions} />
+        </div> 
 
     {/* אזור טיפים קבוע בתחתית שמאל */}
     <div className="fixed bottom-4 left-4 w-[350px] z-30">
@@ -142,7 +149,7 @@ return (
               onClick={() => setShowTips(false)}
               className="text-sm text-gray-500 hover:text-gray-700"
             >
-               ✕
+              ✕
             </button>
           </div>
           <TipsComponent />
@@ -150,9 +157,10 @@ return (
       ) : (
         <button
           onClick={() => setShowTips(true)}
-          className="bg-white border border-indigo-100 rounded-xl shadow-lg px-4 py-2 text-indigo-600 underline hover:text-indigo-800"
+          className="fixed bottom-4 left-4 z-50 text-3xl text-indigo-600 hover:text-indigo-800 transition-transform duration-200 hover:scale-125"
+          title="הצג טיפים"
         >
-          הצג טיפים
+          💡
         </button>
       )}
     </div>
@@ -161,21 +169,18 @@ return (
     {currentAnswerId && (
       <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
         <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl mx-4 p-6 relative">
-          {/* כפתור סגירה */}
           <button
             onClick={() => dispatch(setCurrentAnswerId(null))}
             className="absolute top-2 left-2 text-gray-500 hover:text-gray-800 text-xl"
           >
             ×
           </button>
-
           <AnswerAI answerId={currentAnswerId} />
         </div>
       </div>
     )}
   </div>
 );
-
 
 };
 

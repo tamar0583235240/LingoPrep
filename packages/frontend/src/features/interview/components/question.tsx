@@ -50,7 +50,7 @@ const Question: React.FC<QuestionProps> = ({
       )}
 
       {/* <div className="flex justify-center items-center min-h-[60vh] bg-[--color-surface] py-8 px-2 direction-rtl"> */}
-        <div className="bg-white rounded-2xl shadow-md border border-[--color-border] p-8 max-w-xl w-full text-right">
+<div className="bg-white rounded-2xl shadow-md border border-[--color-border] p-4 max-w-xl w-full text-right">
           <div className="flex justify-between items-center mb-2">
             <span className="bg-[--color-background] text-primary-dark text-xs font-semibold px-3 py-1 rounded-full">
               שאלה {currentIndex + 1} 

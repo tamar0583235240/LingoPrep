@@ -95,7 +95,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     <div className="space-y-4 w-full">
       {/* כפתור ראשי תמיד מוצג */}
       <>
-        {!showRecordingModal && (
+        
           <button
             className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white rounded-xl px-6 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={() => {
@@ -108,7 +108,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
             <FiIcons.FiMic size={20} />
             התחל הקלטה
           </button>
-        )}
+        
         <RecordButton
           open={showRecordingModal}
           onClose={() => setShowRecordingModal(false)}
@@ -128,18 +128,18 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       </>
 
       {/* מונה זמן - מוצג רק כשהפופאפ פתוח */}
-      {showRecordingModal && (recordingPhase === 'recording' || recordingPhase === 'paused') && (
+      {/* {showRecordingModal && (recordingPhase === 'recording' || recordingPhase === 'paused') && (
         <div className="flex flex-col items-center gap-2">
           <div className="text-lg font-bold text-text-main">
             {formatTime(currentRecording.recordingTime)}
           </div>
         </div>
-      )}
+      )} */}
 
       {/* כפתורים בזמן עצירה זמנית */}
       {showRecordingModal && recordingPhase === 'paused' && (
         <div className="grid grid-cols-2 gap-2">
-          <Button
+          {/* <Button
             size="sm"
             fullWidth
             variant="outline"
@@ -151,8 +151,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
             className="gap-2"
           >
             מחדש
-          </Button>
-          <Button
+          </Button> */}
+          {/* <Button
             size="sm"
             fullWidth
             variant="primary-dark"
@@ -161,7 +161,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
             className="gap-2"
           >
             סיום
-          </Button>
+          </Button> */}
         </div>
       )}
 
