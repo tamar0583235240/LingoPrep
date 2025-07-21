@@ -3,6 +3,8 @@ import { Button } from "../../../shared/ui/button";
 import { SummaryBox } from "../../../shared/ui/SummaryBox";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from '../../../shared/hooks/reduxHooks';
+import { Certificate } from '../../dashboard/components/Certificate';
 
 interface EndSurveyProps {
   showEndButton: boolean;
@@ -12,7 +14,9 @@ interface EndSurveyProps {
 
 const EndSurvey: React.FC<EndSurveyProps> = ({ showEndButton, answeredCount, totalQuestions }) => {
   const [showEnd, setShowEnd] = useState(false);
+  const [showCertificate, setShowCertificate] = useState(false);
   const navigate = useNavigate();
+  const user = useAppSelector((state) => state.auth.user);
 
   if (!showEndButton) return null; // לא מציגים כלל אם לא כולם נענו
 
@@ -65,7 +69,7 @@ const EndSurvey: React.FC<EndSurveyProps> = ({ showEndButton, answeredCount, tot
                 icon={<BadgeCheck className="w-5 h-5" />}
                 iconPosition="left"
                 fullWidth
-                onClick={() => navigate("/certificate")}
+                onClick={() => setShowCertificate(true)}
               >
                 הנפקת תעודה
               </Button>
@@ -80,6 +84,25 @@ const EndSurvey: React.FC<EndSurveyProps> = ({ showEndButton, answeredCount, tot
                 לדשבורד
               </Button>
             </div>
+          </div>
+        </div>
+      )}
+      {showCertificate && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-3xl w-full relative">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute top-4 left-4"
+              aria-label="סגור"
+              onClick={() => setShowCertificate(false)}
+              iconPosition="left"
+              icon={<span className="text-gray-400 hover:text-gray-600 transition">×</span>}
+            />
+            <Certificate
+              first_name={user?.first_name || ""}
+              last_name={user?.last_name || ""}
+            />
           </div>
         </div>
       )}
