@@ -18,6 +18,7 @@ const GoogleAuthButton = () => {
 
   const onSuccess = (googleUser: any) => {
     const token = googleUser.credential;
+    console.log('Google token:', token);
 
     authWithGoogle(token)
       .unwrap()

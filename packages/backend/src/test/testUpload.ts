@@ -17,8 +17,8 @@ cloudinary.config({
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'lingo',
-  password: 'your_password',
+  database: 'lingo-prep',
+  password: 'TAMARg!!595',
   port: 5432,
 });
 
