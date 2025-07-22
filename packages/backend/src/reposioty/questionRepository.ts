@@ -2,6 +2,9 @@ import { pool } from '../config/dbConnection';
 import { Questions } from "../interfaces/entities/Questions";
 import { v4 as uuid4 } from 'uuid';
 
+
+//צריך לשנות פה בגלל שמחקנו category 
+//מטבלת שאלות
 const addQustion = async (question: Questions): Promise<Questions> => {
   try {
 
@@ -9,8 +12,8 @@ const addQustion = async (question: Questions): Promise<Questions> => {
     let exists = true;
     id = uuid4();
     const query = `
-      INSERT INTO questions (id , title , content , category , tips , ai_guidance , is_active)
-      VALUES ('${id}', '${question.title}', '${question.content}', '${question.category}', '${question.tips}', '${question.aiGuidance}','${question.isActive}')
+      INSERT INTO questions (id , title , content , tips , ai_guidance , is_active)
+      VALUES ('${id}', '${question.title}', '${question.content}', '${question.tips}', '${question.aiGuidance}','${question.isActive}')
     `;
 
     const result = await pool.query(query);
@@ -97,5 +100,25 @@ const deleteQuestionById = async (id: string, is_active: boolean): Promise<strin
     throw error;
   }
 }
-export default { getAllQuestionById, getAllQuestions, deleteQuestionById, addQustion, updateQuestionById };
+
+
+
+
+const getQuestionsByCategory = async (category_id: string): Promise<Questions[]> => {
+  try {
+    const query = `
+      SELECT q.*
+      FROM questions q
+      JOIN question_categories qc ON qc.question_id = q.id
+      WHERE qc.category_id = $1
+    `;
+    const result = await pool.query(query, [category_id]);
+    return result.rows as Questions[];
+  } catch (error) {
+    console.error(":x: Error fetching questions by category:", error);
+    throw error;
+  }
+};
+
+export default { getAllQuestionById, getAllQuestions, deleteQuestionById, addQustion, updateQuestionById, getQuestionsByCategory };
 
