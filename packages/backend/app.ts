@@ -50,6 +50,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
+app.use('/auth', authRouts);
 app.use('/api/categories', categoryRoutes)
 app.use('/api', resourceRouts);
 app.use('/api', feedbackRouter)
@@ -58,11 +59,9 @@ app.use('/api', sharedRecrdingRouter)
 app.use('/answers', answerRouter);
 app.use('/question', questionRoute);
 app.use('/shared-recordings', sharedRecordingsRoutes);
-app.use('/auth', authRouts);
 app.use('/interview-materials-hub', interviewMaterialsRoutes);
 app.use('/api/users', userRouts);
 app.use('/api/admin', userAdminRouts);
-// app.use("/api/questions", answerRoutes);
 app.use("/api/aiInsight", aiInsightRoutes);
 
 
