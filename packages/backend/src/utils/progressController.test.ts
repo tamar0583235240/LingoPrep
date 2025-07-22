@@ -9,7 +9,7 @@ jest.mock('../config/dbConnection', () => ({
   },
 }));
 
-const validUserId = "00000000-0000-0000-0000-000000000000";
+const validUserId = "3b836dc9-5840-4109-8ad5-ab862c8d4ee8";
 
 describe('בדיקות ל־Progress Controller', () => {
   beforeEach(() => {
