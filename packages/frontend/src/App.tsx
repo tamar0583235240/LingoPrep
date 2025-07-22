@@ -9,6 +9,7 @@ import { useRefreshTokenMutation } from './shared/api/authApi';
 
 import { useAppDispatch } from "./shared/hooks/reduxHooks";
 import { InterviewExperiencesList } from './features/interviewExperiences/components/interviewExperiencesList';
+import { QuestionStatsChart } from './features/dashboard/components/QuestionStatsChart';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -16,22 +17,22 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  dispatch(loginStart());
+    dispatch(loginStart());
 
-  refreshTokenTrigger()
-    .unwrap()
-    .then((res) => {
-      console.log("הצלחה!", res);
-      dispatch(loginSuccess({ token: res.token, user: res.user }));
-    })
-    .catch((err) => {
-      console.log("נכשל ברענון הטוקן", err);
-      dispatch(logout());
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-}, []);
+    refreshTokenTrigger()
+      .unwrap()
+      .then((res) => {
+        console.log("הצלחה!", res);
+        dispatch(loginSuccess({ token: res.token, user: res.user }));
+      })
+      .catch((err) => {
+        console.log("נכשל ברענון הטוקן", err);
+        dispatch(logout());
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   if (loading) return <p>טוען...</p>;
 
@@ -40,6 +41,9 @@ function App() {
       <BrowserRouter>
         <AppRoutes />
         <InterviewExperiencesList></InterviewExperiencesList>
+        {/* <div className="p-4"> */}
+          <QuestionStatsChart total={100} completed={2} />
+        {/* </div> */}
       </BrowserRouter>
     </MessageModalProvider>
   );
