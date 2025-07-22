@@ -3,7 +3,7 @@ import { TitleQuestions } from './question';
 import { Button } from '../../../shared/ui/button';
 import { cn } from '../../../shared/utils/cn';
 import { Star } from 'lucide-react';
-import { Answer } from '../types/Answer';
+import { Answer } from '../types/answer';
 
 export const FilteringComponents = (props: {
   filterCriteria: {
