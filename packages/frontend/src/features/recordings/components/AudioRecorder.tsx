@@ -10,23 +10,24 @@ import type { RecordingState } from '../types/Answer';
 import RecordButton from './RecordButton';
 import { RootState } from "../../../shared/store/store";
 import { CheckCircle2, XCircle } from 'lucide-react';
+import { NotificationType } from '../../interview/types/notificationType';
 
 type AudioRecorderProps = {
   answered?: boolean;
   onFinish?: () => void;
   onSaveSuccess?: (answerId: string) => void;
-  setNotification?: (notification: {
-    message: string;
-    type: "success" | "error";
-    icon?: React.ReactNode;
-  }) => void;
+  // setNotification?: (notification: {
+  //   message: string;
+  //   type: "success" | "error";
+  //   icon?: React.ReactNode;
+  // }) => void;
 };
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
   answered,
   onFinish,
   onSaveSuccess,
-  setNotification
+  // setNotification
 }) => {
   const { questions, currentIndex, currentUserId } = useSelector((state: RootState) => state.simulation);
   const currentQuestion = questions[currentIndex];
@@ -51,6 +52,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const [recordingPhase, setRecordingPhase] = useState<
     'idle' | 'recording' | 'paused' | 'finished'
   >('idle');
+
+  const [notification, setNotification] = useState<NotificationType>(null);
 
   const handleMainButtonClick = () => {
     if (recordingPhase === 'idle' || recordingPhase === 'finished') {
@@ -87,7 +90,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       type: "success",
       icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
     });
-    setTimeout(() => setNotification?.({ message: "", type: "success" }), 3500);
+    setTimeout(() => setNotification?.(null), 3500);
 
   } catch (error) {
     console.error('שגיאה בשמירה:', error);
@@ -96,7 +99,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       type: "error",
       icon: <XCircle className="w-6 h-6 text-red-500" />,
     });
-    setTimeout(() => setNotification?.({ message: "", type: "success" }), 3500);
+    setTimeout(() => setNotification?.(null), 3500);
   }
   };
 

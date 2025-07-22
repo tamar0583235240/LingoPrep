@@ -7,7 +7,6 @@ import {
   setCurrentAnswerId,
   setCurrentUserId,
 } from "../features/interview/store/simulationSlice";
-import { addAnsweredAnswer } from "../features/interview/store/answeredSlice";
 import { RootState } from "../shared/store/store";
 import Sidebar from "../features/interview/components/sidebar";
 import Question from "../features/interview/components/question";
@@ -19,6 +18,7 @@ import { skipToken } from "@reduxjs/toolkit/query";
 import { CheckCircle2, Lightbulb, X } from "lucide-react";
 import { Button } from "../shared/ui/button";
 import CategoryTabs from "../features/interview/components/showCategories";
+import { useGetAnsweredQuestionsQuery } from "../features/interview/services/statusAPI";
 
 const InterviewPage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -31,9 +31,16 @@ const InterviewPage = () => {
     useGetQuestionsByCategoryQuery(currentCategoryId || skipToken, {
       refetchOnMountOrArgChange: true,
     });
-  const answeredAnswers = useSelector(
-    (state: RootState) => state.answered.answeredAnswers
+  const {
+    data: answeredIdsFromServer = [],
+    isSuccess,
+    refetch: refetchAnswered
+  } = useGetAnsweredQuestionsQuery(
+    user && currentCategoryId
+      ? { userId: user.id, categoryId: currentCategoryId }
+      : skipToken
   );
+  // הסר את answeredAnswers מה-state
   const [showTips, setShowTips] = useState(false);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   const [notification, setNotification] = useState<{
@@ -42,9 +49,67 @@ const InterviewPage = () => {
     icon?: React.ReactNode;
   } | null>(null);
   const [notificationOpen, setNotificationOpen] = useState(false);
+
+  // עדכון יוזר נוכחי ב-simulationSlice
+  useEffect(() => {
+    if (user?.id) {
+      dispatch(setCurrentUserId(user.id));
+    }
+  }, [user, dispatch]);
+
+  // איפוס currentAnswerId, טעינת AI וטיפים בכל מעבר שאלה
+  useEffect(() => {
+    dispatch(setCurrentAnswerId(null));
+    setIsLoadingAI(false);
+    setShowTips(true);
+  }, [currentIndex, dispatch]);
+
+  // עדכון שאלות ב-simulationSlice בכל טעינת שאלות
+  useEffect(() => {
+    if (questions.length > 0) {
+      dispatch(setQuestions(questions));
+      dispatch(goToQuestion(0));
+    }
+  }, [questions, dispatch]);
+
+  // הפעלת טעינת AI כאשר יש currentAnswerId
+  useEffect(() => {
+    if (currentAnswerId) {
+      setIsLoadingAI(true);
+    }
+  }, [currentAnswerId]);
+
+  // עדכון תשובות שנענו מהשרת
+  useEffect(() => {
+    if (isSuccess && answeredIdsFromServer) {
+      const answeredArr = answeredIdsFromServer.map((qid: any) => ({
+        id: String(qid.id),
+        question: { id: String(qid.id) }
+      }));
+    }
+  }, [isSuccess, answeredIdsFromServer]);
+
+  // עדכון תשובה שנשמרה
+  const handleAnswerSaved = (answerId: string) => {
+    const q = questions[currentIndex];
+    // setNotification({
+    //   message: "התשובה נשמרה בהצלחה!",
+    //   type: "success",
+    //   icon: <CheckCircle2 className="w-5 h-5 text-green-600" />,
+    // });
+    setNotificationOpen(true);
+    setTimeout(() => {
+      setNotification(null);
+      setNotificationOpen(false);
+      dispatch(setCurrentAnswerId(answerId));
+      refetchAnswered(); // רענון תשובות מהשרת
+    }, 3500);
+  };
+
+  // בניית רשימת תשובות שנענו ישירות מהשרת
   const answeredQuestionIds = useMemo(
-    () => answeredAnswers.map((a) => a.question.id),
-    [answeredAnswers]
+    () => (answeredIdsFromServer || []).map((a: any) => String(a.id)),
+    [answeredIdsFromServer]
   );
   const questionsWithStatus = useMemo(
     () =>
@@ -58,47 +123,7 @@ const InterviewPage = () => {
   const totalQuestions = questions.length;
   const answeredCount = questionsWithStatus.filter((q) => q.answered).length;
   const allAnswered = totalQuestions > 0 && answeredCount === totalQuestions;
-  useEffect(() => {
-    if (user?.id) {
-      dispatch(setCurrentUserId(user.id));
-    }
-  }, [user, dispatch]);
-  useEffect(() => {
-    dispatch(setCurrentAnswerId(null));
-    setIsLoadingAI(false);
-    setShowTips(true);
-  }, [currentIndex]);
-  useEffect(() => {
-    if (questions.length > 0) {
-      dispatch(setQuestions(questions));
-      dispatch(goToQuestion(0));
-    }
-  }, [questions, dispatch]);
-  useEffect(() => {
-    if (currentAnswerId) {
-      setIsLoadingAI(true);
-    }
-  }, [currentAnswerId]);
-  const handleAnswerSaved = (answerId: string) => {
-    const q = questions[currentIndex];
-    dispatch(
-      addAnsweredAnswer({
-        id: answerId,
-        question: { id: String(q.id), text: q.title || q.text },
-      })
-    );
-    setNotification({
-      message: "התשובה נשמרה בהצלחה!",
-      type: "success",
-      icon: <CheckCircle2 className="w-5 h-5 text-green-600" />,
-    });
-    setNotificationOpen(true);
-    setTimeout(() => {
-      setNotification(null);
-      setNotificationOpen(false);
-      dispatch(setCurrentAnswerId(answerId));
-    }, 3500);
-  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center">
@@ -164,7 +189,7 @@ const InterviewPage = () => {
             }
             iconPosition="left"
             onClick={() => {
-              const answered = answeredAnswers.find(
+              const answered = answeredIdsFromServer.find(
                 (a) => a.question.id === String(questionsWithStatus[currentIndex].id)
               );
               if (answered) {
@@ -256,4 +281,5 @@ const InterviewPage = () => {
     </div>
   );
 };
+
 export default InterviewPage;
