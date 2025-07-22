@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
-<<<<<<< HEAD
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../shared/store/store';
 import { 
   setRecordingState, 
   setShowRecordingModal, 
@@ -8,85 +8,11 @@ import {
   addAnswer 
 } from '../store/recordingSlice';
 import { useUploadAnswerMutation } from '../services/recordingApi';
-=======
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../shared/store/store';
-import {
-  setRecordingState,
-  setShowRecordingModal,
-  resetRecording,
-  addAnswer
-} from '../store/recordingSlice';
-import { useUploadAnswerMutation } from '../services/recordingApi';
 import { useUploadRecordingMutation } from '../services/resourceApi';
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
 import { UploadAnswerDto } from '../types/UploadAnswerDto';
 
 export const useRecording = () => {
   const dispatch = useDispatch();
-<<<<<<< HEAD
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const chunksRef = useRef<BlobPart[]>([]);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const timeRef = useRef<number>(0);
-  const audioBlobRef = useRef<Blob | null>(null);
-  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-  const [recordingTime, setRecordingTime] = useState(0);
-  const [uploadAnswer] = useUploadAnswerMutation();
-
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-    
-    if (mediaRecorderRef.current?.state === 'recording') {
-      intervalId = setInterval(() => {
-        setRecordingTime(prev => {
-          const newTime = prev + 1;
-          dispatch(setRecordingState({ recordingTime: newTime }));
-          return newTime;
-        });
-      }, 1000);
-    }
-
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, [dispatch, mediaRecorderRef.current?.state]);
-
-  const startRecording = async () => {
-    try {
-      if (audioBlobRef.current) {
-        deleteRecording();
-      }
-      setAudioBlob(null);
-      timeRef.current = 0;
-      chunksRef.current = [];
-      
-      console.log('מבקש גישה למיקרופון...');
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: true,
-        video: false 
-      });
-      
-      console.log('יוצר MediaRecorder...');
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-      setRecordingTime(0);
-      dispatch(setRecordingState({ recordingTime: 0 }));
-
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          console.log('קיבלנו נתוני אודיו:', event.data.size, 'bytes');
-          chunksRef.current.push(event.data);
-        }
-      };
-
-      mediaRecorder.onstop = () => {
-        console.log('ההקלטה נעצרה, מאחד chunks...');
-        const blob = new Blob(chunksRef.current, { type: 'audio/wav' });
-        console.log('Blob נוצר:', blob.size, 'bytes');
-=======
   const { currentRecording, showRecordingModal } = useSelector(
     (state: RootState) => state.recording);
   const [uploadAnswer, { isLoading }] = useUploadAnswerMutation();
@@ -97,15 +23,16 @@ export const useRecording = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const audioBlobRef = useRef<Blob | null>(null);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [recordingTime, setRecordingTime] = useState(0);
 
   // טיימר להקלטה
-
   useEffect(() => {
     if (currentRecording.isRecording && !currentRecording.isPaused) {
       timerRef.current = setInterval(() => {
         dispatch(setRecordingState({
           recordingTime: currentRecording.recordingTime + 1
         }));
+        setRecordingTime(prev => prev + 1);
       }, 1000);
     } else {
       if (timerRef.current) {
@@ -121,24 +48,41 @@ export const useRecording = () => {
   }, [currentRecording.isRecording, currentRecording.isPaused, currentRecording.recordingTime, dispatch]);
 
   const startRecording = async () => {
-    if (audioBlobRef.current) {
-      deleteRecording();
-    }
-    setAudioBlob(null); // איפוס גם ב-state
-
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      if (audioBlobRef.current) {
+        deleteRecording();
+      }
+      setAudioBlob(null);
+      setRecordingTime(0);
+      chunksRef.current = [];
+      
+      console.log('מבקש גישה למיקרופון...');
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: true,
+        video: false 
+      });
+      
+      console.log('יוצר MediaRecorder...');
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
-      chunksRef.current = [];
+      dispatch(setRecordingState({ 
+        recordingTime: 0,
+        isRecording: true,
+        isPaused: false 
+      }));
+      dispatch(setShowRecordingModal(true));
 
       mediaRecorder.ondataavailable = (event) => {
-        chunksRef.current.push(event.data);
+        if (event.data.size > 0) {
+          console.log('קיבלנו נתוני אודיו:', event.data.size, 'bytes');
+          chunksRef.current.push(event.data);
+        }
       };
 
       mediaRecorder.onstop = () => {
+        console.log('ההקלטה נעצרה, מאחד chunks...');
         const blob = new Blob(chunksRef.current, { type: 'audio/wav' });
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
+        console.log('Blob נוצר:', blob.size, 'bytes');
         audioBlobRef.current = blob;
         setAudioBlob(blob);
         stream.getTracks().forEach(track => track.stop());
@@ -168,34 +112,21 @@ export const useRecording = () => {
     console.log('עוצר הקלטה...');
     if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
       mediaRecorderRef.current.stop();
-      dispatch(setRecordingState({ recordingTime: recordingTime }));
-=======
-      mediaRecorder.start();
-      dispatch(setRecordingState({
-        isRecording: true,
-        isPaused: false,
-        recordingTime: 0
+      dispatch(setRecordingState({ 
+        recordingTime: recordingTime,
+        isRecording: false,
+        isPaused: false
       }));
-      dispatch(setShowRecordingModal(true));
-    } catch (error) {
-      console.error('שגיאה בהתחלת הקלטה:', error);
-      alert('לא ניתן לגשת למיקרופון');
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
     }
   };
 
   const pauseRecording = () => {
-<<<<<<< HEAD
-    if (mediaRecorderRef.current?.state === 'recording') {
-      mediaRecorderRef.current.pause();
-=======
     if (mediaRecorderRef.current && currentRecording.isRecording) {
       mediaRecorderRef.current.pause();
       dispatch(setRecordingState({
         isPaused: true,
         isRecording: false
       }));
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
     }
   };
 
