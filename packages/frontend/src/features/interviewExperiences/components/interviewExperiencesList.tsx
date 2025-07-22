@@ -59,8 +59,6 @@ export const InterviewExperiencesList = () => {
   });
 
   function getThunksByInterviewExperienceId(interviewExperienceId: string): experienceThanks[] {
-    // console.log(interviewExperienceId);
-
     return (experienceThanks ? experienceThanks.filter(thanks => thanks.experience_id === interviewExperienceId) : []);
   }
 
