@@ -63,17 +63,12 @@ app.use('/interview-materials-hub', interviewMaterialsRoutes);
 app.use('/api/users', userRouts);
 app.use('/api/admin', userAdminRouts);
 app.use("/api/aiInsight", aiInsightRoutes);
-
-
 app.use('/api/simulation', questionRoutes);
 app.use('/api/questions', questionRoutes);
 app.use('/api/status', statusRoutes);
 app.use('/api/answers', answerRoutes);
-
-
 app.use('/api/status', statusRouts);
 app.use('/api/insights', aIInsightRouts);
-
 app.use('/api/dynamic-contents', useDynamicContentRouter);
 app.use("/api/questions", answerRoutes);
 app.use("/api/aiInsight", aiInsightRoutes);

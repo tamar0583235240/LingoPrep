@@ -11,7 +11,6 @@ interface EndSurveyProps {
   answeredCount: number;
   totalQuestions: number;
 }
-
 const EndSurvey: React.FC<EndSurveyProps> = ({ showEndButton, answeredCount, totalQuestions }) => {
   const [showEnd, setShowEnd] = useState(false);
   const [showCertificate, setShowCertificate] = useState(false);
@@ -19,9 +18,7 @@ const EndSurvey: React.FC<EndSurveyProps> = ({ showEndButton, answeredCount, tot
   const user = useAppSelector((state) => state.auth.user);
 
   if (!showEndButton) return null; // לא מציגים כלל אם לא כולם נענו
-
   return (
-
 <>
   <Button
     variant="primary-dark"
@@ -33,9 +30,6 @@ const EndSurvey: React.FC<EndSurveyProps> = ({ showEndButton, answeredCount, tot
   >
     סיום השאלון
   </Button>
-
-
-
       {showEnd && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
           <div className="relative bg-white rounded-2xl p-8 shadow-xl w-full max-w-md text-right border border-[--color-border] animate-fade-in">
@@ -52,7 +46,6 @@ const EndSurvey: React.FC<EndSurveyProps> = ({ showEndButton, answeredCount, tot
               <Sparkles className="text-yellow-500 w-6 h-6" />
               <span className="text-xl font-bold text-text-main">ברכות לרגל סיום השאלון!</span>
             </div>
-
             <SummaryBox
               title="שאלות שענית"
               value={answeredCount.toString()}
@@ -61,7 +54,6 @@ const EndSurvey: React.FC<EndSurveyProps> = ({ showEndButton, answeredCount, tot
               iconColor="success"
               className="mb-4"
             />
-
             <div className="flex flex-col sm:flex-row gap-3">
               <Button
                 variant="primary-dark"
@@ -109,5 +101,4 @@ const EndSurvey: React.FC<EndSurveyProps> = ({ showEndButton, answeredCount, tot
     </>
   );
 };
-
 export default EndSurvey;
