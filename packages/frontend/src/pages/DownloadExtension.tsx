@@ -1,8 +1,8 @@
-import { Search, CheckCircle, Target, Check, Copy, Lightbulb, StarHalfIcon, StarOff, StarsIcon, Stars } from "lucide-react";
+import { CheckCircle, Check, Copy, Lightbulb, Stars } from "lucide-react";
 import { useEffect, useState } from "react";
+import { BiExtension } from "react-icons/bi";
 import { FaDownload, FaChrome } from "react-icons/fa";
 import MessageModal from "../shared/ui/messageModal";
-import { AiFillAccountBook, AiFillApi, AiFillGold } from "react-icons/ai";
 
 export default function DownloadExtension() {
     const [copied, setCopied] = useState(false);
@@ -84,16 +84,14 @@ export default function DownloadExtension() {
                     <ol className="list-decimal pr-5 space-y-2 text-[--color-secondary-text]">
                         <li>לחצי על כפתור ההורדה למעלה והורידי את הקובץ למחשב.</li>
                         <li>פתחי את הקובץ (ZIP) ופרקי אותו לתיקייה כלשהי.</li>
-                        <li>היכנסי לכתובת: <span className="underline text-[--color-primary]">chrome://extensions</span>      <button onClick={handleCopy} title="העתק כתובת"
+                        <li>היכנסי לכתובת: <span className="underline text-[--color-primary]">chrome://extensions</span>    
+                          <button onClick={handleCopy} title="העתק כתובת"
                             className="transition-colors text-sm p-1 rounded hover:bg-[--color-primary]/10">
                             {copied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
                         </button></li>
-
-
-
                         <li>הפעילי את <strong>מצב פיתוח (Developer Mode)</strong> בצד שמאל למעלה.</li>
                         <li>לחצי על <strong>טעינת פריט unpacked</strong> ובחרי את התיקייה שפתחת מה-ZIP.</li>
-                        <li>וזהו! התוסף יופיע בצד ימין למעלה, ליד שורת הכתובת.</li>
+                        <li>וזהו! התוסף יופיע בצד שמאל למעלה, ליד שורת הכתובת.<span className=" inline-block"><BiExtension size={20}/></span></li>
                     </ol>
                 </div>
             </div>
