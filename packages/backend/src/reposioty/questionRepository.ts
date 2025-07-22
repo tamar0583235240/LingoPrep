@@ -12,8 +12,8 @@ const addQustion = async (question: Questions): Promise<Questions> => {
     let exists = true;
     id = uuid4();
     const query = `
-      INSERT INTO questions (id , title , content , category , tips , ai_guidance , is_active)
-      VALUES ('${id}', '${question.title}', '${question.content}', '${"question.category"}', '${question.tips}', '${question.aiGuidance}','${question.isActive}')
+      INSERT INTO questions (id , title , content , tips , ai_guidance , is_active)
+      VALUES ('${id}', '${question.title}', '${question.content}', '${question.tips}', '${question.aiGuidance}','${question.isActive}')
     `;
 
     const result = await pool.query(query);

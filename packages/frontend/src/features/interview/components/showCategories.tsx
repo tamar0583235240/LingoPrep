@@ -14,7 +14,6 @@ const CategoryTabs: React.FC = () => {
       dispatch(setCurrentCategoryId(String(categories[0].id)));
     }
   }, [categories, currentCategoryId, dispatch]);
-
   return (
     <div className=" border-[--color-border] rounded-t-[2.5rem] px-4 pt-4 pb-0">
       {isLoadingCategories ? (
@@ -34,7 +33,7 @@ const CategoryTabs: React.FC = () => {
                 }}
                 className={`w-28 h-12 flex items-center justify-center text-sm font-semibold transition-all duration-200 border-t border-x focus:outline-none rounded-t-[1rem] ${
   isSelected
-    ? "bg-[#e6fcf7] text-[--color-primary] z-20 border-[--color-primary]"
+    ? "bg-[#E6FCF7] text-[--color-primary] z-20 border-[--color-primary]"
     : "bg-[--color-background] text-[--color-secondary-text] hover:bg-white hover:text-[--color-primary] z-10 border-[--color-border] border-b"
 }`}
                 style={{

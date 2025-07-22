@@ -9,7 +9,6 @@ import {
 } from "../features/interview/store/simulationSlice";
 import { addAnsweredAnswer } from "../features/interview/store/answeredSlice";
 import { RootState } from "../shared/store/store";
-
 import Sidebar from "../features/interview/components/sidebar";
 import Question from "../features/interview/components/question";
 import AnswerAI from "../features/interview/components/AnswerAI";
@@ -28,16 +27,13 @@ const InterviewPage = () => {
   const { currentCategoryId, currentIndex, currentAnswerId } = useSelector(
     (state: RootState) => state.simulation
   );
-
   const { data: questions = [], isLoading } =
     useGetQuestionsByCategoryQuery(currentCategoryId || skipToken, {
       refetchOnMountOrArgChange: true,
     });
-
   const answeredAnswers = useSelector(
     (state: RootState) => state.answered.answeredAnswers
   );
-
   const [showTips, setShowTips] = useState(false);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   const [notification, setNotification] = useState<{
@@ -46,12 +42,10 @@ const InterviewPage = () => {
     icon?: React.ReactNode;
   } | null>(null);
   const [notificationOpen, setNotificationOpen] = useState(false);
-
   const answeredQuestionIds = useMemo(
     () => answeredAnswers.map((a) => a.question.id),
     [answeredAnswers]
   );
-
   const questionsWithStatus = useMemo(
     () =>
       questions.map((q) => ({
@@ -60,37 +54,31 @@ const InterviewPage = () => {
       })),
     [questions, answeredQuestionIds]
   );
-
   const isCurrentQuestionAnswered = questionsWithStatus[currentIndex]?.answered;
   const totalQuestions = questions.length;
   const answeredCount = questionsWithStatus.filter((q) => q.answered).length;
   const allAnswered = totalQuestions > 0 && answeredCount === totalQuestions;
-
   useEffect(() => {
     if (user?.id) {
       dispatch(setCurrentUserId(user.id));
     }
   }, [user, dispatch]);
-
   useEffect(() => {
     dispatch(setCurrentAnswerId(null));
     setIsLoadingAI(false);
     setShowTips(true);
   }, [currentIndex]);
-
   useEffect(() => {
     if (questions.length > 0) {
       dispatch(setQuestions(questions));
       dispatch(goToQuestion(0));
     }
   }, [questions, dispatch]);
-
   useEffect(() => {
     if (currentAnswerId) {
       setIsLoadingAI(true);
     }
   }, [currentAnswerId]);
-
   const handleAnswerSaved = (answerId: string) => {
     const q = questions[currentIndex];
     dispatch(
@@ -99,21 +87,18 @@ const InterviewPage = () => {
         question: { id: String(q.id), text: q.title || q.text },
       })
     );
-
-    // setNotification({
-    //   message: "התשובה נשמרה בהצלחה!",
-    //   type: "success",
-    //   icon: <CheckCircle2 className="w-5 h-5 text-green-600" />,
-    // });
+    setNotification({
+      message: "התשובה נשמרה בהצלחה!",
+      type: "success",
+      icon: <CheckCircle2 className="w-5 h-5 text-green-600" />,
+    });
     setNotificationOpen(true);
-
     setTimeout(() => {
       setNotification(null);
       setNotificationOpen(false);
       dispatch(setCurrentAnswerId(answerId));
     }, 3500);
   };
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center">
@@ -145,7 +130,6 @@ const InterviewPage = () => {
         />
       </div>
     </div>
-
     {/* שאלה ופעולות */}
     <div className="lg:col-span-9 space-y-6">
       {questionsWithStatus[currentIndex] ? (
@@ -162,7 +146,6 @@ const InterviewPage = () => {
           <p className="text-red-500 text-lg">אין שאלות להצגה</p>
         </div>
       )}
-
       {/* כפתורי פעולה */}
       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
         {isCurrentQuestionAnswered && !currentAnswerId && !notificationOpen && (
@@ -193,13 +176,11 @@ const InterviewPage = () => {
             הצג ניתוח AI
           </Button>
         )}
-
           <EndSurvey
             showEndButton={allAnswered}
             answeredCount={answeredCount}
             totalQuestions={totalQuestions}
           />
-
         {/* טיפים בתוך הכרטיס */}
         <div className="absolute bottom-6 left-6 z-30">
           {showTips ? (
@@ -232,10 +213,6 @@ const InterviewPage = () => {
     </div>
   </div>
 </div>
-
-
-
-
         {/* התראה על שמירה */}
         {notification && notificationOpen && (
           <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-right duration-300">
@@ -245,7 +222,6 @@ const InterviewPage = () => {
             </div>
           </div>
         )}
-
         {/* ניתוח AI */}
         {currentAnswerId && !notificationOpen && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -259,7 +235,6 @@ const InterviewPage = () => {
                   <X className="w-6 h-6" />
                 </button>
               </div>
-
               <div className="p-6 max-h-[70vh] overflow-y-auto">
                 {isLoadingAI ? (
                   <div className="text-center py-12">
@@ -281,5 +256,4 @@ const InterviewPage = () => {
     </div>
   );
 };
-
 export default InterviewPage;
