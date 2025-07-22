@@ -27,7 +27,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['answered'], // רק answered יישמר
+  whitelist: [], // לא לשמור answered ב-localStorage
 };
 
 // רדיוסר עם persist

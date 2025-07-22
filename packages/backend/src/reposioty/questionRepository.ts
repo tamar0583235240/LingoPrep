@@ -3,8 +3,7 @@ import { Questions } from "../interfaces/entities/Questions";
 import { v4 as uuid4 } from 'uuid';
 
 
-//צריך לשנות פה בגלל שמחקנו category 
-//מטבלת שאלות
+
 const addQustion = async (question: Questions): Promise<Questions> => {
   try {
 
@@ -100,8 +99,6 @@ const deleteQuestionById = async (id: string, is_active: boolean): Promise<strin
     throw error;
   }
 }
-
-
 
 
 const getQuestionsByCategory = async (category_id: string): Promise<Questions[]> => {
