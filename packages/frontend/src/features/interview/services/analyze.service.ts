@@ -10,8 +10,4 @@ export const analyzeInterview = async (file: File) => {
 
   if (!res.ok) throw new Error('שגיאה בניתוח הקלטה');
   return await res.json();
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
