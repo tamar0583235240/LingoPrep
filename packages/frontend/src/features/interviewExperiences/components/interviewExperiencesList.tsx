@@ -59,8 +59,8 @@ export const InterviewExperiencesList = () => {
   });
 
   function getThunksByInterviewExperienceId(interviewExperienceId: string): experienceThanks[] {
-    console.log(interviewExperienceId);
-    
+    // console.log(interviewExperienceId);
+
     return (experienceThanks ? experienceThanks.filter(thanks => thanks.experience_id === interviewExperienceId) : []);
   }
 
@@ -117,10 +117,26 @@ export const InterviewExperiencesList = () => {
           <h2 className="text-xl font-semibold">סנן לפי</h2>
 
           <Grid className="grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-            <Input placeholder="שם חברה" value={searchCompany} onChange={(e) => setSearchCompany(e.target.value)} className="border p-2 rounded" />
-            <Input placeholder="תפקיד" value={filterPosition} onChange={(e) => setFilterPosition(e.target.value)} className="border p-2 rounded" />
-            <Input type="number" placeholder="כמות תודות מינימלית" value={minThanks} onChange={(e) => setMinThanks(Number(e.target.value))} className="border p-2 rounded" />
-            <Input type="date" value={filterDate} onChange={(e) => setFilterDate(e.target.value)} className="border p-2 rounded" />
+            <Input
+              placeholder="שם חברה"
+              value={searchCompany}
+              onChange={(e) => setSearchCompany(e.target.value)}
+              className="border p-2 rounded" />
+            <Input
+              placeholder="תפקיד"
+              value={filterPosition}
+              onChange={(e) => setFilterPosition(e.target.value)}
+              className="border p-2 rounded" />
+            <Input
+              type="number"
+              placeholder="כמות תודות מינימלית"
+              value={minThanks} onChange={(e) => setMinThanks(Number(e.target.value))}
+              className="border p-2 rounded" />
+            <Input
+              type="date"
+              value={filterDate}
+              onChange={(e) => setFilterDate(e.target.value)}
+              className="border p-2 rounded" />
           </Grid>
 
           <h2 className="text-xl font-semibold">מיין לפי</h2>
