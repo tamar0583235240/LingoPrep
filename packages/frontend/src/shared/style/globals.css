@@ -16,7 +16,8 @@
   }
 }
 body {
-  @apply bg-[--color-background] text-[--color-text];
+  background-color: var(--color-background);
+  color: var(--color-text);
   font-family: 'Inter', sans-serif;
   direction: rtl;
 }
