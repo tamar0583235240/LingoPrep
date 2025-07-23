@@ -29,7 +29,7 @@ export const UpdateQuestion = (props: { question: Question, questionSaveClick: F
             id: question.id,
             title: titleQ,
             content: contentQ,
-            category: categoryQ,
+            // category: categoryQ,
             tips: tipsQ,
             ai_guidance: ai_guidanceQ,
             is_active: true
