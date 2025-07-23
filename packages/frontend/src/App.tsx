@@ -1,4 +1,3 @@
-
 import './App.css';
 import { MessageModalProvider } from './shared/ui/MessageModalContext';
 import React, { useEffect, useState } from 'react';
@@ -10,6 +9,8 @@ import { useAppDispatch } from './shared/hooks/reduxHooks';
 import { loginStart, loginSuccess, logout } from './features/auth/store/authSlice';
 import { useRefreshTokenMutation } from './shared/api/authApi';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { ToastContainer } from 'react-toastify';
+import { FeedbackNotificationListener } from './features/feedback/components/AllFeedbackNotificationListener';
 
 
 function App() {
@@ -43,6 +44,8 @@ function App() {
       <>
         <BrowserRouter>
           <AppRoutes />
+          <FeedbackNotificationListener />
+          <ToastContainer />
         </BrowserRouter>
        {/* <EditInterviewMaterialsSubForm
   id="some-id"

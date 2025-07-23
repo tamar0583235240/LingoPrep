@@ -50,19 +50,27 @@ export const getAllPreviouslySharedEmails = async (
   }));
 };
 
-export const getSharedRecordingIdByAnswerId = async (answerId: string): Promise<string | null> => {
+export const getSharedRecordingIdByAnswerId = async (answerId: string): Promise<string> => {
   try {
-
-    const data = await pool.query(`SELECT id FROM shared_recordings WHERE answer_id = $1`, [answerId]);
-
-    console.log(data.rows.length);
-
-    return data.rows[0].id as string;
-  }
-  catch (error) {
-    console.error(`Error fetching sharedRecordingId by answerId: ${answerId} from Supabase:`, error);
+    const query = `SELECT id FROM shared_recordings WHERE answer_id = $1 LIMIT 1`;
+    const { rows } = await pool.query(query, [answerId]);
+    if (rows.length === 0) {
+      throw new Error(`No shared recording found for answerId: ${answerId}`);
+    }
+    return rows[0].id;
+  } catch (error) {
+    console.error(`Error fetching sharedRecordingId by answerId: ${answerId}`, error);
     throw error;
   }
+};
+
+export const getSharedRecordingByIdRepo = async (id: string) => {
+  const result = await pool.query(
+    `SELECT id, title, transcript FROM shared_recordings WHERE id = $1`,
+    [id]
+  );
+
+  return result.rows[0] || null;
 };
 
 export const deleteEmailFromSharedRecordingRepo = async (

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { addParticipantRepo, deleteEmailFromSharedRecordingRepo, getAllPreviouslySharedEmails, getSharedWithByAnswerAndOwner } from '../reposioty/sharedRecordingRpository';
+import { addParticipantRepo, deleteEmailFromSharedRecordingRepo, getAllPreviouslySharedEmails, getSharedRecordingByIdRepo, getSharedWithByAnswerAndOwner } from '../reposioty/sharedRecordingRpository';
 import { log } from 'console';
 
 export const getSharedRecordingParticipants = async (req: Request, res: Response) => {
@@ -23,6 +23,23 @@ export const getPreviouslySharedEmails = async (req: Request, res: Response) => 
   } catch (error) {
     console.error("Error getting shared emails:", error);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+export const getSharedRecordingById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const sharedRecording = await getSharedRecordingByIdRepo(id);
+
+    if (!sharedRecording) {
+      return res.status(404).json({ message: "Shared recording not found" });
+    }
+
+    res.json(sharedRecording);
+  } catch (error) {
+    console.error("Error getting shared recording by id:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
