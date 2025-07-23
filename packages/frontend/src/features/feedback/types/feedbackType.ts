@@ -6,3 +6,4 @@ export interface FeedbackType {
     rating: number | undefined
     created_dat: Date
 }
+

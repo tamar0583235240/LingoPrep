@@ -4,10 +4,21 @@ import { ExperienceThanks } from "./ExperienceThanks";
 import { InterviewExperiences } from "./InterviewExperiences";
 import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
+<<<<<<< HEAD
+import { PasswordResetTokens } from "./PasswordResetTokens";
+import { Resources } from "./Resources";
+import { SharedRecordings } from "./SharedRecordings";
+<<<<<<< HEAD
+import { UserActivity } from "./UserActivity";
+=======
+=======
+import { Feedbacktype } from "./Feedbacktype";
 import { PasswordResetTokens } from "./PasswordResetTokens";
 import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
 import { UserActivity } from "./UserActivity";
+>>>>>>> tamar-adess
+>>>>>>> f459e50e8a6f6d800c0cb3a76c28fffdc787329b
 import { UserReminderSettings } from "./UserReminderSettings";
 import { UserSessions } from "./UserSessions";
 import { WorkExperiences } from "./WorkExperiences";
@@ -71,11 +82,20 @@ export class Users {
   @OneToMany(() => Feedback, (feedback) => feedback.givenByUser)
   feedbacks: Feedback[];
 
+  @OneToMany(() => Feedbacktype, (feedbacktype) => feedbacktype.givenByUser)
+  feedbacktypes: Feedbacktype[];
+
   @OneToMany(
     () => PasswordResetTokens,
     (passwordResetTokens) => passwordResetTokens.user
   )
   passwordResetTokens: PasswordResetTokens[];
+
+  @OneToMany(() => PasswordResetTokens, (passwordResetTokens) => passwordResetTokens.user)
+  passwordResetTokens: PasswordResetTokens[];
+
+  @OneToMany(() => Resources, (resources) => resources.user)
+  resources: Resources[];
 
   @OneToMany(() => Resources, (resources) => resources.user)
   resources: Resources[];
@@ -86,9 +106,18 @@ export class Users {
   )
   sharedRecordings: SharedRecordings[];
 
+<<<<<<< HEAD
   @OneToMany(() => UserActivity, (userActivity) => userActivity.user)
   userActivities: UserActivity[];
 
+=======
+<<<<<<< HEAD
+=======
+  @OneToMany(() => UserActivity, (userActivity) => userActivity.user)
+  userActivities: UserActivity[];
+
+>>>>>>> tamar-adess
+>>>>>>> f459e50e8a6f6d800c0cb3a76c28fffdc787329b
   @OneToMany(
     () => UserReminderSettings,
     (userReminderSettings) => userReminderSettings.user

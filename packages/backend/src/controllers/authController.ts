@@ -257,36 +257,37 @@ export const requestSignup = async (req: Request, res: Response) => {
 
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-pendingSignups.set(email, {
-  userData: {
-  id: uuidv4(),
-  firstName,
-  lastName,
-  email,
-  phone,
-  password: hashedPassword,
-  role: "student",
-  isActive: true,
-  createdAt: new Date(),
-  slug: null,
 
-  contentReports: [],
-  experienceThanks: [],
-  interviewExperiences: [],
-  answers: [],
-  feedbacks: [],
-  passwordResetTokens: [],
-  resources: [],
-  sharedRecordings: [],
-  userActivities: [],
-  userReminderSettings: [],
-  userSessions: [],
-  workExperiences: [],
-  },
-  code,
-  expiresAt,
-});
-
+  // שמירת פרטי המשתמש והקוד זמנית
+  pendingSignups.set(email, {
+    userData: {
+      id: uuidv4(),
+      firstName,
+      lastName,
+      email,
+      phone,
+      password: hashedPassword,
+      role: "student",
+      isActive: true,
+      answers: [],
+      feedbacks: [],
+      feedbacktypes: [],
+      passwordResetTokens: [],
+      sharedRecordings: [],
+      createdAt: new Date(),
+      resources: [],
+      userReminderSettings: [],
+      slug: null,
+      contentReports: [],
+      experienceThanks: [],
+      interviewExperiences: [],
+      userActivities: [],
+      userSessions: [],
+      workExperiences: []
+    },
+    code,
+    expiresAt,
+  });
 
   await sendVerificationCodeEmail(email, `קוד האימות להרשמה שלך הוא: ${code}`);
 
@@ -345,31 +346,32 @@ export const signup = async (req: Request, res: Response) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-const newUser: Users = {
-  id: uuidv4(),
-  firstName,
-  lastName,
-  email,
-  phone,
-  password: hashedPassword,
-  role: "student",
-  isActive: true,
-  createdAt: new Date(),
-  slug: null,
 
-  contentReports: [],
-  experienceThanks: [],
-  interviewExperiences: [],
-  answers: [],
-  feedbacks: [],
-  passwordResetTokens: [],
-  resources: [],
-  sharedRecordings: [],
-  userActivities: [],
-  userReminderSettings: [],
-  userSessions: [],
-  workExperiences: [],
-};
+  const newUser: Users = {
+    id: uuidv4(),
+    firstName,
+    lastName,
+    email,
+    phone,
+    password: hashedPassword,
+    role: "student",
+    isActive: true,
+    answers: [],
+    feedbacks: [],
+    feedbacktypes: [],
+    passwordResetTokens: [],
+    sharedRecordings: [],
+    createdAt: new Date(),
+    resources: [],
+    userReminderSettings: [],
+    slug: null,
+    contentReports: [],
+    experienceThanks: [],
+    interviewExperiences: [],
+    userActivities: [],
+    userSessions: [],
+    workExperiences: []
+  };
 
 
 

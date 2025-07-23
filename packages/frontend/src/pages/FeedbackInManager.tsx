@@ -4,7 +4,7 @@ import { useState } from "react"
 import FeedbackCardManager from "../features/feedback/components/FeedbackCardManager"
 import { Grid } from "../shared/ui/grid"
 import FeedbackChart from '../features/feedback/components/FeedbackChart'
-import { useGetAllFeedbacksQuery } from '../features/feedback/services/feedbackApi'
+import { useGetAllFeedbacksQuery } from '../features/feedback/services/FeedbackApi'
 
 const sampleFeedbacks = [
     {

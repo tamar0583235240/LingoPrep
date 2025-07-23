@@ -1,4 +1,4 @@
-import { useGetFeedbackAveragesQuery } from "../services/feedbackApi";
+import { useGetFeedbackAveragesQuery } from "../services/FeedbackApi";
 import {
   BarChart,
   Bar,

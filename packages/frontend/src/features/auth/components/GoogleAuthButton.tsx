@@ -26,6 +26,7 @@ const GoogleAuthButton = () => {
         console.log('Google user:', user);
 
         dispatch(loginSuccess({ user: user, token: token }));
+  localStorage.setItem("auth", JSON.stringify({ token, user }));
 
         navigate('/');
       })

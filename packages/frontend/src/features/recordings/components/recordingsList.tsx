@@ -1,7 +1,7 @@
 import { TitleQuestions } from "./question";
 import { RootState } from '../../../shared/store/store';
 import { useSelector } from "react-redux";
-import { Feedbackes } from "../../feedback/components/feedbackes";
+import { Feedbackes } from "../../feedback/components/Feedbackes";
 import { useGetAnswersByIdUserQuery } from "../services/answerApi";
 import { AiInsightsList } from "./AiInsightsList";
 import { GridContainer } from "../../../shared/ui/GridContainer";
@@ -17,11 +17,23 @@ import { useGetAiInsightsQuery } from "../services/AiInsightsApi";
 import ShareButton from "../../shared-recordings/components/ShareButton";
 import ShareDialog from "../../shared-recordings/components/ShareDialog";
 
+
 export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRoles }) => {
     const user = useSelector((state: RootState) => state.auth.user);
     const userId = user?.id ?? '';
     console.log(user?.id);
-    const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
+
+// export const RecordingsList = () => {
+//     const userId = 'a3f1b842-1d3e-4b29-9f99-8d1b12a91f77';
+
+    // const user = useSelector((state: RootState) => state.auth.user);
+    // // שורה זו צריך לשנות לאחר שיש את הנתונים של המשתמש הנוכחי שנמצא כעת באתר
+    // const userId = user && user.id ? user.id.toString() : 'a3f1b842-1d3e-4b29-9f99-8d1b12a91f77';
+const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId, {
+  skip: !userId,
+});
+
+    // const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
     const { data: allInsights } = useGetAiInsightsQuery();
 
   const insightsMap = useMemo(() => {
@@ -299,4 +311,4 @@ export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRo
       )}
     </GridContainer>
   );
-};
+}; 

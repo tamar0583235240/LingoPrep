@@ -104,32 +104,58 @@ export const createUser = async (req: Request, res: Response) => {
     }
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-const newUser: Users = {
-    id: uuidv4(),
-    firstName: first_name,
-    lastName: last_name,
-    email,
-    phone,
-    password: hashedPassword,
-    role: role || 'student',
-    createdAt: new Date(),
-    isActive: true,
-    slug: null,  // הוספת שדה slug, אפשר גם slug: '' או slugify(email)
+// const newUser: Users = {
+//     id: uuidv4(),
+//     firstName: first_name,
+//     lastName: last_name,
+//     email,
+//     phone,
+//     password: hashedPassword,
+//     role: role || 'student',
+//     createdAt: new Date(),
+//     isActive: true,
+//     slug: null,  // הוספת שדה slug, אפשר גם slug: '' או slugify(email)
 
-    contentReports: [],
-    experienceThanks: [],
-    interviewExperiences: [],
-    answers: [],
-    feedbacks: [],
-    passwordResetTokens: [],
-    resources: [],
-    sharedRecordings: [],
-    userActivities: [],
-    userReminderSettings: [],
-    userSessions: [],
-    workExperiences: [],
-};
+//     contentReports: [],
+//     experienceThanks: [],
+//     interviewExperiences: [],
+//     answers: [],
+//     feedbacks: [],
+//     passwordResetTokens: [],
+//     resources: [],
+//     sharedRecordings: [],
+//     userActivities: [],
+//     userReminderSettings: [],
+//     userSessions: [],
+//     workExperiences: [],
+// };
 
+
+    const newUser: Users = {
+      id: uuidv4(),
+      firstName: first_name,
+      lastName: last_name,
+      email,
+      phone,
+      password: hashedPassword,
+      role: role || 'student',
+      createdAt: new Date(),
+      isActive: true,
+      answers: [],
+      feedbacks: [],
+      feedbacktypes: [],
+      passwordResetTokens: [],
+      sharedRecordings: [],
+      resources: [],
+      userReminderSettings: [],
+      slug: null,
+      contentReports: [],
+      experienceThanks: [],
+      interviewExperiences: [],
+      userActivities: [],
+      userSessions: [],
+      workExperiences: []
+    };
 
     const createdUser = await userRepository.createUser(newUser);
     res.status(201).json(createdUser);
