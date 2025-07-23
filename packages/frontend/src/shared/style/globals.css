@@ -16,8 +16,7 @@
   }
 }
 body {
-  background-color: var(--color-background);
-  color: var(--color-text);
+  @apply bg-[--color-background] text-[--color-text];
   font-family: 'Inter', sans-serif;
   direction: rtl;
 }
