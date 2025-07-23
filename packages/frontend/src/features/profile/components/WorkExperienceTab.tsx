@@ -42,17 +42,16 @@ export const WorkExperienceTab = () => {
 
   const handleSave = async (id: string, updated: WorkExperienceItem) => {
     try {
-const payload = {
-  user_id: userId,
-  companyName: updated.company_name,
-  position: updated.position,
-  description: updated.description || "",
-  startDate: updated.start_date,
-  endDate: updated.end_date?.trim() === "" ? null : updated.end_date,
-  isPublic: updated.is_public ?? false,
-};
+     const payload = {
+     user_id: userId,
+     companyName: updated.company_name,
+     position: updated.position,
+     description: updated.description || "",
+     startDate: updated.start_date,
+     endDate: updated.end_date?.trim() === "" ? null : updated.end_date,
+     isPublic: updated.is_public ?? false,
+     };
       if (id === "new") {
-        console.log("payload:", payload);
         await create(payload).unwrap();
       } else {
         await update({ id, ...payload }).unwrap();

@@ -10,6 +10,8 @@ import { loginStart, loginSuccess, logout } from './features/auth/store/authSlic
 import { useRefreshTokenMutation } from './shared/api/authApi';
 import AppRoutes from './shared/routes/appRoutes';
 import { MessageModalProvider } from './shared/ui/MessageModalContext';
+import { PracticeTasksTab } from './features/planner/components/PracticeTasksTab';
+import { PracticeTasksCalendar } from './features/planner/components/PracticeTasksCalendar';
 
 function AppWrapper() {
   const dispatch = useAppDispatch();
@@ -50,6 +52,11 @@ function App() {
     <GoogleOAuthProvider clientId={clientId}>
       <Provider store={store}>
         <MessageModalProvider>
+
+
+          {/* <PracticeTasksTab/>  */}
+<PracticeTasksCalendar/> 
+
           <AppWrapper />
         </MessageModalProvider>
       </Provider>
