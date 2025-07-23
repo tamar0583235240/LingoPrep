@@ -4,8 +4,7 @@ import {   useGetAllFeedbacksQuery,  useGetFeedbackAveragesQuery,useGetFeedbacke
 import { MessageCircle, ChevronDown, ChevronUp, User, Calendar } from "lucide-react"
 import { Users } from "../types/UsersType"
 import { FeedbackType } from "../types/FeedbackType"
-
-import "./feedbackes.css"
+// import '../../shared-recordings/components/shareErcording.css'
 
 export const Feedbackes = ({
   props,

@@ -10,10 +10,7 @@ import { AiInsights } from "./AiInsights";
 import { Questions } from "./Questions";
 import { Users } from "./Users";
 import { Feedback } from "./Feedback";
-<<<<<<< HEAD
 import { SharedRecordings } from "./SharedRecordings";
-=======
->>>>>>> f459e50e8a6f6d800c0cb3a76c28fffdc787329b
 
 @Index("answers_pkey", ["id"], { unique: true })
 @Entity("answers", { schema: "public" })
@@ -55,13 +52,11 @@ export class Answers {
 
   @OneToMany(() => Feedback, (feedback) => feedback.answerCode)
   feedbacks: Feedback[];
-<<<<<<< HEAD
 
   @OneToMany(
     () => SharedRecordings,
-    (sharedRecordings) => sharedRecordings.answer
+    (sharedRecordings) => sharedRecordings.sharedwith
   )
   sharedRecordings: SharedRecordings[];
-=======
->>>>>>> f459e50e8a6f6d800c0cb3a76c28fffdc787329b
+
 }

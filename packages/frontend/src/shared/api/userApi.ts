@@ -38,7 +38,7 @@ export const userApi = api.injectEndpoints({
     }),
     authWithGoogle: builder.mutation({
       query: (token: string) => ({
-        url: '/auth/google-auth',
+        url: 'api/auth/google-auth',
         method: 'POST',
         body: {
           payload: { credential: token },
