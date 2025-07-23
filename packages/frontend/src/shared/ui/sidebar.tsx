@@ -15,7 +15,6 @@ interface NavItem {
 
 const navItems: NavItem[] = [
 
-  { label: "תזכורות", href: "/tipsAndPractices" },
   { label: "סימולציה", href: "/simulation" },
   { label: "לוח בקרה", href: "/dashboard" },
   { label: "ההקלטות שלי", href: "/recordings" },

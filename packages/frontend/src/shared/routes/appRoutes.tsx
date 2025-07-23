@@ -41,14 +41,14 @@ export default function AppRoutes() {
       <Routes>
         {/* Routes without sidebar */}
         <Route path="/" element={<LandingPage />} />
-     
+
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route
           path="/reset-password"
           element={
-              <ResetPassword />
+            <ResetPassword />
           }
         />
         {/* Routes with header */}
@@ -157,7 +157,7 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
-                    <Route
+          <Route
             path="/tipsAndPractices"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
@@ -193,10 +193,10 @@ export default function AppRoutes() {
           />
           <Route
             path="/manager/resources"
-            element = {
-            <RoleProtectedRoute allowedRoles={["manager"]}>
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
                 <p>InterviewMaterialsHub</p>
-            </RoleProtectedRoute>
+              </RoleProtectedRoute>
             }
           />
 
@@ -241,7 +241,7 @@ export default function AppRoutes() {
 
         <Route path="/not-authorized" element={<NotAuthorizedPage />} />
 
-                <Route path="/u/:slug" element={<PublicProfilePage/>} />
+        <Route path="/u/:slug" element={<PublicProfilePage />} />
 
       </Routes>
     </div>

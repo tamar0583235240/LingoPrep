@@ -74,7 +74,7 @@ export default function ReminderSettingsCard({
           <span
             className={cn(
               "inline-block w-4 h-4 transform bg-white rounded-full shadow transition-transform",
-              isEnabled ? "translate-x-5" : "translate-x-0"
+              isEnabled ? "translate-x-0" : "-translate-x-5"
             )}
           />
         </button>

@@ -7,11 +7,16 @@ import { useGetUserReminderSettingsQuery, useSaveUserReminderSettingsMutation } 
 import { ReminderType, ReminderSelection } from "../features/reminders/types/reminderType";
 import { Button } from "../shared/ui/button";
 import { GridContainer } from "../shared/ui/GridContainer";
-
+import { useSelector } from 'react-redux';
+import { RootState } from "../shared/store/store";
 
 export default function RemindersPage() {
-  const userId = "a40dc000-b446-409a-aa7b-3e778e8f4467"; // להחליף ל־auth דינמי
-  const { data: savedData, isLoading } = useGetUserReminderSettingsQuery(userId);
+  const userId = useSelector((state: RootState) => {
+    return state.auth.user?.id;
+  });
+  const { data: savedData, isLoading } = useGetUserReminderSettingsQuery(userId!, {
+    skip: !userId,
+  });
   const [saveSettings, { isLoading: isSaving }] = useSaveUserReminderSettingsMutation();
 
   const [selections, setSelections] = useState<Record<ReminderType, ReminderSelection>>({
@@ -60,7 +65,12 @@ export default function RemindersPage() {
       !selections.tip.is_enabled && !selections.practice.is_enabled;
 
     try {
-      await saveSettings({ userId, settings: selections }).unwrap();
+      if (userId) {
+        await saveSettings({ userId, settings: selections }).unwrap();
+      } else {
+        console.error("No user ID found – cannot save settings.");
+      }
+
 
       if (allDisabled) {
         showMessage("לא נבחרו תזכורות, תוכלי להוסיף מתי שתרצי בהמשך", "warning");
@@ -79,13 +89,12 @@ export default function RemindersPage() {
       <GridContainer maxWidth="md">
         {message && (
           <div
-            className={`mb-4 p-3 rounded text-sm text-center font-medium ${
-              messageType === "success"
-                ? "bg-green-100 text-green-800"
-                : messageType === "warning"
+            className={`mb-4 p-3 rounded text-sm text-center font-medium ${messageType === "success"
+              ? "bg-green-100 text-green-800"
+              : messageType === "warning"
                 ? "bg-yellow-100 text-yellow-800"
                 : "bg-blue-100 text-blue-800"
-            }`}
+              }`}
           >
             {message}
           </div>

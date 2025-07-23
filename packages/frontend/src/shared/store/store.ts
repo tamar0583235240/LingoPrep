@@ -45,11 +45,13 @@ import reminderSlice from '../../features/reminders/store/exampleSlice'
 import authReducer from '../../features/auth/store/authSlice';
 import userReducer from '../../features/auth/store/userSlice';
 import { profilesApi } from "../../features/profile/services/profileApi";
+import { reminderSettingsApi } from "../../pages/store/reminderSettingsApi";
 
 export const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
     [profilesApi.reducerPath]: profilesApi.reducer,
+    [reminderSettingsApi.reducerPath]: reminderSettingsApi.reducer,
     example: exampleSlice,
     reminder: reminderSlice,
     user: userReducer,
@@ -58,7 +60,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(api.middleware)
-      .concat(profilesApi.middleware),
+      .concat(profilesApi.middleware)
+      .concat(reminderSettingsApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
