@@ -1,4 +1,4 @@
- @tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -15,11 +15,12 @@
     --font-hand: 'Fredoka', sans-serif;
   }
 }
-  body {
-    @apply bg-[--color-background] text-[--color-text];
-    font-family: 'Inter', sans-serif;
-    direction: rtl;
-  }
+body {
+  @apply bg-[--color-background] text-[--color-text];
+  font-family: 'Inter', sans-serif;
+  direction: rtl;
+}
+
 /* הוספת utility מותאם אישית ל־scrollbar */
 @layer utilities {
   .scrollbar-none {
