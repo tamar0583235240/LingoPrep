@@ -156,7 +156,7 @@ const InterviewPage = () => {
       </div>
     </div>
     {/* שאלה ופעולות */}
-    <div className="lg:col-span-9 space-y-6">
+    <div className="lg:col-span-9 space-y-2">
       {questionsWithStatus[currentIndex] ? (
         <div className="p-4 md:p-6 lg:p-8">
           <Question
@@ -207,33 +207,7 @@ const InterviewPage = () => {
             totalQuestions={totalQuestions}
           />
         {/* טיפים בתוך הכרטיס */}
-        <div className="absolute bottom-6 left-6 z-30">
-          {showTips ? (
-            <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-5 w-80 max-h-96 overflow-y-auto">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                  <Lightbulb className="w-5 h-5 text-yellow-500" />
-                  טיפים שימושיים
-                </h3>
-                <button
-                  onClick={() => setShowTips(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-              <TipsComponent />
-            </div>
-          ) : (
-            <button
-              onClick={() => setShowTips(true)}
-              className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-110 hover:-translate-y-1"
-              title="הצג טיפים"
-            >
-              <Lightbulb className="w-6 h-6" />
-            </button>
-          )}
-        </div>
+          <TipsComponent />
       </div>
     </div>
   </div>
