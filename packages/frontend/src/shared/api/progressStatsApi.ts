@@ -4,7 +4,7 @@ import { ProgressStats } from "../../features/dashboard/types/aiInsightsType";
 export const progressStatsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getProgressStats: builder.query<ProgressStats, string>({
-      query: (userId) => `/api/questions/progress/${userId}`,
+      query: (userId) => `/questions/progress/${userId}`,
     }),
   }),
   overrideExisting: false,

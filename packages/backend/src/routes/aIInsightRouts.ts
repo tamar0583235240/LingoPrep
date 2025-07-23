@@ -9,8 +9,8 @@ import {
 
 const AiInsightsRouter = Router();
 
-AiInsightsRouter.get('/AiInsights/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
-AiInsightsRouter.get('/AiInsights/getAiInsights', getAiInsights);
+AiInsightsRouter.get('/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
+AiInsightsRouter.get('/getAiInsights', getAiInsights);
 AiInsightsRouter.get('/', getAllInsightsController);
 AiInsightsRouter.post('/', createInsightController);            
 AiInsightsRouter.get('/:id', getInsightByIdController);         

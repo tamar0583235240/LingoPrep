@@ -5,11 +5,11 @@ export const aiInsightsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAiInsights: builder.query<aiInsightsType[], void>({
       query: () => "/AiInsights/getAiInsights",
-      providesTags: ["users"],
+      providesTags: ["AiInsights"],
     }),
     getAiInsightsByAnswerId: builder.query<aiInsightsType[], string>({
       query: (answerId) => `/AiInsights/getAiInsightsByAnswerId/${answerId}`,
-      providesTags: ["users"],
+      providesTags: ["AiInsights"],
     }),
   }),
 });

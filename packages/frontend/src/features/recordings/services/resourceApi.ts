@@ -6,7 +6,7 @@ export const resourceApi = api.injectEndpoints({
       id(id: any): unknown; url: string 
 }, FormData>({
       query: (formData) => ({
-        url: "api/upload",
+        url: "upload",
         method: "POST",
         body: formData,
       }),

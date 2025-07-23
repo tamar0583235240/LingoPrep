@@ -5,7 +5,7 @@ export const aiInsightApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAIInsights: builder.query<AIInsight[], void>({
       query: () => ({
-url: "/api/aiInsights/getAiInsights"
+url: "/aiInsights/getAiInsights"
       }),
     }),
   }),
