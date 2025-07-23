@@ -16,7 +16,8 @@ import userAdminRouts from './src/routes/userAdminRouts';
 import popularQuestionsRoute from './src/routes/popularQuestionsRoute';
 import exampleRouts from './src/routes/exampleRouts';
 import activity_MonitoringRoutes from './src/routes/StatsDateRangePickerRoutes';
-import userStatsRoutes from './src/routes/userStatsRouts';
+// import userStatsRoutes from './src/routes/userStatsRouts';
+import userStatsRoutes from './src/routes/stateRoutes';
 
 dotenv.config();
 
@@ -52,6 +53,7 @@ app.use('/api/example', exampleRouts);
 app.use("/api/monitoringh", activity_MonitoringRoutes);
 app.use("/api/activity", activity_MonitoringRoutes);
 app.use("/api/monitoring", activity_MonitoringRoutes);
-app.use('/api', userStatsRoutes);
+app.use('/api/stats', userStatsRoutes);
+app.use('/api/stats', userStatsRoutes);
 
 export default app;

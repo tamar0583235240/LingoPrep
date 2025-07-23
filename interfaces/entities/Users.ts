@@ -1,10 +1,11 @@
-import { Column, Entity, Index, OneToMany } from "typeorm";
+import { Column, Entity, Index, OneToMany, OneToOne } from "typeorm";
 import { ContentReports } from "./ContentReports";
 import { ExperienceThanks } from "./ExperienceThanks";
 import { InterviewExperiences } from "./InterviewExperiences";
 import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
+import { Profiles } from "./Profiles";
 import { SharedRecordings } from "./SharedRecordings";
 import { UserReminderSettings } from "./UserReminderSettings";
 import { WorkExperiences } from "./WorkExperiences";
@@ -46,10 +47,16 @@ export class Users {
   @OneToMany(() => ContentReports, (contentReports) => contentReports.user)
   contentReports: ContentReports[];
 
-  @OneToMany(() => ExperienceThanks, (experienceThanks) => experienceThanks.user)
+  @OneToMany(
+    () => ExperienceThanks,
+    (experienceThanks) => experienceThanks.user
+  )
   experienceThanks: ExperienceThanks[];
 
-  @OneToMany(() => InterviewExperiences, (interviewExperiences) => interviewExperiences.user)
+  @OneToMany(
+    () => InterviewExperiences,
+    (interviewExperiences) => interviewExperiences.user
+  )
   interviewExperiences: InterviewExperiences[];
 
   @OneToMany(() => Answers, (answers) => answers.user)
@@ -58,13 +65,25 @@ export class Users {
   @OneToMany(() => Feedback, (feedback) => feedback.givenByUser)
   feedbacks: Feedback[];
 
-  @OneToMany(() => PasswordResetTokens, (passwordResetTokens) => passwordResetTokens.user)
+  @OneToMany(
+    () => PasswordResetTokens,
+    (passwordResetTokens) => passwordResetTokens.user
+  )
   passwordResetTokens: PasswordResetTokens[];
 
-  @OneToMany(() => SharedRecordings, (sharedRecordings) => sharedRecordings.owner)
+  @OneToOne(() => Profiles, (profiles) => profiles.user)
+  profiles: Profiles;
+
+  @OneToMany(
+    () => SharedRecordings,
+    (sharedRecordings) => sharedRecordings.owner
+  )
   sharedRecordings: SharedRecordings[];
 
-  @OneToMany(() => UserReminderSettings, (userReminderSettings) => userReminderSettings.user)
+  @OneToMany(
+    () => UserReminderSettings,
+    (userReminderSettings) => userReminderSettings.user
+  )
   userReminderSettings: UserReminderSettings[];
 
   @OneToMany(() => WorkExperiences, (workExperiences) => workExperiences.user)

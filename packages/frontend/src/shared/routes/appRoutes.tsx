@@ -15,7 +15,7 @@ import Dashboard from "../../pages/dashboard";
 import Activity_Monitoring from "../../pages/Activity_Monitoring";
 import StatsDashboard from "../../pages/StatsDashboard";
 import CategoryStats from "../../features/activity-Moonitoring/components/CategoryStats";
-import FunnelDiagram from "../../features/activity-Moonitoring/components/FunnelDiagram.tsx";
+import FunnelDiagram from "../../features/activity-Moonitoring/components/FunnelDiagram";
 
 export default function AppRoutes() {
   return (
