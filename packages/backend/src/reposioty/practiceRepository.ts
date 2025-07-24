@@ -5,13 +5,22 @@ import { v4 as uuid4 } from 'uuid';
 const addPractice = async (practice: Practices): Promise<Practices> => {
   try {
     const id = uuid4();
-    const query = `
+
+    // שלב 1: שליפת ה־sequence_number הכי גבוה
+    const maxSeqResult = await pool.query(`SELECT MAX(sequence_number) AS max_seq FROM practices`);
+    const currentMax = maxSeqResult.rows[0].max_seq ?? 0;
+    const nextSequenceNumber = currentMax + 1;
+
+    // שלב 2: הוספת תרגול חדש עם המספר החדש
+    const insertQuery = `
       INSERT INTO practices (id, content, sequence_number)
-      VALUES ($1, $2, 1)
+      VALUES ($1, $2, $3)
       RETURNING *;
     `;
-    const result = await pool.query(query, [id, practice.content]);
+    const result = await pool.query(insertQuery, [id, practice.content, nextSequenceNumber]);
+
     return result.rows[0] as Practices;
+
   } catch (error) {
     console.error("Error adding practice:", error);
     throw new Error("ADD_PRACTICE_FAILED");

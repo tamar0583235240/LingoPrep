@@ -1,6 +1,3 @@
-
-// features/reminders/components/ReminderSettingsCard.tsx
-
 import React, { useEffect, useState } from "react";
 import { ReminderFrequency, ReminderType, ReminderSelection } from "../types/reminderType";
 import { CardSimple } from "../../../shared/ui/card";
@@ -32,6 +29,7 @@ export default function ReminderSettingsCard({
 }: Props) {
   const [isEnabled, setIsEnabled] = useState(false);
   const [selectedOption, setSelectedOption] = useState<ReminderFrequency | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // משתנה להודעת שגיאה
 
   useEffect(() => {
     setIsEnabled(savedOption?.is_enabled ?? false);
@@ -42,17 +40,21 @@ export default function ReminderSettingsCard({
     const newEnabled = !isEnabled;
     setIsEnabled(newEnabled);
 
-    const newSelection: ReminderSelection = {
-      is_enabled: newEnabled,
-      frequency: newEnabled ? selectedOption : null,
-    };
-
-    onOptionChange(reminderType, newSelection);
+    // אם המתג נדלק אבל לא נבחרה תדירות, מציגים הודעה
+    if (newEnabled && !selectedOption) {
+    } else {
+      setErrorMessage(null); // אם המתג נדלק ונבחרה תדירות, מנקים את הודעת השגיאה
+      const newSelection: ReminderSelection = {
+        is_enabled: newEnabled,
+        frequency: newEnabled ? selectedOption : null,
+      };
+      onOptionChange(reminderType, newSelection);
+    }
   };
 
   const selectOption = (frequency: ReminderFrequency) => {
     setSelectedOption(frequency);
-
+    setErrorMessage(null); // אם בחרנו תדירות, מנקים את הודעת השגיאה
     if (isEnabled) {
       onOptionChange(reminderType, {
         is_enabled: true,
@@ -117,7 +119,12 @@ export default function ReminderSettingsCard({
           הדליקי את המתג כדי לבחור תדירות תזכורת
         </p>
       )}
+
+      {errorMessage && (
+        <div className="text-red-500 text-center mt-2">
+          <p>{errorMessage}</p>
+        </div>
+      )}
     </CardSimple>
   );
 }
-

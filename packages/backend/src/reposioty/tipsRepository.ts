@@ -5,18 +5,27 @@ import { v4 as uuid4 } from 'uuid';
 const addTip = async (tip: Tips): Promise<Tips> => {
   try {
     const id = uuid4();
-    const query = `
+
+    // שלב 1: הבאת המספר הסידורי הכי גבוה
+    const maxSeqResult = await pool.query(`SELECT MAX(sequence_number) AS max_seq FROM tips`);
+    const currentMax = maxSeqResult.rows[0].max_seq ?? 0; // אם אין טיפים עדיין – התחלה מ-0
+    const nextSequenceNumber = currentMax + 1;
+
+    // שלב 2: הוספה עם המספר החדש
+    const insertQuery = `
       INSERT INTO tips (id, content, sequence_number)
-      VALUES ($1, $2, 1)
+      VALUES ($1, $2, $3)
       RETURNING *;
     `;
-    const result = await pool.query(query, [id, tip.content]);
+    const result = await pool.query(insertQuery, [id, tip.content, nextSequenceNumber]);
     return result.rows[0] as Tips;
+
   } catch (error) {
     console.error("Error adding tip:", error);
     throw new Error("ADD_TIP_FAILED");
   }
 };
+
 
 const getAllTips = async (): Promise<Tips[]> => {
   try {

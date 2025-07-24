@@ -9,8 +9,11 @@ import { Button } from "../shared/ui/button";
 import { GridContainer } from "../shared/ui/GridContainer";
 import { useSelector } from 'react-redux';
 import { RootState } from "../shared/store/store";
+import { useNavigate } from "react-router-dom";
 
 export default function RemindersPage() {
+    const navigate = useNavigate();
+
   const userId = useSelector((state: RootState) => {
     return state.auth.user?.id;
   });
@@ -50,6 +53,8 @@ export default function RemindersPage() {
     a.is_enabled === b.is_enabled && a.frequency === b.frequency;
 
   const handleSave = async () => {
+    
+    // setBool_(false);
     if (!savedData) return;
 
     const hasChanges = Object.keys(selections).some((key) =>
@@ -80,6 +85,7 @@ export default function RemindersPage() {
     } catch (e) {
       showMessage("אירעה שגיאה בשמירה", "warning");
     }
+    window.dispatchEvent(new Event('refreshSettingsPage'));
   };
 
   if (isLoading) return <div>טוען...</div>;
@@ -120,6 +126,12 @@ export default function RemindersPage() {
         <div className="mt-8 text-center">
           <Button size="lg" onClick={handleSave} disabled={isSaving}>
             {isSaving ? "שומר..." : "שמור את ההגדרות"}
+          </Button>
+        </div>
+        <div className="mt-8 text-center">
+          <Button size="md" onClick={() => navigate("/tipsAndPractices")}
+>
+            חזרה לעמוד ההגדרות
           </Button>
         </div>
       </GridContainer>

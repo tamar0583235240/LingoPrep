@@ -48,7 +48,8 @@ export const reminderSettingsApi = createApi({
         method: "PUT",
         body: settings,
       }),
-      invalidatesTags: ["ReminderSettings"], // ✅ כך ה-query יתעדכן אוטומטית
+      // invalidatesTags: ["ReminderSettings"], // ✅ כך ה-query יתעדכן אוטומטית
+      invalidatesTags: (result, error, { userId }) => [{ type: "ReminderSettings", id: userId }],
     }),
   }),
 });
