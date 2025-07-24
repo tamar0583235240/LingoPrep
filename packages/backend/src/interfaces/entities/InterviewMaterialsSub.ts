@@ -15,6 +15,9 @@ export class InterviewMaterialsSub {
   @Column("text", { name: "short_description", nullable: true })
   shortDescription: string | null;
 
+  @Column("text", { name: "file_url" })
+  fileUrl: string;
+
   @Column("integer", {
     name: "downloads_count",
     nullable: true,
@@ -22,6 +25,6 @@ export class InterviewMaterialsSub {
   })
   downloadsCount: number | null;
 
-  @Column("text", { name: "file_url" })
-  fileUrl: string;
+  @Column("text", { name: "original_file_name", nullable: true })
+  originalFileName: string | null;
 }

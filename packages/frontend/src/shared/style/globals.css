@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* הגדרות בסיס */
 @layer base {
   :root {
     --color-primary: #00D6AD;
@@ -19,5 +20,18 @@
     @apply bg-[--color-background] text-[--color-text];
     font-family: 'Inter', sans-serif;
     direction: rtl;
+    --font-hand: 'Fredoka', sans-serif;
+  }
+}
+
+/* הוספת utility מותאם אישית ל־scrollbar */
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
   }
 }

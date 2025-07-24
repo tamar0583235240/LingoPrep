@@ -338,7 +338,7 @@ export const requestSignup = async (req: Request, res: Response) => {
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expiresAt = Date.now() + 5 * 60 * 1000;
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-
+  // שמירת הבקשה הרשמה עם כל הפרטים
   pendingSignups.set(email, {
     userData: {
       id: uuidv4(),
@@ -354,12 +354,20 @@ export const requestSignup = async (req: Request, res: Response) => {
       passwordResetTokens: [],
       sharedRecordings: [],
       createdAt: new Date(),
-      resources: [],
+      userSessions: [],
       userReminderSettings: [],
+      // הוספת השדות החסרים:
+      slug: null,
+      contentReports: [],
+      experienceThanks: [],
+      interviewExperiences: [],
+      profiles: null, // או undefined אם הטיפוס מאפשר
+      workExperiences: [],
     },
     code,
     expiresAt,
   });
+  
 
   await sendVerificationCodeEmail(email, `קוד האימות להרשמה שלך הוא: ${code}`);
 
@@ -422,21 +430,31 @@ export const signup = async (req: Request, res: Response) => {
 
   const newUser: Users = {
     id: uuidv4(),
-    firstName,
-    lastName,
-    email,
-    phone,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    phone: req.body.phone,
     password: hashedPassword,
-    role: "student",
+    role: "user",
     isActive: true,
+    createdAt: new Date(),
+    
+    // שדות חובה שאולי נשכחו:
+    slug: null, // או מחולל slug אם נדרש
+  
     answers: [],
     feedbacks: [],
     passwordResetTokens: [],
     sharedRecordings: [],
-    createdAt: new Date(),
-    resources: [],
+    userSessions: [],
     userReminderSettings: [],
+    contentReports: [],
+    experienceThanks: [],
+    interviewExperiences: [],
+    profiles: null,
+    workExperiences: [],
   };
+  
 
   await authRepository.signup(newUser);
 

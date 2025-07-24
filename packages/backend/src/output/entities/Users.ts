@@ -4,6 +4,8 @@ import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
 import { Resources } from "./Resources";
 import { SharedRecordings } from "./SharedRecordings";
+import { UserReminderSettings } from "./UserReminderSettings";
+import { UserSessions } from "./UserSessions";
 
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
@@ -24,8 +26,12 @@ export class Users {
   @Column("text", { name: "phone", nullable: true })
   phone: string | null;
 
-  @Column("text", { name: "role" })
-  role: string;
+  @Column("enum", {
+    name: "role",
+    enum: ["student", "manager"],
+    default: "'student'",
+  })
+  role: "student" | "manager";
 
   @Column("timestamp without time zone", {
     name: "created_at",
@@ -45,18 +51,18 @@ export class Users {
   @OneToMany(() => Feedback, (feedback) => feedback.givenByUser)
   feedbacks: Feedback[];
 
-  @OneToMany(
-    () => PasswordResetTokens,
-    (passwordResetTokens) => passwordResetTokens.user
-  )
+  @OneToMany(() => PasswordResetTokens, (tokens) => tokens.user)
   passwordResetTokens: PasswordResetTokens[];
 
   @OneToMany(() => Resources, (resources) => resources.user)
   resources: Resources[];
 
-  @OneToMany(
-    () => SharedRecordings,
-    (sharedRecordings) => sharedRecordings.owner
-  )
+  @OneToMany(() => SharedRecordings, (recordings) => recordings.owner)
   sharedRecordings: SharedRecordings[];
+
+  @OneToMany(() => UserReminderSettings, (settings) => settings.user)
+  userReminderSettings: UserReminderSettings[];
+
+  @OneToMany(() => UserSessions, (sessions) => sessions.user)
+  userSessions: UserSessions[];
 }

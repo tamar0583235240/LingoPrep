@@ -16,6 +16,10 @@ import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
 import cookieParser from 'cookie-parser';
 // import {supabase} from './src/config/dbConnection';
+import answerRoutes from './src/routes/answerRouts';
+import aiInsightRoutes from './src/routes/aIInsightRouts';
+import activity_MonitoringRoutes from './src/routes/activity-MonitoringRoutes'
+import { pool } from './src/config/dbConnection';
 
 const corsOptions = {
   origin: process.env.CORS_ORIGIN,
@@ -25,11 +29,25 @@ dotenv.config();
 const app: Application = express();
 
 
+console.log('✅ i am here in app');
+
+app.use(cors());
+app.use(express.json());
+
+// רישום הראוטים
+app.use("/api/users", userRouts);
+app.use("/api/questions", answerRoutes);
+app.use("/api/aiInsight", aiInsightRoutes);
+app.use("/api/monitoring", activity_MonitoringRoutes);
+
+
+
 
 app.use(cors({
   origin: 'http://localhost:3000',
   credentials: true
 }));
+
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api' ,feedbackRouter )

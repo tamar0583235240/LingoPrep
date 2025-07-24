@@ -1,4 +1,4 @@
-import { clsx } from "clsx";
+import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
 
 // מחבר classNames ומוודא שאין התנגשויות ב־Tailwind

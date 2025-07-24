@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./shared/routes/appRoutes";
-
+import RouteTimer from './features/activity-Monitoring/components/RouteTimer'
 import "./App.css";
 import { MessageModalProvider } from "./shared/ui/MessageModalContext";
 import { loginStart, loginSuccess, logout } from './features/auth/store/authSlice';
@@ -38,6 +38,7 @@ function App() {
     <MessageModalProvider>
       <BrowserRouter>
         <AppRoutes />
+        <RouteTimer/>
       </BrowserRouter>
     </MessageModalProvider>
   );

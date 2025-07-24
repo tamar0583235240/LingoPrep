@@ -20,8 +20,8 @@ export class Feedback {
   })
   createdAt: Date;
 
-  @Column("uuid", { name: "answer_code" })
-  answerCode: string;
+  @Column("text", { name: "ANSWERCODE ", nullable: true })
+  answercode: string | null;
 
   @ManyToOne(() => Users, (users) => users.feedbacks, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "given_by_user_id", referencedColumnName: "id" }])

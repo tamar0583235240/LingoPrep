@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { AiInsights } from '../interfaces/entities/AiInsights';
 import AiInsightsReposiory from '../reposioty/AiInsightsReposiory';
+import aiInsigthRepository from '../reposioty/aiInsigthRepository';
 
 export const getAiInsightsByAnswerId = async (req: Request, res: Response): Promise<AiInsights | void> => {
     try {
@@ -22,5 +23,15 @@ export const getAiInsights = async (req: Request, res: Response): Promise<void> 
     } catch (error) {
         console.error('Error in getAiInsights controller:', error);
         res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const getAiInsigths = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const items = await aiInsigthRepository.getAiInsights();
+        res.json(items);
+    } catch (error) {
+        console.error('Error in ai insigth controller:', error);
+        res.status(500).json({ error });
     }
 };
