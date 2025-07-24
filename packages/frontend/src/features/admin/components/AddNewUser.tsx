@@ -8,7 +8,6 @@ import { store } from '../store/store.admin';
 import { Plus } from 'lucide-react';
 
 const MySwal = withReactContent(Swal);
-
 const AddUserWithSwal: React.FC = () => {
   const handleAddUserClick = () => {
     MySwal.fire({
