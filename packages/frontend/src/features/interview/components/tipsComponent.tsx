@@ -2,14 +2,11 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../shared/store/store';
 import { Lightbulb, X } from 'lucide-react';
-
 const TipsComponent: React.FC = () => {
   const { questions, currentIndex } = useSelector((state: RootState) => state.simulation);
   const currentQuestion = questions[currentIndex];
-  const [showTips, setShowTips] = useState(false);
-
+  const [showTips, setShowTips] = useState(true);
   if (!currentQuestion?.tips) return null;
-
   return (
     <div className="absolute bottom-6 left-6 z-30">
       {showTips ? (
@@ -44,5 +41,4 @@ const TipsComponent: React.FC = () => {
     </div>
   );
 };
-
 export default TipsComponent;

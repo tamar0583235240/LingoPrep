@@ -10,21 +10,18 @@ import { RootState } from "../../../shared/store/store";
 import MagicLoader from "./MagicLoader";
 import { useUploadAnswerMutation } from "../../recordings/services/recordingApi";
 import FileUpload from "../../recordings/components/FileUpload";
-
 interface QuestionProps {
     question: interviewType & { answered?: boolean };
   onFinishRecording: () => void;
   onAnswerSaved: (answerId: string) => void;
   onNavigate: (index: number) => void;
 }
-
 const Question: React.FC<QuestionProps> = ({
   question,
   onFinishRecording,
   onAnswerSaved,
   onNavigate,
 }) => {
-  
   const dispatch = useDispatch();
   const { questions, currentIndex, currentUserId } = useSelector((state: RootState) => state.simulation);
   const currentQuestion = questions[currentIndex];
@@ -34,11 +31,7 @@ const Question: React.FC<QuestionProps> = ({
     type: "success" | "error";
     icon?: React.ReactNode;
   } | null>(null);
-
-
-
   if (!questions.length || currentIndex >= questions.length) return <div>אין שאלות להצגה</div>;
-
     return (
     <div className="bg-transparent">
       {notification && (
@@ -59,7 +52,6 @@ const Question: React.FC<QuestionProps> = ({
   >
     <ChevronRight size={40} />
   </button>
-
   {/* תוכן השאלה במרכז */}
   <div className="bg-white rounded-2xl shadow-md border border-[--color-border] p-4 max-w-xl w-full text-right">
     <div className="flex justify-between items-center mb-2">
@@ -67,15 +59,12 @@ const Question: React.FC<QuestionProps> = ({
         שאלה {currentIndex + 1}
       </span>
     </div>
-
     <div className="text-2xl md:text-3xl font-bold text-text-main mb-6 leading-snug">
       {currentQuestion.title}
     </div>
-
     <div className="text-xl mb-6 leading-snug">
       {currentQuestion.content}
     </div>
-
           <div className="flex gap-4 w-full">
             {/* העלאת קובץ */}
             <div className="w-1/2">
@@ -91,39 +80,19 @@ const Question: React.FC<QuestionProps> = ({
                       amountFeedbacks: 0,
                       answerFileName: fileName,
                     }).unwrap();
-                    setNotification({
-                    message: "הקובץ נשמר בהצלחה!",
-                    type: "success",
-                    icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
-                  });
-
-                  setTimeout(() => {
-                    setNotification(null);
+                    // קריאה לפונקציה ללא עיכוב נוסף - העיכוב כבר קיים ב-FileUpload
                     if (answer?.id) {
-                      onAnswerSaved(answer.id); // כאן ייפתח ה-AI רק לאחר סגירת ההודעה
+                      onAnswerSaved(answer.id);
                     }
-                  }, 3500);
-                    if (answer?.id) onAnswerSaved(answer.id);
                   } catch (e) {
-                    setNotification({
-                      message: "שגיאה בשמירת התשובה",
-                      type: "error",
-                      icon: <XCircle className="w-6 h-6 text-red-500" />,
-                    });
-                    setTimeout(() => setNotification(null), 3500);
+                    console.error('שגיאה בשמירת התשובה:', e);
                   }
                 }}
-                onError={() => {
-                  setNotification({
-                    message: "שגיאה בהעלאת קובץ",
-                    type: "error",
-                    icon: <XCircle className="w-6 h-6 text-red-500" />,
-                  });
-                  setTimeout(() => setNotification(null), 3500);
+                onError={(error) => {
+                  console.error('שגיאה בהעלאת קובץ:', error);
                 }}
               />
             </div>
-
             {/* הקלטה */}
             <div className="w-1/2">
               <AudioRecorder
@@ -148,5 +117,4 @@ const Question: React.FC<QuestionProps> = ({
     </div>
   );
 };
-
 export default Question;

@@ -5,11 +5,11 @@ import MagicLoader from "./MagicLoader";
 import { X } from "lucide-react";
 interface AnswerAIProps {
   answerId: string;
-  audioFile: File; 
+  // audioFile: File; 
   onClose?: () => void;
   onLoaded?: () => void;
 }
-const AnswerAI: React.FC<AnswerAIProps> = ({ answerId, audioFile, onClose, onLoaded }) => {
+const AnswerAI: React.FC<AnswerAIProps> = ({ answerId, onClose, onLoaded }) => {
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [retryCount, setRetryCount] = useState(0);

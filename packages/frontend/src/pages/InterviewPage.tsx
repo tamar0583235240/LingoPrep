@@ -243,6 +243,7 @@ const InterviewPage = () => {
                 ) : (
                   <AnswerAI
                     answerId={currentAnswerId}
+                    // audioFile={}
                     onClose={() => dispatch(setCurrentAnswerId(null))}
                     onLoaded={() => setIsLoadingAI(false)}
                   />
