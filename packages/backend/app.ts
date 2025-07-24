@@ -33,11 +33,12 @@ const app: Application = express();
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+app.use('/api/reminders', remindersRouter);
 app.use('/api' ,feedbackRouter )
 app.use('/api' , AiInsightsRouter ) 
 app.use('/api' , sharedRecrdingRouter )  
 app.use('/answers', answerRouter);
-app.use('/api/reminders', remindersRouter);
+
 app.use('/question', questionRoute); 
 app.use('/shared-recordings', sharedRecordingsRoutes);
 app.use('/auth', authRouts);

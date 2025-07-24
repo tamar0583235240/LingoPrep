@@ -96,7 +96,10 @@ export const ReminderBell: React.FC = () => {
     }, []);
 
 
+
 const handleDone = (id: string) => {
+      console.log("🆔 סימון תזכורת כבוצע - ID:", id);
+
   fetch(`/api/reminders/${id}/done`, { method: "POST" }).then(() =>
     setReminders((prev) => prev.filter((r) => r.id !== id))
   );
