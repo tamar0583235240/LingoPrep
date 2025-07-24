@@ -16,7 +16,7 @@ type Props = {
   reminderType: ReminderType;
   savedOption?: ReminderSelection;
   onOptionChange: (reminderType: ReminderType, data: ReminderSelection) => void;
-  className?: string; // ⬅️ חדש
+  className?: string;
 };
 
 export default function ReminderSettingsCard({
@@ -29,7 +29,6 @@ export default function ReminderSettingsCard({
 }: Props) {
   const [isEnabled, setIsEnabled] = useState(false);
   const [selectedOption, setSelectedOption] = useState<ReminderFrequency | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null); // משתנה להודעת שגיאה
 
   useEffect(() => {
     setIsEnabled(savedOption?.is_enabled ?? false);
@@ -40,21 +39,17 @@ export default function ReminderSettingsCard({
     const newEnabled = !isEnabled;
     setIsEnabled(newEnabled);
 
-    // אם המתג נדלק אבל לא נבחרה תדירות, מציגים הודעה
-    if (newEnabled && !selectedOption) {
-    } else {
-      setErrorMessage(null); // אם המתג נדלק ונבחרה תדירות, מנקים את הודעת השגיאה
-      const newSelection: ReminderSelection = {
-        is_enabled: newEnabled,
-        frequency: newEnabled ? selectedOption : null,
-      };
-      onOptionChange(reminderType, newSelection);
-    }
+    const newSelection: ReminderSelection = {
+      is_enabled: newEnabled,
+      frequency: newEnabled ? selectedOption : null,
+    };
+
+    onOptionChange(reminderType, newSelection);
   };
 
   const selectOption = (frequency: ReminderFrequency) => {
     setSelectedOption(frequency);
-    setErrorMessage(null); // אם בחרנו תדירות, מנקים את הודעת השגיאה
+
     if (isEnabled) {
       onOptionChange(reminderType, {
         is_enabled: true,
@@ -64,7 +59,10 @@ export default function ReminderSettingsCard({
   };
 
   return (
-    <CardSimple className={cn("space-y-4 w-full", className)}>
+    <CardSimple
+      className={cn("space-y-4 w-full", "direction-rtl", className)}
+      style={{ direction: "rtl" }}
+    >
       <div className="flex items-center gap-2 justify-between">
         <button
           onClick={toggleSwitch}
@@ -76,11 +74,12 @@ export default function ReminderSettingsCard({
           <span
             className={cn(
               "inline-block w-4 h-4 transform bg-white rounded-full shadow transition-transform",
-              isEnabled ? "translate-x-0" : "-translate-x-5"
+              isEnabled ? "-translate-x-5" : "translate-x-0"
             )}
           />
         </button>
-        <div className="text-right">
+
+        <div className="text-right flex-1">
           <h3 className="text-lg font-semibold text-text-main mb-1">{title}</h3>
           <p className="text-sm text-text-secondary leading-snug">{description}</p>
         </div>
@@ -106,7 +105,7 @@ export default function ReminderSettingsCard({
                 <div className="text-2xl">{option.icon}</div>
                 <p className="text-sm font-medium">{option.text}</p>
                 {selectedOption === option.id && (
-                  <div className="absolute top-2 right-2">
+                  <div className="absolute top-2 left-2">
                     <span className="text-white font-bold">✓</span>
                   </div>
                 )}
@@ -118,12 +117,6 @@ export default function ReminderSettingsCard({
         <p className="text-center text-text-secondary mt-4 text-sm text-right">
           הדליקי את המתג כדי לבחור תדירות תזכורת
         </p>
-      )}
-
-      {errorMessage && (
-        <div className="text-red-500 text-center mt-2">
-          <p>{errorMessage}</p>
-        </div>
       )}
     </CardSimple>
   );

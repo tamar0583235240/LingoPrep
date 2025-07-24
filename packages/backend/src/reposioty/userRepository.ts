@@ -11,13 +11,18 @@ const SALT_ROUNDS = 10;
 
 // קבלת משתמש לפי אימייל בלבד
 export const getUserByEmail = async (email: string): Promise<Users | null> => {
+
   try {
+    console.log("email: " + email)
     const result = await pool.query(
       "SELECT * FROM users WHERE email = $1 LIMIT 1",
       [email]
+
     );
+    console.log("Query Result:", result);
+
     return result.rows[0] || null;
-  } catch {
+  } catch(error) {
     throw new Error("User not found");
   }
 };
@@ -87,7 +92,7 @@ const updateUser = async (
   try {
     const { firstName, lastName, email, phone, role, isActive, password, slug } =
       userData;
-        const res = await pool.query(`
+    const res = await pool.query(`
             UPDATE users 
             SET first_name = $1, last_name = $2, email = $3, phone = $4, role = COALESCE($5, role), is_active = COALESCE($6, is_active), password = COALESCE($7, password), slug = COALESCE($8, slug)
             WHERE id = $9 RETURNING *`,
@@ -121,12 +126,12 @@ const updateActiveUser = async (id: string): Promise<Users | null> => {
 
 // יצירת משתמש חדש (עם הצפנת סיסמה)
 const createUser = async (user: Users): Promise<Users> => {
-    try {
-        if (!user.password) {
-            throw new Error("Password is required to create a user");
-        }
-        const res = await pool.query(
-            `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password, slug)
+  try {
+    if (!user.password) {
+      throw new Error("Password is required to create a user");
+    }
+    const res = await pool.query(
+      `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password, slug)
              VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW(), $6, $7,$8)
              RETURNING *`,
       [
@@ -264,14 +269,14 @@ const insertUsersFromExcel = async (
 };
 
 export default {
-    getAllUsers,
-    getUserById,
-    getUserByEmailAndPassword,
-    getUserByEmail,
-    updateUserPassword,
-    updateUser,
-    createUser,
-    insertUser,
-    deleteUser,
-    insertUsersFromExcel,
+  getAllUsers,
+  getUserById,
+  getUserByEmailAndPassword,
+  getUserByEmail,
+  updateUserPassword,
+  updateUser,
+  createUser,
+  insertUser,
+  deleteUser,
+  insertUsersFromExcel,
 };
