@@ -7,18 +7,3 @@ export interface Answer {
     submitted_at: Date
     amount_feedbacks:number
 }
-
-export interface RecordingState {
-  isRecording: boolean;
-  isPaused: boolean;
-  recordingTime: number;
-  audioBlob: Blob | null;
-  fileName: string;
-}
-
-export interface AudioRecorderProps {
-  userId?: string;
-  questionId?: string;
-  onFinish?: (audioUrl: string, fileName: string) => void;
-  onSaveSuccess?: (answerId: string) => void;
-}
