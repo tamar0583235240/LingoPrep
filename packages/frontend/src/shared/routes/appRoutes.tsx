@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import HomePage from "../../pages/homePage";
 import { RecordingsList } from "../../features/recordings/components/recordingsList";
+import { RoleProtectedRoute } from "../components/roleProtectedRoute";
 import { SearchComponents } from "../../features/recordings/components/searchComponents";
 import { FilteringComponents } from "../../features/recordings/components/filteringComponents";
 import { SortComponents } from "../../features/recordings/components/sortComponents";
@@ -12,24 +12,6 @@ import SignupForm from "../../features/auth/components/SignupForm";
 import Dashboard from '../../pages/dashboard';
 import DashboardLayout from "../ui/DashboardLayout";
 import ResetPassword from "../../features/auth/components/ResetPassword";
-import LandingPage from "../../pages/LandingPage";
-import LoginPage from "../../pages/LoginPage";
-import { RootState } from "../store/store";
-import { useSelector } from "react-redux";
-import ProfilePage from "../../pages/ProfilePage";
-import SettingsPage from "../../pages/SettingsPage";
-// import InterviewMaterialsView from "../../features/knowledge-base/components/InterviewMaterialsView";
-// import ProjectsList from "../../features/profile/components/projects";
-import { WorkExperienceTab } from "../../features/profile/components/WorkExperienceTab";
-import ProfileList from "../../features/profile/components/ProfileList";
-import MyProfileViewPage from "../../pages/my-profile-view";
-import ProfileAccordionPage from "../../pages/ProfileAccordionPage";
-import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
-import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
-import NotAuthorizedPage from "../components/NotAuthorizedPage";
-import DynamicContentPage from "../../pages/DynamicContentPage";
-import { PublicProfilePage } from "../../pages/PublicProfilePage";
-import InterviewPage from "../../pages/InterviewPage";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -108,45 +90,10 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+          <Route path="/recordings" element={<RecordingsList allowedRoles={["student"]} />} />
+          <Route path="/shared" element={<RoleProtectedRoute allowedRoles={["student"]}><p>SharedRecordings</p></RoleProtectedRoute>} />
+          <Route path="/resources" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Resources</p></RoleProtectedRoute>} />
 
-
-          <Route
-            path="/recordings"
-            element={<RecordingsList allowedRoles={["student", "manager"]} />}
-          />
-
-          <Route
-            path="/shared"
-            element={
-              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <Dashboard />
-              </RoleProtectedRoute>
-            }
-          />
-          <Route
-            path="/recordings"
-            element={
-              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <p>Recordings</p>
-              </RoleProtectedRoute>
-            }
-          />
-          <Route
-            path="/shared"
-            element={
-              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <p>SharedRecordings</p>
-              </RoleProtectedRoute>
-            }
-          />
-          <Route
-            path="/resources"
-            element={
-              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <p>Resources</p>
-              </RoleProtectedRoute>
-            }
-          />
           <Route
             path="/interviewMaterialsHub"
             element={
@@ -261,3 +208,10 @@ export default function AppRoutes() {
     </div>
   );
 }
+
+
+
+
+
+
+

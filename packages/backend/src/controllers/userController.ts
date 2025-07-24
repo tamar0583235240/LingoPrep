@@ -119,10 +119,12 @@ export const createUser = async (req: Request, res: Response) => {
     isActive: true,
     answers: [],
     feedbacks: [],
+     feedbacktypes: [],  
     passwordResetTokens: [],
     sharedRecordings: [],
     contentReports: [],
     experienceThanks: [],
+     resources: [],  
     interviewExperiences: [],
     userReminderSettings: [],
     userSessions: [],
@@ -145,8 +147,29 @@ export const createUser = async (req: Request, res: Response) => {
 
   };
 
-  const createdUser = await userRepository.createUser(newUser);
-  res.status(201).json(createdUser);
+  // const createdUser = await userRepository.createUser(newUser);
+  // res.status(201).json(createdUser);
+    // const newUser: Users = {
+    //     id: uuidv4(),
+    //     firstName: first_name,
+    //     lastName: last_name,
+    //     email,
+    //     phone,
+    //     password: hashedPassword,
+    //     role: role || 'student',
+    //     createdAt: new Date(),
+    //     isActive: true,
+    //     answers: [],
+    //     feedbacks: [],
+    //     feedbacktypes: [],
+    //     passwordResetTokens: [],
+    //     sharedRecordings: [],
+    //     resources: [],
+    //     userReminderSettings: []
+    // };
+
+    const createdUser = await userRepository.createUser(newUser);
+    res.status(201).json(createdUser);
 };
 
 export const updateUser = async (req: Request, res: Response) => {

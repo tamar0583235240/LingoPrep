@@ -21,6 +21,11 @@ export class InterviewMaterialsSub {
   @Column("text", { name: "original_file_name", nullable: true })
   originalFileName: string;
 
+// removed merge conflict markers
+  @Column("text", { name: "file_url" })
+  @Column("text", { name: "file_url" })
+  fileUrl: string;
+
   @Column("integer", {
     name: "downloads_count",
     nullable: true,

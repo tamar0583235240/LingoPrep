@@ -24,6 +24,7 @@ function App() {
       console.log("הצלחה!", res);
       dispatch(loginSuccess({ token: res.token, user: res.user }));
     })
+    
     .catch((err) => {
       console.log("נכשל ברענון הטוקן", err);
       dispatch(logout());

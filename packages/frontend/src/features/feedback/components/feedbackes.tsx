@@ -1,7 +1,8 @@
 // בס"ד
+
 import { useState } from "react"
 import { MessageCircle, ChevronDown, ChevronUp, User, Calendar } from "lucide-react"
-import { useGetFeedbackesBysharedRecordingIdQuery } from "../services/feedbackApi"
+import { useGetFeedbacksBySharedRecordingIdQuery } from "../services/feedbackApi"
 import { Users } from "../types/UsersType"
 import { Button } from "../../../shared/ui/button"
 import { CardSimple } from "../../../shared/ui/card"
@@ -10,20 +11,36 @@ import { IconWrapper } from "../../../shared/ui/IconWrapper"
 import { SummaryBox } from "../../../shared/ui/SummaryBox"
 import { Heading1, Paragraph } from "../../../shared/ui/typography"
 
-export const Feedbackes = ({props}:{props: {sharedRecordingId: string , usersList: Users[]}}) => {
-    const {sharedRecordingId , usersList} = props
-    const { data: feedbackes, isLoading, error } = useGetFeedbackesBysharedRecordingIdQuery(sharedRecordingId)
-    
-    const [flagShow , setFlagShow] = useState<boolean>(false)   
+// import { useState } from "react";
+// import "./feedbackes.css";
+// import { useGetFeedbacksBySharedRecordingIdQuery } from "../services/feedbackApi";
+// import { Users } from "../types/UsersType";
+import { feedbackType } from "../types/feedbackType";
+
+
+
+export const Feedbackes = ({
+    props,
+}: {
+    props: { sharedRecordingId: string; usersList: Users[] };
+}) => {
+    const { sharedRecordingId, usersList } = props;
+    const {
+        data: feedbacks,
+        isLoading,
+        error,
+    } = useGetFeedbacksBySharedRecordingIdQuery(sharedRecordingId);
+
+    const [flagShow, setFlagShow] = useState<boolean>(false);
 
     function getUserName(userId: string): string {
-        const user = usersList.find(user => user.id == userId);
-        return user ? user.first_name + " "  + user.last_name: 'Unknown User';
+        const user = usersList.find((user) => user.id === userId);
+        return user ? `${user.first_name} ${user.last_name}` : "Unknown User";
     }
 
-    function showFidbackes(): void {
-        console.log(feedbackes);
-        setFlagShow(!flagShow)
+    function showFeedbacks(): void {
+        console.log(feedbacks);
+        setFlagShow(!flagShow);
         console.log(error);
     }
 
@@ -57,29 +74,30 @@ export const Feedbackes = ({props}:{props: {sharedRecordingId: string , usersLis
         )
     }
 
-    return(
+    return (
         <GridContainer maxWidth="lg" className="space-y-6">
-           
+
             {/* כפתור הצגת פידבקים */}
             <div className="flex justify-center">
                 <Button
-                    onClick={showFidbackes}
+                    onClick={showFeedbacks}  // לא showFidbackes
                     variant="primary-dark"
                     size="lg"
                     icon={flagShow ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     iconPosition="right"
                     className="min-w-[200px]"
                 >
-                    {flagShow ? 'הסתר פידבקים' : 'הצג פידבקים'} ({feedbackes?.length || 0})
+                    {flagShow ? 'הסתר פידבקים' : 'הצג פידבקים'} ({feedbacks?.length || 0}) {/* feedbacks ולא feedbackes */}
                 </Button>
+
             </div>
 
             {/* רשימת הפידבקים */}
             {flagShow && (
                 <div className="space-y-4">
-                    {feedbackes && feedbackes.length > 0 ? (
+                    {feedbacks && feedbacks.length > 0 ? (
                         <div className="grid gap-4">
-                            {feedbackes.map(f => (
+                            {feedbacks.map(f => (
                                 <CardSimple key={f?.id} className="p-6 hover:shadow-md transition-shadow">
                                     <div className="space-y-4">
                                         {/* כותרת הפידבק */}
@@ -94,12 +112,11 @@ export const Feedbackes = ({props}:{props: {sharedRecordingId: string , usersLis
                                                     </h4>
                                                 </div>
                                             </div>
-                                            
+
                                             <div className="flex items-center gap-2 text-gray-500">
                                                 <Calendar size={16} />
                                                 <span className="text-sm">
-                                                    {f?.created_dat && new Date(f.created_dat).toLocaleDateString('he-IL')}
-
+                                                    {f?.created_at && new Date(f.created_at).toLocaleDateString('he-IL')}
                                                 </span>
                                             </div>
                                         </div>
@@ -127,5 +144,5 @@ export const Feedbackes = ({props}:{props: {sharedRecordingId: string , usersLis
                 </div>
             )}
         </GridContainer>
-    )   
+    )
 }
