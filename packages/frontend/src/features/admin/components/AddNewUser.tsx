@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import SwalForm from './SwalForm';
 import { store } from '../store/store.admin';
+import { Plus } from 'lucide-react';
 
 const MySwal = withReactContent(Swal);
 
@@ -13,6 +14,7 @@ const AddUserWithSwal: React.FC = () => {
     MySwal.fire({
       title: 'הוספת משתמש חדש',
       html: '<div id="swal-form"></div>',
+      width: 400,
       didOpen: () => {
         const container = document.getElementById('swal-form');
         if (container) {
@@ -32,8 +34,9 @@ const AddUserWithSwal: React.FC = () => {
   return (
     <button
       onClick={handleAddUserClick}
-      className="bg-primary-dark text-white px-4 py-2 rounded-md font-medium transition hover:bg-primary-dark/90"
+      className="bg-primary-dark text-white px-4 py-2 rounded-md font-medium transition hover:bg-primary-dark/90 flex items-center gap-2 group"
     >
+      <Plus className="w-5 h-5 transition-transform duration-300 group-hover:rotate-90" />
       הוספת משתמש
     </button>
   );

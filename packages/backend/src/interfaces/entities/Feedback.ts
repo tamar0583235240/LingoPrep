@@ -2,10 +2,10 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 import { Users } from "./Users";
 import { SharedRecordings } from "./SharedRecordings";
 
-@Index("Feedback_pkey", ["id"], { unique: true })
+@Index("feedback_pkey", ["id"], { unique: true })
 @Entity("feedback", { schema: "public" })
 export class Feedback {
-  @Column("character varying", { primary: true, name: "id" })
+  @Column("uuid", { primary: true, name: "id" })
   id: string;
 
   @Column("text", { name: "comment" })
@@ -13,6 +13,9 @@ export class Feedback {
 
   @Column("integer", { name: "rating", nullable: true })
   rating: number | null;
+
+  @Column("text", { name: "answer_code", nullable: true })
+  answerCode: string | null;
 
   @Column("timestamp without time zone", {
     name: "created_at",

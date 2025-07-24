@@ -1,36 +1,15 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  BaseEntity,
-} from 'typeorm';
+import { Column, Entity, Index } from "typeorm";
 
-export type TipType = 'practice' | 'practical';
-
-@Entity('tips')
-export class Tip extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+@Index("tips_pkey", ["id"], { unique: true })
+@Entity("tips", { schema: "public" })
+export class Tips {
+  @Column("uuid", {
+    primary: true,
+    name: "id",
+    default: () => "uuid_generate_v4()",
+  })
   id: string;
 
-  // תוכן הטיפ
-  @Column('text')
+  @Column("text", { name: "content" })
   content: string;
-
-  // סוג הטיפ – מקצועי או פרקטי
-  @Column({ type: 'varchar', length: 50 })
-  type: TipType;
-
-  // האם פעיל – ניתן להשבית טיפים
-  @Column({ type: 'boolean', default: true })
-  isActive: boolean;
-
-  // תאריך יצירה
-  @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
-
-  // תאריך עדכון אחרון
-  @UpdateDateColumn({ type: 'timestamp' })
-  updatedAt: Date;
 }

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import MessageModal from './messageModal' // הנתיב לקומפוננטה MessageModal שלך
+import MessageModal from './messageModal' 
 
 interface MessageModalContextType {
   showMessage: (title: string, message: string) => void;

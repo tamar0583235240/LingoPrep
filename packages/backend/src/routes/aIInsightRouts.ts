@@ -1,9 +1,21 @@
-import { Router } from 'express';
-import { getAiInsigths} from '../controllers/aIInsightController';
+import { Router } from "express";
+import {
+    getAiInsights, getAiInsightsByAnswerId, createInsightController,
+    deleteInsightController,
+    updateInsightController,
+    getInsightByIdController,
+    getAllInsightsController,
+} from "../controllers/aIInsightController";
 
-const router = Router();
+const AiInsightsRouter = Router();
 
-router.get('/',getAiInsigths);
-router.get('/aiInsight',getAiInsigths);
+AiInsightsRouter.get('/AiInsights/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
+AiInsightsRouter.get('/AiInsights/getAiInsights', getAiInsights);
+AiInsightsRouter.get('/', getAllInsightsController);
+AiInsightsRouter.post('/', createInsightController);            
+AiInsightsRouter.get('/:id', getInsightByIdController);         
+AiInsightsRouter.put('/:id', updateInsightController);           
+AiInsightsRouter.delete('/:id', deleteInsightController);        
 
-export default router;
+
+export default AiInsightsRouter;

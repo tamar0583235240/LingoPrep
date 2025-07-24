@@ -31,7 +31,7 @@ npm run dev
 
 **That's it!** 🎉
 - Frontend: http://localhost:3000
-- Backend API: http://localhost:3001/api
+- Backend API: http://localhost:3000/api
 - Health check: http://localhost:3001/api/health
 
 ## 📋 Table of Contents
@@ -101,13 +101,13 @@ CREATE TABLE IF NOT EXISTS items (
     name VARCHAR(255) NOT NULL,
     type VARCHAR(100) NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    created_dat TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_items_type ON items(type);
-CREATE INDEX IF NOT EXISTS idx_items_created_at ON items(created_at);
+CREATE INDEX IF NOT EXISTS createdat ON items(createdat);
 
 -- Enable Row Level Security
 ALTER TABLE items ENABLE ROW LEVEL SECURITY;

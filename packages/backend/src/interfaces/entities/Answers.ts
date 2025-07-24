@@ -15,11 +15,20 @@ import { SharedRecordings } from "./SharedRecordings";
 @Index("answers_pkey", ["id"], { unique: true })
 @Entity("answers", { schema: "public" })
 export class Answers {
-  @Column("uuid", { primary: true, name: "id" })
+
+  @Column("uuid", {
+    primary: true,
+    name: "id",
+    default: () => "uuid_generate_v4()",
+  })
+
   id: string;
 
   @Column("text", { name: "file_url" })
   fileUrl: string;
+
+  @Column("text", { name: "answer_file_name", nullable: true })
+  answerFileName: string | null;
 
   @Column("timestamp without time zone", {
     name: "submitted_at",
@@ -27,10 +36,11 @@ export class Answers {
   })
   submittedAt: Date;
 
-  @Column("text", { name: "answer_file_name", nullable: true })
-  answerFileName: string | null;
-
-  @Column("integer", { name: "amount_feedbacks", nullable: true })
+  @Column("integer", {
+    name: "amount_feedbacks",
+    nullable: true,
+    default: () => "0",
+  })
   amountFeedbacks: number | null;
 
   @OneToMany(() => AiInsights, (aiInsights) => aiInsights.answer)

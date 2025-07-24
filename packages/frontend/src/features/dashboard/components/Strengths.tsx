@@ -1,27 +1,35 @@
-
+import { Lightbulb } from "lucide-react";
 import { useGetAIInsightsQuery } from "../store/aiInsightApi";
-import { Lightbulb, CheckCircle } from "lucide-react";
+import { CardWrapper } from "./CardWrapper";
 
 export const SummaryStrengths = () => {
   const { data, error, isLoading } = useGetAIInsightsQuery();
 
-  if (isLoading) return <div className="text-center text-blue-500 text-lg">טוען  נקודות חוזקה...</div>;
-  if (!data || data.length === 0) return <div className="text-center text-gray-600">לא נמצאו נקודות חוזקה.</div>;
-  if (error) return <div className="text-center text-red-500 text-lg">אירעה שגיאה בעת שליפת הנתונים</div>;
-  
-  return (
-    <div className="bg-white rounded-lg shadow-sm p-6 max-w-3xl mx-auto flex flex-col gap-4" dir="rtl">
-      <div className="flex items-center justify-center gap-2 mb-4">
-        <Lightbulb className="w-6 h-6 text-yellow-400" />
-        <h2 className="text-lg font-semibold text-primary-text">הנקודות חוזקה  מה-AI</h2>
-      </div>
+  if (isLoading) return <p>טוען נקודות חוזקה...</p>;
+  if (error) return <p>אירעה שגיאה בעת שליפת הנתונים</p>;
+  if (!data || data.length === 0) return <p>לא נמצאו נקודות חוזקה.</p>;
 
-      {data?.map(item => (
-        <div key={item.id} className="flex items-start gap-3 border rounded-lg p-4 shadow-sm bg-gray-50 hover:shadow-md transition">
-          <CheckCircle className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
-          <p className="text-gray-800 leading-relaxed text-sm">{item.strengths}</p>
-        </div>
-      ))}
-    </div>
+  return (
+    <CardWrapper
+      title="נקודות חוזקה מה-AI"
+      icon={<Lightbulb size={24} />}
+      className="border-l-4 border-[--color-primary] bg-[--color-background]"
+    >
+      <div
+        className="overflow-y-auto pr-2 scrollbar-none"
+        style={{ maxHeight: "13rem" }}
+      >
+        <ul className="space-y-3">
+          {data.map((item) => (
+            <li
+              key={item.id}
+              className="flex items-center gap-3 text-[--color-text] bg-white p-2 rounded-lg"
+            >
+              <span>{item.strengths}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </CardWrapper>
   );
 };

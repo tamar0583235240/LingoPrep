@@ -10,14 +10,13 @@ import { Feedback } from "./Feedback";
 import { Answers } from "./Answers";
 import { Users } from "./Users";
 
-
-@Index("SharedRecording_pkey", ["id"], { unique: true })
+@Index("shared_recordings_pkey", ["id"], { unique: true })
 @Entity("shared_recordings", { schema: "public" })
 export class SharedRecordings {
-  @Column("character varying", { primary: true, name: "id" })
+  @Column("uuid", { primary: true, name: "id" })
   id: string;
 
-  @Column("varchar", { name: "shared_with", array: true })
+  @Column("text", { name: "shared_with", array: true })
   sharedWith: string[];
 
   @OneToMany(() => Feedback, (feedback) => feedback.sharedRecording)

@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
 import { v2 as cloudinary } from 'cloudinary';
 import { pool } from '../config/dbConnection';
-import InterviewMaterialSubRepository from '../reposioty/InterviewMaterialSubRepository';
+// import InterviewMaterialSubRepository from '../reposioty/InterviewMaterialSubRepository';
+import {searchFiles,getInterviewMaterialsSubs} from "../repository/interviewMaterialSubRepository"
+// import { getInterviewMaterialsSubs } from 'reposioty/interviewMaterialSubRepository';
+
 import processHebrewText from '../utils/processHebrewText';
-import getFileType, { fileTypeToThumbnail } from "../../../shared/src/FileType"
+import {fileTypeToThumbnail,getFileType} from "../../../shared/src/FileType"
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -80,7 +83,7 @@ export const getInterviewMaterialSubs = async (req: Request, res: Response): Pro
       res.status(300).json({ info: 'Multiple choices' });
       return;
     }
-    const items = await InterviewMaterialSubRepository.getInterviewMaterialSubs();
+    const items = await getInterviewMaterialsSubs();
     res.json(items);
   } catch (error: any) {
     console.error('Error in interview material sub controller:', error);
@@ -96,7 +99,7 @@ export const searchMterials=async(req: Request, res: Response)=>{
   }
 
   try {
-    const results = await InterviewMaterialSubRepository.searchFiles(q);
+    const results = await searchFiles(q);
     console.log("result:",results);
     
     res.json(results);

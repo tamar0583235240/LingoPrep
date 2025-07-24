@@ -22,6 +22,6 @@ const upload = multer({ storage });
 // routes
 router.get('/', uploadRecording);
 
-router.post('/uploadRecord', upload.single('file'), uploadRecording);
-
+router.post('/upload', upload.single('file'), uploadRecording);
 export default router;
+

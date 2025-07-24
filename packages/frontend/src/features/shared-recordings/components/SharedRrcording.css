@@ -1,0 +1,189 @@
+* {   
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;   
+  box-sizing: border-box; 
+}  
+
+.dialog-overlay {   
+  position: fixed;   
+  inset: 0;   
+  background-color: rgba(0, 0, 0, 0.4);   
+  z-index: 999;   
+  display: flex;   
+  align-items: center;   
+  justify-content: center; 
+}  
+
+.dialog-box {   
+  background-color: #ffffff;   
+  border-radius: 16px;   
+  width: 100%;   
+  max-width: 460px;   
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);   
+  overflow: hidden;   
+  font-size: 14px;   
+  color: #1f1f1f; 
+}  
+
+.dialog-header {   
+  background-color: #394b57;   
+  color: white;   
+  padding: 16px 20px;   
+  display: flex;   
+  justify-content: space-between;   
+  align-items: center; 
+}  
+
+.dialog-title {   
+  display: flex;   
+  align-items: center;   
+  gap: 8px;   
+  font-size: 16px;   
+  font-weight: bold; 
+}  
+
+.close-button {   
+  background: none;   
+  border: none;   
+  color: white;   
+  cursor: pointer;   
+  font-size: 20px; 
+}  
+
+.close-button:hover {   
+  color: #ccc; 
+}  
+
+/* שורת קלט */ 
+.dialog-input-row {   
+  display: flex;   
+  gap: 8px;   
+  padding: 16px 20px 0; 
+}  
+
+.dialog-input {   
+  flex: 1;   
+  padding: 10px 12px;   
+  border-radius: 8px;   
+  border: 1px solid #d0d7de;   
+  font-size: 14px;   
+  background-color: #f8f9fa; 
+}  
+
+.add-button {   
+  background-color: #6c757d;   
+  color: white;   
+  border: none;   
+  padding: 10px 16px;   
+  border-radius: 8px;   
+  font-weight: 500;   
+  cursor: pointer;   
+  transition: background-color 0.2s ease; 
+}  
+
+.add-button:hover {   
+  background-color: #5a6268; 
+}  
+
+.participants-list {   
+  padding: 20px;   
+  display: flex;   
+  flex-direction: column;   
+  gap: 12px; 
+}  
+
+.participant-card {   
+  display: flex;   
+  justify-content: space-between;   
+  align-items: center;   
+  background-color: #f5f7fa;   
+  border: 1px solid #e2e8f0;   
+  padding: 12px 14px;   
+  border-radius: 10px; 
+}  
+
+.participant-info {   
+  display: flex;   
+  align-items: center;   
+  gap: 12px; 
+}  
+
+.participant-initial {   
+  background-color: #394b57;    
+  color: white;   
+  font-weight: bold;   
+  border-radius: 50%;   
+  width: 36px;   
+  height: 36px;   
+  display: flex;   
+  align-items: center;   
+  justify-content: center;   
+  font-size: 15px; 
+}  
+
+.participant-name {   
+  font-weight: 600;   
+  font-size: 14px;   
+  color: #1f2937; 
+}  
+
+.participant-email {   
+  font-size: 13px;   
+  color: #6b7280; 
+}  
+
+.delete-button {   
+  background: none;   
+  border: none;   
+  color: #888;   
+  cursor: pointer;   
+  font-size: 18px; 
+}  
+
+.delete-button:hover {   
+  color: #d00; 
+}  
+
+.autocomplete-wrapper {   
+  position: relative;   
+  width: 100%; 
+}  
+
+.autocomplete-list {   
+  position: absolute;   
+  top: 100%;   
+  left: 0;   
+  right: 0;   
+  z-index: 1000;   
+  background: white;   
+  border: 1px solid #d0d7de;   
+  border-radius: 8px;
+  margin-top: 4px;
+  max-height: 200px;   
+  overflow-y: auto;   
+  list-style: none;   
+  margin: 4px 0 0 0;   
+  padding: 8px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}  
+
+.autocomplete-item {   
+  padding: 12px 16px;   
+  cursor: pointer;
+  font-size: 14px;
+  color: #1f2937;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.15s ease;
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-item:hover {   
+  background-color: #f8f9fa;
+  color: #394b57;
+}
+
+.autocomplete-item:active {
+  background-color: #e9ecef;
+}

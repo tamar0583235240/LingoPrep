@@ -5,7 +5,6 @@ import { Answers } from "./Answers";
 @Entity("ai_insights", { schema: "public" })
 export class AiInsights {
   @Column("uuid", { primary: true, name: "id" })
-e0f4b61e85d00beade7884b0f66120e1
   id: string;
 
   @Column("text", { name: "summary" })
@@ -14,11 +13,11 @@ e0f4b61e85d00beade7884b0f66120e1
   @Column("integer", { name: "rating" })
   rating: number;
 
-  @Column("text", { name: "strengths", nullable: true })
-  strengths: string | null;
+  @Column("text", { name: "strengths" })
+  strengths: string;
 
-  @Column("text", { name: "improvements", nullable: true })
-  improvements: string | null;
+  @Column("text", { name: "improvements" })
+  improvements: string;
 
   @ManyToOne(() => Answers, (answers) => answers.aiInsights, {
     onDelete: "CASCADE",

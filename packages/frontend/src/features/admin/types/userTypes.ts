@@ -12,3 +12,16 @@ export interface UserFormFields {
   password: string;
   role: 'student' | 'manager';
 }
+
+// תוספת לצורך תגובת השרת בהעלאת קובץ
+export interface UploadResponse {
+  message: string;
+  successCount: number;
+  skippedCount: number;
+  skippedUsers: {
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+    reason: string;
+  }[];
+}

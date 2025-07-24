@@ -1,6 +1,6 @@
 // src/shared/utils/FileType.ts
 
-const getFileType = (filename: string): string => {
+export const getFileType = (filename: string): string => {
   const extension = filename.split('.').pop()?.toLowerCase();
   switch (extension) {
     case 'pdf': return 'pdf';
@@ -26,4 +26,4 @@ export const fileTypeToThumbnail: Record<string, string> = {
   other: '/thumbnails/file.png',
 };
 
-export default getFileType;
+// export default getFileType;

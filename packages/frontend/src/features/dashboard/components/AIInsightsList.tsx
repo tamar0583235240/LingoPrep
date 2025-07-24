@@ -1,28 +1,34 @@
-import React from 'react';
-import { useGetItemsQuery } from '../services/aiInsightsApi';
-import { aiInsightsType } from '../types/aiInsightsType';
-import { CheckCircle } from 'lucide-react';
+import { FileText } from "lucide-react";
+import { useGetAiInsightsQuery } from '../services/aiInsightsApi';
+import { CardWrapper } from "./CardWrapper";
+import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
 
 const AIInsightsList: React.FC = () => {
-  const { data: insights = [], isLoading, isError } = useGetItemsQuery();
+  const { data: insights = [], isLoading, isError } = useGetAiInsightsQuery();
 
-  if (isLoading) return <p className="text-center text-blue-500 text-lg">טוען מסקנות...</p>;
-  if (isError) return <p className="text-center text-red-500 text-lg">אירעה שגיאה בשליפה.</p>;
-  if (insights.length === 0) return <p className="text-center text-gray-600">לא נמצאו מסקנות.</p>;
+  if (isLoading) return <p>טוען מסקנות...</p>;
+  if (isError) return <p>אירעה שגיאה בשליפה.</p>;
+  if (insights.length === 0) return <p>לא נמצאו מסקנות.</p>;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 max-w-3xl mx-auto flex flex-col gap-4" dir="rtl">
-      <div className="flex items-center justify-center gap-2 mb-4">
-        <CheckCircle className="text-emerald-500 w-5 h-5" />
-        <h2 className="text-lg font-semibold text-primary-text">מסקנות AI</h2>
+    <CardWrapper
+      title="מסקנות מה-AI"
+      icon={<FileText size={24} />}
+      className="border-l-4 border-[--color-primary] bg-[--color-background]"
+    >
+      <div
+        className="overflow-y-auto pr-2 scrollbar-none"
+        style={{ maxHeight: "13rem" }}
+      >
+        <ul className="list-inside space-y-3 text-[--color-text] text-base">
+          {insights.map((insight: { id: Key | null | undefined; summary: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }) => (
+            <li key={insight.id} className="flex items-center gap-3 text-[--color-text] bg-white p-2 rounded-lg">
+              <span>{insight.summary}</span>
+            </li>
+          ))}
+        </ul>
       </div>
-
-      <ul className="list-disc list-inside text-gray-800 text-sm space-y-2">
-        {insights.map((insight: aiInsightsType) => (
-          <li key={insight.id} className="leading-relaxed">{insight.summary}</li>
-        ))}
-      </ul>
-    </div>
+    </CardWrapper>
   );
 };
 
