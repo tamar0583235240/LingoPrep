@@ -74,17 +74,17 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   const handleSaveRecording = async () => {
     try {
-
+      console.log(audioBlobRef.current,"saveRecording");
+      
       setShowRecordingModal(false);
       const answer = await saveRecording(currentUserId, String(currentQuestion.id), fileName.trim());
       console.log("After saveRecording, answer:", answer);
       setShowSaveModal(false);
-      setFileName('');
+      
 
       if (onSaveSuccess && answer?.id) {
         console.log("onSaveSuccess and answer.id exist", { onSaveSuccessExists: !!onSaveSuccess, answerId: answer?.id });
         onSaveSuccess(answer.id);
-        ////////////////////////////////////////////////
 
         if (audioBlobRef.current) {
           console.log("audioBlobRef.current exists", audioBlobRef.current);
@@ -104,10 +104,13 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       } else {
         console.log("onSaveSuccess or answer.id missing", { onSaveSuccessExists: !!onSaveSuccess, answerId: answer?.id });
       }
+      setFileName('');
+
       setNotification?.({
         message: "ההקלטה נשמרה בהצלחה!",
         type: "success",
         icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
+
       });
       setTimeout(() => setNotification?.({ message: "", type: "success" }), 3500);
 
@@ -126,6 +129,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   const downloadRecording = () => {
     if (audioBlobRef.current) {
+      console.log(audioBlobRef.current);
+      
       const url = URL.createObjectURL(audioBlobRef.current);
       const a = document.createElement('a');
       a.href = url;
