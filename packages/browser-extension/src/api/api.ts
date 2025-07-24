@@ -33,15 +33,15 @@ async function refreshToken() {
     credentials: "include",
   });
   console.log("refreshToken response:", res);
-  if (!res.ok) throw new Error("שגיאה בהתחברות עם Google");
+  if (!res.ok) throw new Error("שגיאה ברענון הטוקן");
   return await res.json();
 }
 
 async function getProgress(token: string, userId: string) {
-  const res = await fetch(`${url}/questions/progress/${userId}`, {
+  const res = await fetch(`${url}/api/questions/progress/${userId}`, {
     method: "GET",
     headers: {
-    Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   console.log("getProgress response:", res);
@@ -49,7 +49,7 @@ async function getProgress(token: string, userId: string) {
   return await res.json();
 }
 async function getTips(token: string) {
-  const res = await fetch(`${url}/aiInsight`, {
+  const res = await fetch(`${url}/api/aiInsights/getAiInsights`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,

@@ -19,7 +19,6 @@ import profileRoutes from './src/routes/profileRouts';
 import publicProfileRoutes from './src/routes/publicProfileRoutes';
 
 dotenv.config();
-
 const allowedOrigins = (process.env.CORS_ORIGIN?.split(",") ?? [
   "http://localhost:3000",
   "http://localhost:5000",
@@ -29,18 +28,31 @@ console.log("Allowed CORS origins:", allowedOrigins);
 const normalize = (url: string) => url.replace(/\/+$/, ""); // מסיר / מיותר בסוף
 
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN,
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    console.log("Raw origin:", origin);
+    if (!origin) return callback(null, true);
+
+    const cleanOrigin = normalize(origin);
+    const cleanAllowed = allowedOrigins.map(normalize);
+
+    console.log("Clean origin:", cleanOrigin);
+    console.log("Allowed origins:", cleanAllowed);
+
+    if (
+      cleanOrigin.startsWith("chrome-extension://") ||
+      cleanAllowed.includes(cleanOrigin)
+    ) {
+      return callback(null, true);
+    }
+
+    callback(new Error("CORS blocked: Origin not allowed: " + cleanOrigin));
+  },
   credentials: true,
 };
-dotenv.config();
+
 const app: Application = express();
 
-
-
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api' ,feedbackRouter )

@@ -11,8 +11,8 @@ export interface PublicProfile {
     type: string;
     title: string;
     field_of_study: string;
-    start_date: string;
-    end_date: string;
+    start_date: Date;
+    end_date: Date;
     description: string;
   }[];
   expertise: {
@@ -33,7 +33,7 @@ export interface PublicProfile {
     company_name: string;
     position: string;
     description: string;
-    start_date: string;
-    end_date: string;
+    start_date: Date;
+    end_date: Date;
   }[];
 }
