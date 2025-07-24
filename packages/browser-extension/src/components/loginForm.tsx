@@ -4,7 +4,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { login } from '../api/api';
 
-function LoginForm({ onLoginSuccess }: { onLoginSuccess: (token: string, userId: string) => void }) {
+function LoginForm({ onLoginSuccess }: { onLoginSuccess: ( userId: string) => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -14,7 +14,7 @@ function LoginForm({ onLoginSuccess }: { onLoginSuccess: (token: string, userId:
     login(email, password, rememberMe)
       .then((res) => {
         console.log(res);
-        onLoginSuccess(res.token, res.user.id);
+        onLoginSuccess( res.user.id);
       })
       .catch(() => {
         seterror(true);

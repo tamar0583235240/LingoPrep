@@ -10,7 +10,9 @@ import {
   createToken,
   getToken,
   deleteToken,
+  updateToken,
 } from "../reposioty/passwordResetRepository";
+import refreshTokensRepository from "../reposioty/refreshTokensRepository";
 import userRepository from "../reposioty/userRepository";
 import authRepository from "../reposioty/authRepository";
 import {
@@ -18,6 +20,7 @@ import {
   sendVerificationCodeEmail,
 } from "../utils/emailSender";
 import { generateUniqueSlug } from "../utils/generateSlug";
+import { stat } from "fs";
 
 // Map לשמירת קודי אימות זמניים
 type CodeData = { code: string; expiresAt: number };
@@ -63,12 +66,10 @@ export const validateCode = async (req: Request, res: Response) => {
 
   const validCode = codesPerEmail.get(email);
   if (!validCode) {
-    return res
-      .status(200)
-      .json({
-        valid: false,
-        message: "שגיאה. לא נמצא בקשה לקבלת קוד למייל הזה. אנא נסה שנית.",
-      });
+    return res.status(200).json({
+      valid: false,
+      message: "שגיאה. לא נמצא בקשה לקבלת קוד למייל הזה. אנא נסה שנית.",
+    });
   }
   if (Date.now() > validCode.expiresAt) {
     codesPerEmail.delete(email);
@@ -87,7 +88,8 @@ export const validateCode = async (req: Request, res: Response) => {
 };
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
-const REFRESH_SECRET = process.env.REFRESH_SECRET || "your_refresh_secret";
+const REFRESH_TOKEN_SECRET =
+  process.env.REFRESH_TOKEN_SECRET || "your_REFRESH_TOKEN_SECRET";
 
 export const forgotPassword = async (req: Request, res: Response) => {
   const { email } = req.body;
@@ -102,7 +104,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
         .json({ message: "If email exists, reset link sent" });
     }
 
-    const token = crypto.randomBytes(32).toString('hex');
+    const token = crypto.randomBytes(32).toString("hex");
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
 
     await createToken(user.id, token, expiresAt);
@@ -135,7 +137,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     }
 
     const SALT_ROUNDS = 10;
-    
+
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     await userRepository.updateUserPassword(tokenData.user_id, hashedPassword);
     await deleteToken(token);
@@ -147,20 +149,22 @@ export const resetPassword = async (req: Request, res: Response) => {
   }
 };
 
-// התחברות עם אימייל וסיסמה
+// login with email and password
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password, rememberMe } = req.body;
 
-    const user = await authRepository.login(
+    const user = await userRepository.getUserByEmailAndPassword(
       email,
       password
     );
+    console.log("USER RETURNED FROM login():", user);
+
     if (!user) {
       return res.status(401).json({ message: "אימייל או סיסמה שגויים" });
     }
 
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: rememberMe ? "7d" : "1h" }
@@ -168,8 +172,16 @@ export const login = async (req: Request, res: Response) => {
 
     const refreshToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
-      REFRESH_SECRET,
+      REFRESH_TOKEN_SECRET,
       { expiresIn: rememberMe ? "7d" : "2h" }
+    );
+
+    await refreshTokensRepository.createToken(
+      user.id,
+      refreshToken,
+      new Date(
+        Date.now() + (rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000)
+      )
     );
 
     res.cookie("refreshToken", refreshToken, {
@@ -180,39 +192,75 @@ export const login = async (req: Request, res: Response) => {
       maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
     });
 
-    res.json({ user, token });
+    await userRepository.updateActiveUser(user.id);
+
+    res.json({ user, token: accessToken });
   } catch (error: Error | any) {
-    res.status(500).json({ message: error.message});
+    res.status(500).json({ message: error.message });
   }
 };
 
+//refresh token endpoint
 export const refreshToken = async (req: Request, res: Response) => {
-  const refreshToken = req.cookies.refreshToken;
-  if (!refreshToken) {
+  const existingToken = req.cookies.refreshToken;
+  if (!existingToken) {
     return res.status(401).json({ message: "No refresh token provided" });
   }
 
   try {
-    const userData = jwt.verify(refreshToken, REFRESH_SECRET) as any;
-    const user = await userRepository.getUserById(userData.id);
+    const payload = jwt.verify(existingToken, REFRESH_TOKEN_SECRET) as any;
+    const user = await userRepository.getUserById(payload.id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const newToken = jwt.sign(
+    const storedToken = await refreshTokensRepository.getToken(
+      user.id,
+      existingToken
+    );
+    if (!storedToken) {
+      return res.status(403).json({ message: "Invalid refresh token" });
+    }
+    if(storedToken.expires_at < Date.now()){
+      return res.status(403).json({ message: "Invalid refresh token" });
+    }
+
+    await refreshTokensRepository.deleteToken(existingToken);
+
+    const accessToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: "1h" }
     );
 
-    res.json({ token: newToken, user });
+    const newRefreshToken = jwt.sign({ id: user.id }, REFRESH_TOKEN_SECRET, {
+      expiresIn: "7d",
+    });
+
+    await refreshTokensRepository.refreshToken(
+      user.id,
+      newRefreshToken,
+      new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    );
+
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.json({ token: accessToken, user });
   } catch (err) {
     return res.status(403).json({ message: "Invalid refresh token" });
   }
 };
 
-export const logout = (req: Request, res: Response) => {
+// logout endpoint
+export const logout = async (req: Request, res: Response) => {
+  await refreshTokensRepository.deleteToken(req.cookies.refreshToken);
+  await authRepository.logout(req.body.user.id);
   res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -221,13 +269,13 @@ export const logout = (req: Request, res: Response) => {
   res.json({ message: "התנתקת בהצלחה" });
 };
 
-// Map לשמירת הרשמות ממתינות עם קוד אימות
+// Map to save pending signups
 const pendingSignups = new Map<
   string,
   { userData: Users; code: string; expiresAt: number }
 >();
 
-// בקשת הרשמה (שולח קוד אימות)
+// signup request sending verification code
 export const requestSignup = async (req: Request, res: Response) => {
   const { first_name, last_name, email, phone, password } = req.body;
 
@@ -235,7 +283,9 @@ export const requestSignup = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "חסרים פרטים חובה" });
   }
 
-  const existing = (await userRepository.getAllUsers()).find((u: Users) => u.email === email);
+  const existing = (await userRepository.getAllUsers()).find(
+    (u: Users) => u.email === email
+  );
   if (existing) {
     return res.status(409).json({ message: "Email already exists" });
   }
@@ -278,10 +328,9 @@ export const requestSignup = async (req: Request, res: Response) => {
         preferredJobType: null,
         createdAt: new Date(),
         updatedAt: new Date(),
-        isPublic: false,// This w // This will be set after user creation
-        user: {} as Users
+        isPublic: false, // This w // This will be set after user creation
+        user: {} as Users,
       },
-
     },
     code,
     expiresAt,
@@ -289,50 +338,52 @@ export const requestSignup = async (req: Request, res: Response) => {
 
   await sendVerificationCodeEmail(email, `קוד האימות להרשמה שלך הוא: ${code}`);
 
-  res
-    .status(200)
-    .json({
-      message: "קוד אימות נשלח למייל. נא הזן את הקוד כדי להשלים הרשמה.",
-    });
+  res.status(200).json({
+    message: "קוד אימות נשלח למייל. נא הזן את הקוד כדי להשלים הרשמה.",
+  });
 };
 
-// אישור הרשמה עם קוד
+// confirm signup with verification code
 export const confirmSignup = async (req: Request, res: Response) => {
   const { email, code } = req.body;
 
-  if (!email || !code) return res.status(400).json({ message: "אימייל וקוד דרושים" });
+  if (!email || !code)
+    return res.status(400).json({ message: "אימייל וקוד דרושים" });
 
   const pending = pendingSignups.get(email);
-  if (!pending) return res.status(400).json({ message: "לא נמצאה בקשה הרשמה למייל זה." });
+  if (!pending)
+    return res.status(400).json({ message: "לא נמצאה בקשה הרשמה למייל זה." });
 
   if (pending.expiresAt < Date.now()) {
     pendingSignups.delete(email);
-    return res.status(400).json({ message: "Code expired. Please request a new code." });
+    return res
+      .status(400)
+      .json({ message: "Code expired. Please request a new code." });
   }
 
-  if (pending.code !== code) return res.status(400).json({ message: "הקוד שגוי." });
+  if (pending.code !== code)
+    return res.status(400).json({ message: "הקוד שגוי." });
 
-  await authRepository.signup(pending.userData);
+  const user = pending.userData;
+  await authRepository.signup(user);
   pendingSignups.delete(email);
 
-  const token = jwt.sign(
-    {
-      id: pending.userData.id,
-      email: pending.userData.email,
-      role: pending.userData.role,
-    },
+  const accessToken = jwt.sign(
+    { id: user.id, email: user.email, role: user.role },
     JWT_SECRET,
     { expiresIn: "1h" }
   );
 
   const refreshToken = jwt.sign(
-    {
-      id: pending.userData.id,
-      email: pending.userData.email,
-      role: pending.userData.role,
-    },
-    REFRESH_SECRET,
+    { id: user.id, email: user.email, role: user.role },
+    REFRESH_TOKEN_SECRET,
     { expiresIn: "2h" }
+  );
+
+  await refreshTokensRepository.createToken(
+    user.id,
+    refreshToken,
+    new Date(Date.now() + 2 * 60 * 60 * 1000)
   );
 
   res.cookie("refreshToken", refreshToken, {
@@ -343,13 +394,17 @@ export const confirmSignup = async (req: Request, res: Response) => {
     maxAge: 2 * 60 * 60 * 1000,
   });
 
-  res.status(201).json({ user: pending.userData, token });
+  await userRepository.updateActiveUser(pending.userData.id);
+  const { id, role, firstName, lastName } = pending.userData;
+  res.status(201).json({ user: {id, email, role, first_name: firstName, last_name: lastName}, token: accessToken });
 };
 
 export const signup = async (req: Request, res: Response) => {
   const { first_name, last_name, email, phone, password } = req.body;
 
-  const existing = (await userRepository.getAllUsers()).find((user: Users) => user.email === email);
+  const existing = (await userRepository.getAllUsers()).find(
+    (user: Users) => user.email === email
+  );
   if (existing) {
     return res.status(409).json({ message: "Email already exists" });
   }
@@ -391,12 +446,10 @@ export const signup = async (req: Request, res: Response) => {
       updatedAt: new Date(),
       isPublic: false,
       user: {} as Users, // This will be set after user creation
-    }
+    },
   };
 
-
-
-await authRepository.signup(newUser);
+  await authRepository.signup(newUser);
 
   const token = jwt.sign(
     { id: newUser.id, email: newUser.email, role: newUser.role },
@@ -404,12 +457,9 @@ await authRepository.signup(newUser);
     { expiresIn: "1h" }
   );
 
-
-res.status(201).json({ user: newUser, token });
-
+  res.status(201).json({ user: newUser, token });
 
   await authRepository.signup(newUser);
-
 
   res.status(201).json({ user: newUser, token });
 };
@@ -431,14 +481,16 @@ export const authWithGoogle = async (req: Request, res: Response) => {
 
     const googleUser = ticket.getPayload();
     if (!googleUser?.email) {
-      return res.status(400).json({ message: "Invalid token or email not found" });
+      return res
+        .status(400)
+        .json({ message: "Invalid token or email not found" });
     }
 
     let user = await userRepository.getUserByEmail(googleUser.email);
 
     if (!user) {
-      const first_name = googleUser.given_name ?? '';
-      const last_name = googleUser.family_name ?? '';
+      const first_name = googleUser.given_name ?? "";
+      const last_name = googleUser.family_name ?? "";
       const slug = await generateUniqueSlug(first_name, last_name);
 
       user = await userRepository.insertUser({
@@ -461,7 +513,7 @@ export const authWithGoogle = async (req: Request, res: Response) => {
         .json({ message: "Failed to create or retrieve user" });
     }
 
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: rememberMe ? "7d" : "1h" }
@@ -469,8 +521,16 @@ export const authWithGoogle = async (req: Request, res: Response) => {
 
     const refreshToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
-      REFRESH_SECRET,
+      REFRESH_TOKEN_SECRET,
       { expiresIn: rememberMe ? "7d" : "2h" }
+    );
+
+    await refreshTokensRepository.createToken(
+      user.id,
+      refreshToken,
+      new Date(
+        Date.now() + (rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000)
+      )
     );
 
     res.cookie("refreshToken", refreshToken, {
@@ -480,8 +540,9 @@ export const authWithGoogle = async (req: Request, res: Response) => {
       path: "/",
       maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000,
     });
+    await userRepository.updateActiveUser(user.id);
 
-    return res.status(200).json({ user, token });
+    return res.status(200).json({ user, token: accessToken });
   } catch (err) {
     console.error("Google Auth error:", err);
     return res.status(500).json({ message: "Google authentication failed" });

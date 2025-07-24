@@ -16,8 +16,8 @@ export class SharedRecordings {
   @Column("uuid", { primary: true, name: "id" })
   id: string;
 
-  @Column("uuid", { name: "shared_with", nullable: true, array: true })
-  sharedWith: string[] | null;
+  @Column("text", { name: "shared_with", array: true })
+  sharedWith: string[];
 
   @OneToMany(() => Feedback, (feedback) => feedback.sharedRecording)
   feedbacks: Feedback[];

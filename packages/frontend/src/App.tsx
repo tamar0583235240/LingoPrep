@@ -22,7 +22,7 @@ function App() {
     .unwrap()
     .then((res) => {
       console.log("הצלחה!", res);
-      dispatch(loginSuccess({ token: res.token, user: res.user }));
+      dispatch(loginSuccess({ user: res.user }));
     })
     .catch((err) => {
       console.log("נכשל ברענון הטוקן", err);

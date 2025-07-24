@@ -60,7 +60,7 @@ const getUserByEmailAndPassword = async (
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw new Error("Email or password is incorrect");
 
-    return user;
+    return user as Users;
   } catch (error) {
     console.log(error);
     throw error;
@@ -270,6 +270,7 @@ export default {
     getUserByEmail,
     updateUserPassword,
     updateUser,
+    updateActiveUser,
     createUser,
     insertUser,
     deleteUser,

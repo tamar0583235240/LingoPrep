@@ -23,7 +23,7 @@ const GoogleAuthButton = () => {
       const res = await authWithGoogle(credential).unwrap();
 
 
-      dispatch(loginSuccess({ user: res.user, token: res.token }));
+      dispatch(loginSuccess({ user: res.user }));
       navigate("/");
     } catch (error: any) {
       dispatch(loginFailure(error?.data?.message || "שגיאה בהתחברות עם Google"));

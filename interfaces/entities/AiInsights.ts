@@ -7,17 +7,17 @@ export class AiInsights {
   @Column("uuid", { primary: true, name: "id" })
   id: string;
 
-  @Column("text", { name: "summary", nullable: true })
-  summary: string | null;
+  @Column("text", { name: "summary" })
+  summary: string;
 
-  @Column("integer", { name: "rating", nullable: true })
-  rating: number | null;
+  @Column("integer", { name: "rating" })
+  rating: number;
 
-  @Column("text", { name: "strengths", nullable: true })
-  strengths: string | null;
+  @Column("text", { name: "strengths" })
+  strengths: string;
 
-  @Column("text", { name: "improvements", nullable: true })
-  improvements: string | null;
+  @Column("text", { name: "improvements" })
+  improvements: string;
 
   @ManyToOne(() => Answers, (answers) => answers.aiInsights, {
     onDelete: "CASCADE",

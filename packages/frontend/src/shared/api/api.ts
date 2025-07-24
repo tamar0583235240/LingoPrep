@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ProgressStats } from "../../features/dashboard/types/aiInsightsType";
+import { RootState } from "../store/store";
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({

@@ -8,14 +8,23 @@ export const createToken = async (userId: string, token: string, expiresAt: Date
 };
 export const getToken = async (token: string) => {
     const result = await pool.query(
-        'SELECT * FROM password_reset_tokens WHERE token = $1 LIMIT 1',
+        'SELECT * FROM password_reset_tokens WHERE token = $2 LIMIT 1',
         [token]
     );
     return result.rows[0] || null;
 };
+
+
 export const deleteToken = async (token: string) => {
     await pool.query(
         'DELETE FROM password_reset_tokens WHERE token = $1',
         [token]
     );
 };
+
+export const updateToken = async (userId: string, token: string, expiresAt: Date) => {
+    await pool.query(
+        'UPDATE password_reset_tokens SET token = $2, expires_at = $3 WHERE user_id = $1',
+        [userId, token, expiresAt]
+    );
+}

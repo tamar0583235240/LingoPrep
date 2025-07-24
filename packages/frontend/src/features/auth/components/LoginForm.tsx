@@ -43,7 +43,7 @@ const LoginForm = () => {
 
   const successfulLogin = (res: any) => {
     if (res?.user && res?.token) {
-      dispatch(loginSuccess({ user: res.user, token: res.token }));
+      dispatch(loginSuccess({ user: res.user }));
       navigate("/home");
     }
   };

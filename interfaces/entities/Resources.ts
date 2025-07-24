@@ -12,15 +12,15 @@ export class Resources {
   @Column("text", { name: "type" })
   type: string;
 
-  @Column("text", { name: "description", nullable: true })
-  description: string | null;
+  @Column("text", { name: "description" })
+  description: string;
 
   @Column("text", { name: "file_url" })
   fileUrl: string;
 
   @Column("timestamp without time zone", {
     name: "created_at",
-    default: () => "CURRENT_TIMESTAMP",
+    default: () => "now()",
   })
   createdAt: Date;
 }

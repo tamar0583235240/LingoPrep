@@ -4,7 +4,6 @@ import { User } from "../types/types";
 
 interface AuthState {
   user: User | null;
-  token: string | null;
   loggedIn: boolean;
   loading: boolean;
   error: string | null;
@@ -13,7 +12,6 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: null,
   loggedIn: false,
   loading: false,
   error: null,
@@ -28,11 +26,10 @@ const authSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    loginSuccess(state, action: PayloadAction<{ user: User; token: string }>) {
+    loginSuccess(state, action: PayloadAction<{ user: User; }>) {
       state.loading = false;
       state.loggedIn = true;
       state.user = action.payload.user;
-      state.token = action.payload.token;
       state.error = null;
       state.isAdmin = action.payload.user.role === "manager";
     },
@@ -42,7 +39,6 @@ const authSlice = createSlice({
     },
     logout(state) {
       state.user = null;
-      state.token = null;
       state.loggedIn = false;
       state.loading = false;
       state.error = null;
@@ -54,7 +50,6 @@ const authSlice = createSlice({
       authApi.endpoints.refreshToken.matchFulfilled,
       (state, action) => {
         state.loading = false;
-        state.token = action.payload.token;
         state.user = action.payload.user;
         state.loggedIn = true;
         state.isAdmin = action.payload.user.role === "manager";
@@ -73,6 +68,9 @@ const authSlice = createSlice({
       (state, action) => {
         state.loading = false;
         state.error = "Failed to refresh token";
+        state.user = null;
+        state.loggedIn = false;
+        state.isAdmin = false;
       }
     );
   },

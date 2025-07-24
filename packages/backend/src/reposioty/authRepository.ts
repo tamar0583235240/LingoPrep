@@ -15,6 +15,7 @@ export const login = async (email: string, password: string): Promise<Users | nu
 
     // Mark as active user
     await pool.query('UPDATE users SET is_active = true WHERE id = $1', [user.id]);
+    console.log(`User with ID ${user.id} logged in successfully.`);
 
     // מחזיר את המשתמש ללא שדה הסיסמה
     const { password: _, ...userWithoutPassword } = user;
@@ -46,6 +47,7 @@ export const signup = async (userData: Users): Promise<Users> => {
 export const logout = async (userId: string): Promise<void> => {
   try {
     await pool.query('UPDATE users SET is_active = false WHERE id = $1', [userId]);
+    console.log(`User with ID ${userId} logged out successfully.`);
   } catch (error) {
     console.error("Error during logout:", error);
     throw error;

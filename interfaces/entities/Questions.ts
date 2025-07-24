@@ -13,14 +13,14 @@ export class Questions {
   @Column("text", { name: "content" })
   content: string;
 
-  @Column("text", { name: "category", nullable: true })
-  category: string | null;
+  @Column("text", { name: "category" })
+  category: string;
 
-  @Column("text", { name: "tips", nullable: true })
-  tips: string | null;
+  @Column("text", { name: "tips" })
+  tips: string;
 
-  @Column("text", { name: "ai_guidance", nullable: true })
-  aiGuidance: string | null;
+  @Column("text", { name: "ai_guidance" })
+  aiGuidance: string;
 
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
