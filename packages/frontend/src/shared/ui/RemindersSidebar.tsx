@@ -3,7 +3,7 @@ import { cn } from "../utils/cn";
 import { FaRegBell, FaCheck } from "react-icons/fa";
 
 interface Reminder {
-    id: number;
+    id: string;
     subject: string;
     status: "pending" | "done";
 }
@@ -12,7 +12,7 @@ interface RemindersSidebarProps {
     open: boolean;
     onClose: () => void;
     reminders: Reminder[];
-    onDone: (id: number) => void;
+    onDone: (id: string) => void;
 }
 
 export const RemindersSidebar: React.FC<RemindersSidebarProps> = ({
@@ -76,11 +76,18 @@ export const ReminderBell: React.FC = () => {
     const [open, setOpen] = useState(false);
     const [reminders, setReminders] = useState<Reminder[]>([]);
 
+
+
+
     useEffect(() => {
         fetch("/api/reminders/")
             .then((res) => res.json())
+            
             .then((data) => {
+                
                 console.log("📥 נשלפו תזכורות מהשרת:", data);
+                console.log("🔔 reminders from API:", data);
+
                 setReminders(data);
             })
             .catch((err) => {
@@ -88,11 +95,12 @@ export const ReminderBell: React.FC = () => {
             });
     }, []);
 
-    const handleDone = (id: number) => {
-        fetch(`/api/reminders/${id}/done`, { method: "POST" }).then(() =>
-            setReminders((prev) => prev.filter((r) => r.id !== id))
-        );
-    };
+
+const handleDone = (id: string) => {
+  fetch(`/api/reminders/${id}/done`, { method: "POST" }).then(() =>
+    setReminders((prev) => prev.filter((r) => r.id !== id))
+  );
+};
 
     return (
         <>

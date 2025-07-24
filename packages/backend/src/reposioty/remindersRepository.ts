@@ -6,7 +6,9 @@ export const getReminders = async () => {
     WHERE treatment_status = 'In treatment'
     ORDER BY createdat DESC
   `;
+   console.log("🔍 מריץ שאילתה:", query);
     const { rows } = await pool.query(query);
+//   console.log("🔁 rows שהתקבלו:", rows);
 
     console.log("🔁 rows:", rows);
     return rows.map(row => ({

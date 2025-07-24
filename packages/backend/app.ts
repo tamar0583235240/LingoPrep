@@ -20,6 +20,7 @@ import dotenv from 'dotenv';
 import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
 import cookieParser from 'cookie-parser';
+import remindersRouter from './src/routes/remindersRouts';
 // import {supabase} from './src/config/dbConnection';
 
 const corsOptions = {
@@ -36,6 +37,7 @@ app.use('/api' ,feedbackRouter )
 app.use('/api' , AiInsightsRouter ) 
 app.use('/api' , sharedRecrdingRouter )  
 app.use('/answers', answerRouter);
+app.use('/api/reminders', remindersRouter);
 app.use('/question', questionRoute); 
 app.use('/shared-recordings', sharedRecordingsRoutes);
 app.use('/auth', authRouts);

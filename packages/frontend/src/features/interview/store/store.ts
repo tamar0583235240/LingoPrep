@@ -5,6 +5,7 @@ import { categoriesApi } from '../services/categoriesApi';
 import answeredReducer from './answeredSlice';
 import simulationReducer from './simulationSlice';
 // import recordingReducer from './recordingSlice';
+import recordingReducer from "../store/simulationSlice"
 
 import {
   persistStore,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   [categoriesApi.reducerPath]: categoriesApi.reducer,
   answered: answeredReducer,
     simulation: simulationReducer,  // הוסף פה
+  recording: recordingReducer, // 💡 הוסף את זה!
 
 });
 

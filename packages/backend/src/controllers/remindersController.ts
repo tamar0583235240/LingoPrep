@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { getReminders, markReminderAsDone } from "../reposioty/remindersRepository";
 export const getRemindersController = async (req: Request, res: Response) => {
   try {
+        console.log("🔔 נכנסנו ל-getRemindersController");
+
     console.log("🔔 קריאה ל-GET /api/reminders");
     const reminders = await getReminders();
         console.log("📥 נשלפו תזכורות:", reminders); 
