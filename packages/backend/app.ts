@@ -51,6 +51,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use('/auth', authRouts);
+app.use('/api/insights', aiInsightRoutes);
 app.use('/api/categories', categoryRoutes)
 app.use('/api', resourceRouts);
 app.use('/api', feedbackRouter)
@@ -71,7 +72,6 @@ app.use('/api/status', statusRouts);
 app.use('/api/insights', aIInsightRouts);
 app.use('/api/dynamic-contents', useDynamicContentRouter);
 app.use("/api/questions", answerRoutes);
-app.use("/api/aiInsight", aiInsightRoutes);
 app.use("/manager/interview-materials", interviewMaterialsRoutes);
 app.use("/profiles", profileRoutes);
 app.use('/public-profile', publicProfileRoutes);

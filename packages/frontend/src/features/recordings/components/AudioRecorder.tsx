@@ -5,6 +5,7 @@ import { formatTime } from '../../../shared/utils/timeUtils';
 import { Button } from '../../../shared/ui/button';
 import * as FiIcons from 'react-icons/fi';
 import { useSelector } from 'react-redux';
+import { analyzeInterview } from '../../interview/services/analyze.service';
 
 import type { RecordingState } from '../types/Answer';
 import RecordButton from './RecordButton';
@@ -73,31 +74,54 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   const handleSaveRecording = async () => {
     try {
-    setShowRecordingModal(false);
-    const answer = await saveRecording(currentUserId, String(currentQuestion.id), fileName);
-    setShowSaveModal(false);
-    setFileName('');
 
-    if (onSaveSuccess && answer?.id) {
-      onSaveSuccess(answer.id);
+      setShowRecordingModal(false);
+      const answer = await saveRecording(currentUserId, String(currentQuestion.id), fileName.trim());
+      console.log("After saveRecording, answer:", answer);
+      setShowSaveModal(false);
+      setFileName('');
+
+      if (onSaveSuccess && answer?.id) {
+        console.log("onSaveSuccess and answer.id exist", { onSaveSuccessExists: !!onSaveSuccess, answerId: answer?.id });
+        onSaveSuccess(answer.id);
+        ////////////////////////////////////////////////
+
+        if (audioBlobRef.current) {
+          console.log("audioBlobRef.current exists", audioBlobRef.current);
+          console.log("AI Analysis Triggered for answer ID:", answer.id);
+          const file = new File([audioBlobRef.current], fileName || "recording.wav", { type: audioBlobRef.current.type });
+          analyzeInterview(file, answer.id)
+            .then(result => {
+              console.log("AI Analysis Result:", result);
+              // אפשר לשמור את התוצאה בסטייט או להציג הודעה
+            })
+            .catch(err => {
+              console.error("AI Analysis Error:", err);
+            });
+        } else {
+          console.log("audioBlobRef.current is missing");
+        }
+      } else {
+        console.log("onSaveSuccess or answer.id missing", { onSaveSuccessExists: !!onSaveSuccess, answerId: answer?.id });
+      }
+      setNotification?.({
+        message: "ההקלטה נשמרה בהצלחה!",
+        type: "success",
+        icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
+      });
+      setTimeout(() => setNotification?.({ message: "", type: "success" }), 3500);
+
+      //////////////////////////
+
+    } catch (error) {
+      console.error('שגיאה בשמירה:', error);
+      setNotification?.({
+        message: "שגיאה בשמירת ההקלטה",
+        type: "error",
+        icon: <XCircle className="w-6 h-6 text-red-500" />,
+      });
+      setTimeout(() => setNotification?.({ message: "", type: "success" }), 3500);
     }
-
-    setNotification?.({
-      message: "ההקלטה נשמרה בהצלחה!",
-      type: "success",
-      icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
-    });
-    setTimeout(() => setNotification?.({ message: "", type: "success" }), 3500);
-
-  } catch (error) {
-    console.error('שגיאה בשמירה:', error);
-    setNotification?.({
-      message: "שגיאה בשמירת ההקלטה",
-      type: "error",
-      icon: <XCircle className="w-6 h-6 text-red-500" />,
-    });
-    setTimeout(() => setNotification?.({ message: "", type: "success" }), 3500);
-  }
   };
 
   const downloadRecording = () => {
@@ -117,20 +141,21 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     <div className="space-y-4 w-full">
       {/* כפתור ראשי תמיד מוצג */}
       <>
-        
-          <button
-            className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white rounded-xl px-6 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={() => {
-              setRecordingPhase('idle');
-              setShowRecordingModal(true)}
-            }
 
-            disabled={answered}
-          >
-            <FiIcons.FiMic size={20} />
-            התחל הקלטה
-          </button>
-        
+        <button
+          className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white rounded-xl px-6 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={() => {
+            setRecordingPhase('idle');
+            setShowRecordingModal(true)
+          }
+          }
+
+          disabled={answered}
+        >
+          <FiIcons.FiMic size={20} />
+          התחל הקלטה
+        </button>
+
         <RecordButton
           open={showRecordingModal}
           onClose={() => setShowRecordingModal(false)}
