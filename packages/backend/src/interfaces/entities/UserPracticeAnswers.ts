@@ -34,13 +34,6 @@ export class UserPracticeAnswers {
   })
   createdAt: Date | null;
 
-  @Column("timestamp without time zone", {
-    name: "updated_at",
-    nullable: true,
-    default: () => "CURRENT_TIMESTAMP",
-  })
-  updatedAt: Date | null;
-
   @ManyToOne(
     () => PracticeQuestions,
     (practiceQuestions) => practiceQuestions.userPracticeAnswers,

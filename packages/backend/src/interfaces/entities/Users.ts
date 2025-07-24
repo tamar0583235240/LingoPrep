@@ -11,7 +11,6 @@ import { UserSessions } from "./UserSessions";
 import { WorkExperiences } from "./WorkExperiences";
 import { UserActivity } from "./UserActivity";
 
-
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
 @Index("users_slug_key", ["slug"], { unique: true })

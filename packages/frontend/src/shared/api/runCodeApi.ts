@@ -1,70 +1,42 @@
-// import { api } from '../api/api';
-
-// export const practiceApi = api.injectEndpoints({
-//   endpoints: (builder) => ({
-//     // שליפת שאלות כלליות לפי סינון (topic, level, type)
-//     getAllQuestions: builder.query({
-//       query: ({ topic, level, type }) => {
-//         const params = new URLSearchParams();
-//         if (topic) params.append('topic', topic);
-//         if (level) params.append('level', level);
-//         if (type) params.append('type', type);
-//         return `api/codeQuestions/questions?${params.toString()}`;
-//       },
-//     }),
-
-//     // // שליפת כל הנושאים
-//     // getAllTopics: builder.query({
-//     //   query: () => `api/codeQuestions/topics`,
-//     // }),
-
-//     // שליחת תשובה לשאלה
-//     submitAnswer: builder.mutation({
-//       query: ({ questionId, answer }) => ({
-//         url: `api/codeQuestions/submitAnswer/${questionId}`,
-//         method: 'POST',
-//         body: { answer },
-//       }),
-//     }),
-
-//     // הרצת קוד
-//     runCode: builder.mutation({
-//       query: ({ language, code }) => ({
-//         url: `api/codeQuestions/runCode`,
-//         method: 'POST',
-//         body: { language, code },
-//       }),
-//     }),
-//   }),
-// });
-
-// export const {
-//   useGetAllQuestionsQuery,
-// //   useGetAllTopicsQuery,
-//   useSubmitAnswerMutation,
-//   useRunCodeMutation,
-// } = practiceApi;
 import { api } from '../api/api';
 
 export const practiceApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    // שליפת שאלות כלליות לפי סינון (topic, level, type)
-    getAllQuestions: builder.query({
-      query: ({ topic, level, type }) => {
-        const params = new URLSearchParams();
-        if (topic) params.append('topic', topic);
-        if (level) params.append('level', level);
-        if (type) params.append('type', type);
-        return `api/codeQuestions/questions?${params.toString()}`;
-      },
+    // עדכון סטטוס שאלה
+    updateQuestionStatus: builder.mutation({
+      query: ({ userId, questionId, status }: { userId: string; questionId: string; status: string }) => ({
+        url: `api/codeQuestions/question/status`,
+        method: 'POST',
+        body: { userId, questionId, status },
+      }),
     }),
 
-    // שליחת תשובה לשאלה
-    submitAnswer: builder.mutation({
-      query: ({ questionId, answer }) => ({
-        url: `api/codeQuestions/submitAnswer/${questionId}`,
+    // שמירת תשובת משתמש
+    saveUserAnswer: builder.mutation({
+      query: ({ userId, questionId, answer, codeLanguage }: { userId: string; questionId: string; answer: string; codeLanguage?: string }) => ({
+        url: `api/codeQuestions/question/answer`,
         method: 'POST',
-        body: { answer },
+        body: { userId, questionId, answer, codeLanguage },
+      }),
+    }),
+
+    // שליפת סטטוס של כל השאלות למשתמש
+    getQuestionStatuses: builder.query({
+      query: (userId: string) => `api/codeQuestions/getQuestionStatus/${userId}`,
+    }),
+
+    // שליפת התשובה של המשתמש לשאלה ספציפית
+    getUserAnswer: builder.query({
+      query: ({ userId, questionId }) =>
+        `api/codeQuestions/userAnswer/${userId}/${questionId}`,
+    }),
+
+    // מחיקת תשובת משתמש לשאלה
+    deleteUserAnswer: builder.mutation<void, { userId: string; questionId: string }>({
+      query: ({ userId, questionId }) => ({
+        url: `api/codeQuestions/deleteUserAnswer/${userId}/${questionId}`,
+        method: 'DELETE',
+        body: { userId, questionId },
       }),
     }),
 
@@ -77,7 +49,6 @@ export const practiceApi = api.injectEndpoints({
       }),
     }),
 
- 
     // לייק או דיסלייק לשאלה
     voteQuestion: builder.mutation({
       query: ({ userId, questionId, liked }: { userId: string; questionId: string; liked: boolean }) => ({
@@ -92,17 +63,26 @@ export const practiceApi = api.injectEndpoints({
       query: (questionId: string) => `api/codeQuestions/likes/${questionId}`,
     }),
 
-    // שליפת כל הלייקים לכל השאלות
-    getAllLikes: builder.query({
-      query: () => `api/codeQuestions/allLikes`,
+    // שליחת מייל
+    sendEmail: builder.mutation<{ success: boolean; message: string }, { to: string; subject: string; text: string }>({
+      query: ({ to, subject, text }) => ({
+        url: `api/codeQuestions/send-email`,
+        method: 'POST',
+        body: { to, subject, text },
+      }),
     }),
+
   }),
 });
 
 export const {
-  useGetAllQuestionsQuery,
-  useSubmitAnswerMutation,
+  useUpdateQuestionStatusMutation,
+  useSaveUserAnswerMutation,
+  useGetQuestionStatusesQuery,
+  useGetUserAnswerQuery,
+  useDeleteUserAnswerMutation,
   useRunCodeMutation,
   useVoteQuestionMutation,
   useGetQuestionVotesQuery,
+  useSendEmailMutation,
 } = practiceApi;

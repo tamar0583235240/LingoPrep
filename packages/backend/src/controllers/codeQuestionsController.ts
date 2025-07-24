@@ -1,16 +1,17 @@
 import { Request, Response } from "express";
 import * as codeQuestionsRepository from "../reposioty/codeQuestionsRepository";
+import nodemailer from 'nodemailer';
 
 
 // שליפת כל הנושאים
 export const getAllTopics = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const topics = await codeQuestionsRepository.getAllTopicsFromDB();
-        res.status(200).json(topics);
-    } catch (err) {
-        console.error("Error fetching topics", err);
-        res.status(500).json({ message: "שגיאה בקבלת נושאים" });
-    }
+  try {
+    const topics = await codeQuestionsRepository.getAllTopicsFromDB();
+    res.status(200).json(topics);
+  } catch (err) {
+    console.error("Error fetching topics", err);
+    res.status(500).json({ message: "שגיאה בקבלת נושאים" });
+  }
 };
 
 // שליפת כל השאלות
@@ -28,6 +29,127 @@ export const getAllQuestions = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error fetching questions:', error);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+// שמירת תשובת המשתמש ועדכון הסטטוס
+// export const setQuestionStatus = async (req: Request, res: Response) => {
+//   const { userId, questionId, status, answer } = req.body;
+
+//   if (!userId || !questionId || !status) {
+//     return res.status(400).json({ message: "Missing userId, questionId or status" });
+//   }
+
+//   try {
+//     const safeAnswer = typeof answer === 'string' ? answer : null;
+
+//     const updatedAnswer = await codeQuestionsRepository.upsertQuestionStatus(
+//       userId,
+//       questionId,
+//       status,
+//       safeAnswer
+//     );
+
+//     res.json({ success: true, data: updatedAnswer });
+//   } catch (error) {
+//     console.error("Error setting status mode", error);
+//     res.status(500).json({ success: false, message: "Server error" });
+//   }
+// };
+
+
+// עדכון סטטוס שאלה
+export const updateQuestionStatus = async (req: Request, res: Response) => {
+  const { userId, questionId, status } = req.body;
+
+  if (!userId || !questionId || !status) {
+    return res.status(400).json({ message: "Missing userId, questionId or status" });
+  }
+
+  try {
+    const updated = await codeQuestionsRepository.updateQuestionStatus(userId, questionId, status);
+    res.json({ success: true, data: updated });
+  } catch (error) {
+    console.error("Error updating question status", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// DB שמירת/עדכון התשובה של המשתמש ב 
+export const saveUserAnswer = async (req: Request, res: Response) => {
+  const { userId, questionId, answer, codeLanguage } = req.body;
+
+  if (!userId || !questionId || !answer) {
+    return res.status(400).json({ message: "Missing userId, questionId or answer" });
+  }
+
+  try {
+    const saved = await codeQuestionsRepository.saveUserAnswer(userId, questionId, answer, codeLanguage);
+    res.json({ success: true, data: saved });
+  } catch (error) {
+    console.error("Error saving user answer", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// שליפת הסטטוס של כל השאלות לפי משתמש
+export const getUserQuestionStatuses = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+
+  if (!userId) {
+    return res.status(400).json({ message: "Missing userId" });
+  }
+
+  try {
+    const statuses = await codeQuestionsRepository.getStatusesByUserId(userId);
+    res.json({ success: true, data: statuses });
+  } catch (error) {
+    console.error("Error fetching statuses", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// שליפת התשובה של המשתמש
+export const getUserAnswerByQuestion = async (req: Request, res: Response) => {
+  try {
+    const { userId, questionId } = req.params;
+
+    if (!userId || !questionId) {
+      return res.status(400).json({ message: "Missing userId or questionId" });
+    }
+
+    const answer = await codeQuestionsRepository.getUserAnswer(userId, questionId);
+
+    if (!answer) {
+      return res.status(404).json({ message: 'Answer not found' });
+    }
+
+    return res.json(answer);
+  } catch (error) {
+    console.error('Error getting user answer:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// מחיקת תשובה של המשתמש לפי מזהה שאלה
+export const deleteUserAnswerByQuestion = async (req: Request, res: Response) => {
+  try {
+    const { userId, questionId } = req.params;
+
+    if (!userId || !questionId) {
+      return res.status(400).json({ message: "Missing userId or questionId" });
+    }
+
+    const deleted = await codeQuestionsRepository.deleteUserAnswer(userId, questionId);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Answer not found" });
+    }
+
+    return res.status(200).json({ message: "Answer deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user answer:", error);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -73,5 +195,40 @@ export const getAllLikes = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error getting all likes:", error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+// שליחת מייל
+export const sendEmail = async (req: Request, res: Response) => {
+  const { to, subject, text } = req.body;
+
+  if (!to || !subject || !text) {
+    return res.status(400).json({ message: "Missing to, subject or text in request body" });
+  }
+
+  try {
+    // הגדרת transporter עם פרטי החשבון שלך מהסביבה
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST, // smtp.gmail.com
+      port: Number(process.env.SMTP_PORT), // 587
+      secure: false, // TLS
+      auth: {
+        user: process.env.EMAIL_USER, // notify.lingoprep@gmail.com
+        pass: process.env.EMAIL_PASS, // סיסמת האפליקציה
+      },
+    });
+
+    // שליחת המייל
+    await transporter.sendMail({
+      from: `"LingoPrep" <${process.env.EMAIL_USER}>`,
+      to,
+      subject,
+      text,
+    });
+
+    res.status(200).json({ success: true, message: "Email sent successfully" });
+  } catch (error: any) {
+    console.error("Error sending email:", error);
+    res.status(500).json({ success: false, message: "Failed to send email", error: error.message });
   }
 };

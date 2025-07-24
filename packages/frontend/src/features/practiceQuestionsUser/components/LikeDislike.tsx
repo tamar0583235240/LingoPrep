@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useVoteQuestionMutation, useGetQuestionVotesQuery } from "../../../shared/api/runCodeApi";
-import { useSelector } from "react-redux";
-// import { RootState } from "@reduxjs/toolkit/query";
-import { RootState } from "../../../shared/store/store";
 
 interface Props {
   questionId: string;

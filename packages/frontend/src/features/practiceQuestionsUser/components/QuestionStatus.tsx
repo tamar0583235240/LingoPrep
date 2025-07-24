@@ -2,7 +2,6 @@ import { FaSpinner, FaCheckCircle, FaCircle } from "react-icons/fa";
 
 interface QuestionStatusProps {
     value: "not_started" | "in_progress" | "completed";
-    onChange: (newStatus: QuestionStatusProps["value"]) => void;
 }
 
 const statuses = [
@@ -29,23 +28,23 @@ const statuses = [
     },
 ];
 
-export const QuestionStatus = ({ value, onChange }: QuestionStatusProps) => {
+export const QuestionStatus = ({ value }: QuestionStatusProps) => {
     return (
         <div className="flex flex-col gap-1 mt-3">
             <label className="text-mm font-medium text-[--color-text]">סטטוס:</label>
             <div className="flex flex-wrap gap-2">
                 {statuses.map((status) => (
-                    <button
+                    <div
                         key={status.value}
-                        onClick={() => onChange(status.value as QuestionStatusProps["value"])}
-                        className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm transition ${status.color} ${value === status.value
-                            ? `ring-2 ${status.ring}`
-                            : "opacity-70 hover:opacity-100"
-                            }`}
+                        className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm transition cursor-default ${status.color} ${
+                            value === status.value
+                                ? `ring-2 ${status.ring}`
+                                : "opacity-70"
+                        }`}
                     >
                         {status.icon}
                         {status.label}
-                    </button>
+                    </div>
                 ))}
             </div>
         </div>
