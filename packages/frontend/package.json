@@ -67,7 +67,8 @@
     "jest": "^27.5.1",
     "postcss": "^8.5.4",
     "postcss-value-parser": "^4.2.0",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^3.4.17",
+    "typescript": "^4.9.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -92,6 +93,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://localhost:5000"
+  }
 }
