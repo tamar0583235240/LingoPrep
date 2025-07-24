@@ -1,3 +1,4 @@
+import { Categories } from '@interfaces/entities/Categories';
 import { pool } from '../config/dbConnection';
 import { Questions } from "../interfaces/entities/Questions";
 import { v4 as uuid4 } from 'uuid';
@@ -12,7 +13,7 @@ const addQustion = async (question: Questions): Promise<Questions> => {
     let exists = true;
     id = uuid4();
     const query = `
-      INSERT INTO questions (id , title , content , category , tips , ai_guidance , is_active)
+      INSERT INTO questions (id , title , content  , tips , ai_guidance , is_active)
       VALUES ('${id}', '${question.title}', '${question.content}', '${"question.category"}', '${question.tips}', '${question.aiGuidance}','${question.isActive}')
     `;
 
@@ -57,7 +58,7 @@ const getAllQuestions = async (): Promise<Questions[]> => {
 
 
 
-const updateQuestionById = async (updates: Questions) => {
+const updateQuestionById = async (updates: Questions,category:Categories) => {
   const { id, ...fieldsToUpdate } = updates;
   const fields = Object.keys(fieldsToUpdate);
   if (fields.length === 0) {
@@ -68,15 +69,11 @@ const updateQuestionById = async (updates: Questions) => {
     .map((field, i) => `"${field}" = $${i + 1}`)
     .join(', ');
 
-  const query = `
-    UPDATE questions
-    SET ${setString}
-    WHERE id = $${fields.length + 1}
-    RETURNING *;
-  `;
-
+  const query = ` UPDATE questions SET ${setString} WHERE id = $${fields.length + 1} RETURNING *;`;
+  const query2 = `UPDATE question_categories SET category_id = $1 WHERE question_id = $2;`;
   try {
     const { rows } = await pool.query(query, [...values, id]);
+    await pool.query(query2, [category.id, id]);
     if (rows.length === 0) {
       throw new Error(`Question with id ${id} not found`);
     }

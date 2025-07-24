@@ -2,7 +2,6 @@ import { pool } from "../config/dbConnection";
 import { Users } from "../interfaces/entities/Users";
 // import { Users } from "../interfaces/User";
 import bcrypt from "bcrypt";
-
 import xlsx from "xlsx";
 import { v4 as uuidv4 } from "uuid";
 import { createUserByAdminSchema } from "../validations/userValidations";

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Question } from '../types/Question';
-import { useUpdateQuestionMutation } from '../services/adminQuestionApi';
+
+import { useUpdateQuestionMutation, useGetAllCategoriesQuery } from '../services/adminQuestionApi';
 import { Button } from "../../../shared/ui/button";
 import { Input } from "../../../shared/ui/input";
 import { CardSimple } from "../../../shared/ui/card";
@@ -8,36 +9,47 @@ import { GridContainer } from "../../../shared/ui/GridContainer";
 import { Heading1 } from "../../../shared/ui/typography";
 import { IconWrapper } from "../../../shared/ui/IconWrapper";
 import { useMessageModal } from "../../../shared/ui/MessageModalContext";
-import { X, Save, Edit } from "lucide-react";
+import { X, Save, Edit, ChevronDown } from "lucide-react";
 import { cn } from "../../../shared/utils/cn";
+import { Category } from '../types/Categories';
 
-export const UpdateQuestion = (props: { question: Question, questionSaveClick: Function }) => {
-    const { question, questionSaveClick } = props;
+export const UpdateQuestion = (props: { question: Question,categorySelected:Category, questionSaveClick: Function }) => {
+    const { question, categorySelected,questionSaveClick } = props;
     const [updateQuestionById, { isLoading }] = useUpdateQuestionMutation();
+    const { data: categories } = useGetAllCategoriesQuery();
     const { showMessage } = useMessageModal();
-    
+
     const [titleQ, setTitleQ] = useState(question.title);
     const [contentQ, setContentQ] = useState(question.content);
-    const [categoryQ, setCategoryQ] = useState(question.category);
+    const [categoryQ, setCategoryQ] = useState<Category>(categorySelected);
     const [tipsQ, setTipsQ] = useState(question.tips);
     const [ai_guidanceQ, setAi_guidanceQ] = useState(question.ai_guidance);
+    const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
+
+    const handleCategorySelect = (categoryName: string, categoryId: string) => {
+        const categorySelected: Category =
+        {
+            id: categoryId,
+            name: categoryName,           
+        };
+        setCategoryQ(categorySelected);
+        setIsCategoryDropdownOpen(false);
+    };
 
     const updateQuestionF = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        
+
         const UpdateQuestionn: Partial<Question> = {
             id: question.id,
             title: titleQ,
             content: contentQ,
-            category: categoryQ,
             tips: tipsQ,
             ai_guidance: ai_guidanceQ,
             is_active: true
         };
 
         try {
-            await updateQuestionById(UpdateQuestionn).unwrap();       
-            showMessage("הצלחה!", "השאלה עודכנה בהצלחה");
+            await updateQuestionById({ data: UpdateQuestionn, category: categoryQ }).unwrap();            showMessage("הצלחה!", "השאלה עודכנה בהצלחה");
             questionSaveClick();
         } catch (e) {
             console.error('שגיאה בעדכון השאלה:', e);
@@ -67,16 +79,16 @@ export const UpdateQuestion = (props: { question: Question, questionSaveClick: F
 
                     {/* טופס עריכת שאלה */}
                     <form onSubmit={updateQuestionF} className="space-y-6">
-                        <GridContainer 
-                            gridClasses="grid-cols-1 gap-6" 
-                            padding="p-0" 
-                            mt="mt-0" 
+                        <GridContainer
+                            gridClasses="grid-cols-1 gap-6"
+                            padding="p-0"
+                            mt="mt-0"
                             mb="mb-0"
                         >
                             {/* שם השאלה */}
                             <div className="space-y-2">
-                                <label 
-                                    htmlFor="title" 
+                                <label
+                                    htmlFor="title"
                                     className="block text-sm font-semibold text-gray-700 text-right"
                                 >
                                     שם השאלה *
@@ -94,8 +106,8 @@ export const UpdateQuestion = (props: { question: Question, questionSaveClick: F
 
                             {/* תוכן השאלה */}
                             <div className="space-y-2">
-                                <label 
-                                    htmlFor="content" 
+                                <label
+                                    htmlFor="content"
                                     className="block text-sm font-semibold text-gray-700 text-right"
                                 >
                                     תוכן השאלה *
@@ -115,28 +127,67 @@ export const UpdateQuestion = (props: { question: Question, questionSaveClick: F
                             </div>
 
                             {/* קטגוריה */}
-                            <div className="space-y-2">
-                                <label 
-                                    htmlFor="category" 
+                            <div className="space-y-2 relative">
+                                <label
+                                    htmlFor="category"
                                     className="block text-sm font-semibold text-gray-700 text-right"
                                 >
                                     קטגוריה *
                                 </label>
-                                <Input
-                                    id="category"
-                                    type="text"
-                                    placeholder="לדוגמה: טכנולוגיה, ניהול, מכירות..."
-                                    value={categoryQ}
-                                    onChange={(e) => setCategoryQ(e.target.value)}
-                                    required
-                                    className="text-right"
-                                />
+                                <div className="relative">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
+                                        className={cn(
+                                            "w-full rounded-md border border-[--color-border] px-3 py-2 text-sm focus:ring-[--color-primary] focus:border-[--color-primary]",
+                                            "text-right bg-white flex items-center justify-between",
+                                            "hover:bg-gray-50 transition-colors"
+                                        )}
+                                    >
+                                        <ChevronDown
+                                            size={16}
+                                            className={cn(
+                                                "transition-transform",
+                                                isCategoryDropdownOpen && "rotate-180"
+                                            )}
+                                        />
+                                        <span className={cn("text-right flex-1",
+                                            categoryQ ? "text-gray-900" : "text-gray-500"
+                                        )}>
+                                            {categoryQ.name || "בחר קטגוריה..."}
+                                        </span>
+                                    </button>
+
+                                    {isCategoryDropdownOpen && (
+                                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10 max-h-48 overflow-y-auto">
+                                            {categories && categories.length > 0 ? (
+                                                categories.map((category: any) => (
+                                                    <button
+                                                        key={category.id}
+                                                        type="button"
+                                                        onClick={() => handleCategorySelect(category.name, category.id)}
+                                                        className={cn(
+                                                            "w-full px-3 py-2 text-right hover:bg-gray-100 transition-colors text-sm",
+                                                            categoryQ === category.name && "bg-blue-50 text-blue-700"
+                                                        )}
+                                                    >
+                                                        {category.name}
+                                                    </button>
+                                                ))
+                                            ) : (
+                                                <div className="px-3 py-2 text-right text-gray-500 text-sm">
+                                                    אין קטגוריות זמינות
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
                             {/* טיפים למענה */}
                             <div className="space-y-2">
-                                <label 
-                                    htmlFor="tips" 
+                                <label
+                                    htmlFor="tips"
                                     className="block text-sm font-semibold text-gray-700 text-right"
                                 >
                                     טיפים למענה *
@@ -157,8 +208,8 @@ export const UpdateQuestion = (props: { question: Question, questionSaveClick: F
 
                             {/* הוראות AI */}
                             <div className="space-y-2">
-                                <label 
-                                    htmlFor="ai_guidance" 
+                                <label
+                                    htmlFor="ai_guidance"
                                     className="block text-sm font-semibold text-gray-700 text-right"
                                 >
                                     הוראות למערכת AI *
@@ -207,5 +258,3 @@ export const UpdateQuestion = (props: { question: Question, questionSaveClick: F
         </div>
     );
 };
-
-

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useGetAllQuestionsQuery } from "../services/adminQuestionApi";
+import { useGetAllQuestionsQuery, useGetCategoryForQuestionQuery } from "../services/adminQuestionApi";
 import { DeleteQuestion } from "./deleteQuestion";
 import { Button } from "../../../shared/ui/button";
 import { GridContainer } from "../../../shared/ui/GridContainer";
@@ -10,6 +10,7 @@ import { Question } from "../types/Question";
 import { AddQuestion } from "./addQuestion";
 import { SearchComponents } from "./searchComponents";
 import { useDynamicContents } from "../../dynamicContent/hooks/useDynamicContents";
+import { Category } from "../types/Categories";
 
 type AdminQuestionsProps = {
   allowedRoles: string[];
@@ -32,6 +33,21 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
 
     setFilteredQuestions(results);
   }, [searchText, data]);
+
+  const getCategory = (questionId: string) => {
+    const { data, error } = useGetCategoryForQuestionQuery(questionId);
+    if (data) {
+      const c: Category = {
+        id: data.id,
+        name: data.name,
+      };
+      return c;
+    }
+    if (error) {
+      console.error("Error fetching category for question:", error);
+      return null;
+    }
+  }
 
   if (isLoading)
     return (
@@ -157,6 +173,7 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
                   {questionToEdit?.id === question.id && (
                     <UpdateQuestion
                       question={questionToEdit}
+                      categorySelected={getCategory(questionToEdit.id)!}
                       questionSaveClick={() => setQuestionToEdit(null)}
                     />
                   )}

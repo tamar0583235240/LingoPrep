@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import questionRepository from '../reposioty/questionRepository';
 import { Questions } from '../interfaces/entities/Questions';
+
 const addQuestion = async (req: Request, res: Response):Promise<Questions | void> => {
   try {
     const question: Questions = req.body;
@@ -43,9 +44,9 @@ export const adminqQuestionController = async (req: Request, res: Response): Pro
 export const updateQuestionController = async (req: Request, res: Response): Promise<void> => {
   console.log('updateQuestionController called');
   try {
-    const updates = req.body;
+    const {updates,categor} = req.body;
     console.log('Received updates:', updates);
-    const updatedQuestion = await questionRepository.updateQuestionById(updates);
+    const updatedQuestion = await questionRepository.updateQuestionById(updates,categor);
     res.json(updatedQuestion);
   } catch (error) {
     console.error('Error in updateQuestionController:', error);
