@@ -16,10 +16,7 @@ export default function SharedRecordingCard({
   onClick,
 }: Props) {
   return (
-    // <div
-    //   onClick={onClick}
-    //   className="cursor-pointer bg-white shadow rounded-xl p-4 border hover:shadow-md transition"
-    // >
+
     <div
   onClick={onClick}
   className="cursor-pointer bg-white shadow rounded-xl p-4 border border-[#00B894] hover:shadow-lg transition"

@@ -28,10 +28,7 @@ const GoogleAuthButton = () => {
       dispatch(loginSuccess({ user: res.user, token: res.token }));
       navigate("/");
 
-      // localStorage.setItem("auth", JSON.stringify({ token, user }));
 
-      //     dispatch(loginSuccess({ user: res.user, token: res.token }));
-      //     navigate("/");
     } catch (error: any) {
       dispatch(loginFailure(error?.data?.message || "שגיאה בהתחברות עם Google"));
       MySwal.fire({
@@ -57,7 +54,7 @@ const GoogleAuthButton = () => {
       <GoogleLogin
         onSuccess={onSuccess}
         onError={onError}
-        useOneTap // אופציונלי – התחברות אוטומטית
+        useOneTap 
         width="100%"
         shape="pill"
         text="signin_with"

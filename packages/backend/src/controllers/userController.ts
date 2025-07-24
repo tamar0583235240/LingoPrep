@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import { generateUniqueSlug } from '../utils/generateSlug';
 import { pool } from '../config/dbConnection';
 import { v4 as uuidv4 } from 'uuid';
-// import { insertUsersFromExcel } from '../reposioty/userRepository';
+
 import { createUserByAdminSchema , updateUserByAdminSchema  } from '../validations/userValidations';
 import { insertUsersFromExcel } from '../reposioty/userRpository';
 
@@ -50,10 +50,7 @@ export const getAllUsersByAdmin = async (req: Request, res: Response) => {
     conditions.push(`(first_name ILIKE $${values.length} OR last_name ILIKE $${values.length})`);
   }
 
-//   if (startDate && endDate) {
-//     values.push(startDate, endDate);
-//     conditions.push(`created_at BETWEEN $${values.length - 1} AND $${values.length}`);  // בדוק את שם העמודה כאן
-//   }
+
 
   if (conditions.length > 0) {
     baseQuery += ' WHERE ' + conditions.join(' AND ');
@@ -141,32 +138,13 @@ export const createUser = async (req: Request, res: Response) => {
       createdAt: new Date(),
       updatedAt: new Date(),
       isPublic: false,
-      user: {} as Users // This will be set after the user is created
+      user: {} as Users 
       
     }
 
   };
 
-  // const createdUser = await userRepository.createUser(newUser);
-  // res.status(201).json(createdUser);
-    // const newUser: Users = {
-    //     id: uuidv4(),
-    //     firstName: first_name,
-    //     lastName: last_name,
-    //     email,
-    //     phone,
-    //     password: hashedPassword,
-    //     role: role || 'student',
-    //     createdAt: new Date(),
-    //     isActive: true,
-    //     answers: [],
-    //     feedbacks: [],
-    //     feedbacktypes: [],
-    //     passwordResetTokens: [],
-    //     sharedRecordings: [],
-    //     resources: [],
-    //     userReminderSettings: []
-    // };
+
 
     const createdUser = await userRepository.createUser(newUser);
     res.status(201).json(createdUser);
@@ -182,7 +160,7 @@ export const updateUser = async (req: Request, res: Response) => {
 
   if (userData.firstName || userData.lastName) {
     const slug = await generateUniqueSlug(userData.firstName || '', userData.lastName || '');
-    // userData.slug = slug;
+   
   }
 
   const updatedUser: Users | null = await userRepository.updateUser(userId, userData);
@@ -201,31 +179,31 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 export const createUserByAdmin = async (req: Request, res: Response) => {
   try {
-    // וידוא תקינות הנתונים עם schema
+
     await createUserByAdminSchema.validate(req.body, { abortEarly: false });
 
     const { firstName, lastName, email, phone, role, password } = req.body;
 
-    // בדיקת שדות חובה
+ 
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ error: 'שדות חובה חסרים' });
     }
 
-    // בדיקת אימייל כפול
+    
     const checkEmail = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
   if ((checkEmail.rowCount ?? 0) > 0) {
   return res.status(400).json({ error: 'אימייל זה כבר קיים במערכת' });
 }
 
 
-    // hash לסיסמה
+
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-    // יצירת מזהה ותאריך
+   
     const id = uuidv4();
     const createdAt = new Date();
 
-    // הכנסת המשתמש לבסיס
+ 
     const result = await pool.query(
       `INSERT INTO users (id, first_name, last_name, email, phone, role, created_at, is_active, password)
        VALUES ($1, $2, $3, $4, $5, $6, $7, true, $8)
@@ -233,7 +211,7 @@ export const createUserByAdmin = async (req: Request, res: Response) => {
       [id, firstName, lastName, email, phone, role || 'student', createdAt, hashedPassword]
     );
 
-    // החזרת התוצאה למשתמש
+ 
     res.status(201).json(mapUserRowToCamelCase(result.rows[0]));
   } catch (error: any) {
     console.error('Create user error:', error);
@@ -257,7 +235,6 @@ export const updateUserByAdmin = async (req: Request, res: Response) => {
   try {
     await updateUserByAdminSchema.validate(req.body, { abortEarly: false });
 
-    // בדיקה אם המייל קיים אצל משתמש אחר
     const emailCheck = await pool.query(
       `SELECT id FROM users WHERE email = $1 AND id != $2`,
       [email, id]

@@ -31,7 +31,6 @@ const handleSave = async () => {
 
 
   return (
-    // <div className="border rounded-xl p-4 bg-white shadow mt-6 max-w-sm">
     <div className="border rounded-xl p-6 bg-white shadow mt-6 max-w-lg mx-auto">
 
       <label htmlFor="retention-select" className="block mb-2 font-bold text-right">

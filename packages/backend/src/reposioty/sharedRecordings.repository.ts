@@ -1,22 +1,5 @@
 import { pool } from '../config/dbConnection';
-// export const getSharedRecordingsByUserId = async (userId: string) => {
-//   const query = `
-//     SELECT
-//       sr.id,
-//       sr.username AS "userName",
-//       sr.questiontitle AS "questionTitle",
-//       sr.date,
-//       sr.audiourl AS "audioUrl",
-//       sr.aisummary AS "aiSummary",
-//       f.comment AS "feedbackComment",
-//       f.rating AS "feedbackRating"
-//     FROM shared_recordings sr
-// LEFT JOIN feedback f ON f.shared_recording_id = sr.id
-//     WHERE $1 = ANY(sr.sharedwith)
-//   `;
-//   const { rows } = await pool.query(query, [userId]);
-//   return rows;
-// };
+
 export const getSharedRecordingsByUserId = async (userId: string) => {
   const query = `
     SELECT
@@ -61,15 +44,7 @@ export const getSharedRecordingIdByAnswerId = async (answerId: string) => {
 };
 
 
-// export const insertFeedback = async (sharedRecordingId: string, comment: string, rating: number) => {
-//   const query = `
-//     INSERT INTO feedback (id, sharedrecordingid, comment, rating, createdat)
-//     VALUES (gen_random_uuid(), $1, $2, $3, NOW())
-//     RETURNING *
-//   `;
-//   const { rows } = await pool.query(query, [sharedRecordingId, comment, rating]);
-//   return rows[0];
-// };
+
 export const insertFeedback = async (
   sharedRecordingId: string,
   comment: string,
@@ -84,15 +59,7 @@ export const insertFeedback = async (
   const { rows } = await pool.query(query, [sharedRecordingId, comment, rating, givenByUserId]);
   return rows[0];
 };
-// export const insertFeedback = async (sharedRecordingId: string, comment: string, rating: number) => {
-//   const query = `
-//     INSERT INTO feedback (id, shared_recording_id, comment, rating, created_at)
-//     VALUES (gen_random_uuid(), $1, $2, $3, NOW())
-//     RETURNING *
-//   `;
-//   const { rows } = await pool.query(query, [sharedRecordingId, comment, rating]);
-//   return rows[0];
-// };
+
 
 export const updateFeedback = async (feedbackId: string, comment: string, rating: number) => {
   const query = `

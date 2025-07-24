@@ -25,9 +25,3 @@ export const exampleApi = api.injectEndpoints({
   }),
 });
 
-// תוכל להוסיף את זה אם תרצה להשתמש ב־hooks:
-// export const {
-//   useGetItemsQuery,
-//   useAddItemMutation,
-//   useDeleteItemMutation,
-// } = exampleApi;

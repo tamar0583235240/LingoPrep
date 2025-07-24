@@ -16,14 +16,12 @@ const addQuestion = async (req: Request, res: Response):Promise<Questions | void
 
 export { addQuestion };
 
-// import { Questions } from '../interfaces/entities/Questions';
 
 export const questionController = async (req: Request, res: Response): Promise<void> => {
 
   console.log('questionController called');
     try {
-    // const items = await questionRepository.getAllQuestionById(req.params.question_id);
-    // res.json(items);
+  
   } catch (error) {
     console.error('Error in questionController:', error);
     res.status(500).json({ error });
@@ -80,13 +78,4 @@ export const getAllQuestionsController = async (req: Request, res: Response): Pr
     res.status(500).json({ error });
   }
 };
-// export const getQuestionsByCategoryController = async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     const { categoryId } = req.params;
-//     const questions = await questionRepository.getQuestionsByCategory(categoryId);
-//     res.json(questions);
-//   } catch (error) {
-//     res.status(500).json({ error });
-//   }
-// };
 

@@ -1,4 +1,4 @@
-// בס"ד
+
 
 import { useState } from "react"
 import { MessageCircle, ChevronDown, ChevronUp, User, Calendar } from "lucide-react"
@@ -11,10 +11,7 @@ import { IconWrapper } from "../../../shared/ui/IconWrapper"
 import { SummaryBox } from "../../../shared/ui/SummaryBox"
 import { Heading1, Paragraph } from "../../../shared/ui/typography"
 
-// import { useState } from "react";
-// import "./feedbackes.css";
-// import { useGetFeedbacksBySharedRecordingIdQuery } from "../services/feedbackApi";
-// import { Users } from "../types/UsersType";
+
 import { feedbackType } from "../types/feedbackType";
 
 
@@ -77,22 +74,21 @@ export const Feedbackes = ({
     return (
         <GridContainer maxWidth="lg" className="space-y-6">
 
-            {/* כפתור הצגת פידבקים */}
             <div className="flex justify-center">
                 <Button
-                    onClick={showFeedbacks}  // לא showFidbackes
+                    onClick={showFeedbacks}  
                     variant="primary-dark"
                     size="lg"
                     icon={flagShow ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     iconPosition="right"
                     className="min-w-[200px]"
                 >
-                    {flagShow ? 'הסתר פידבקים' : 'הצג פידבקים'} ({feedbacks?.length || 0}) {/* feedbacks ולא feedbackes */}
+                    {flagShow ? 'הסתר פידבקים' : 'הצג פידבקים'} ({feedbacks?.length || 0}) 
                 </Button>
 
             </div>
 
-            {/* רשימת הפידבקים */}
+           
             {flagShow && (
                 <div className="space-y-4">
                     {feedbacks && feedbacks.length > 0 ? (
@@ -100,7 +96,7 @@ export const Feedbackes = ({
                             {feedbacks.map(f => (
                                 <CardSimple key={f?.id} className="p-6 hover:shadow-md transition-shadow">
                                     <div className="space-y-4">
-                                        {/* כותרת הפידבק */}
+                                       
                                         <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                                             <div className="flex items-center gap-3">
                                                 <IconWrapper color="muted" size="sm">
@@ -121,7 +117,7 @@ export const Feedbackes = ({
                                             </div>
                                         </div>
 
-                                        {/* תוכן הפידבק */}
+                                     
                                         <div className="bg-gray-50 rounded-lg p-4">
                                             <Paragraph className="text-gray-800 leading-relaxed mb-0">
                                                 {f?.comment || 'אין תוכן פידבק'}

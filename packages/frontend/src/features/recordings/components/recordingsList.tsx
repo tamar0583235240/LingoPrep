@@ -23,17 +23,11 @@ export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRo
     const userId = user?.id ?? '';
     console.log(user?.id);
 
-// export const RecordingsList = () => {
-//     const userId = 'a3f1b842-1d3e-4b29-9f99-8d1b12a91f77';
 
-    // const user = useSelector((state: RootState) => state.auth.user);
-    // // שורה זו צריך לשנות לאחר שיש את הנתונים של המשתמש הנוכחי שנמצא כעת באתר
-    // const userId = user && user.id ? user.id.toString() : 'a3f1b842-1d3e-4b29-9f99-8d1b12a91f77';
 const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId, {
   skip: !userId,
 });
 
-    // const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
     const { data: allInsights } = useGetAiInsightsQuery();
 
   const insightsMap = useMemo(() => {
@@ -80,14 +74,14 @@ const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId, {
     (async () => {
       let results = [...data];
 
-      // סינון חיפוש
+
       if (searchText.trim()) {
         results = results.filter(a =>
           a.answer_file_name.toLowerCase().includes(searchText.toLowerCase())
         );
       }
 
-      // סינון לפי שאלה ופידבקים
+
       results = results.filter(a => {
         const qok = !filterCriteria.questionName || a.question_id === filterCriteria.questionName;
         const fb = filterCriteria.feedbackCategory;
@@ -99,7 +93,6 @@ const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId, {
         return qok && fbok;
       });
 
-      // סינון לפי תאריך
       if (filterCriteria.dateFilter === 'latest') {
         const latest = results.reduce((a, b) =>
           new Date(b.submitted_at) > new Date(a.submitted_at) ? b : a
@@ -115,7 +108,7 @@ const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId, {
         results = results.filter(a => new Date(a.submitted_at) >= mAgo);
       }
 
-      // סינון לפי דירוג
+   
       if (filterCriteria.ratingFilter !== null) {
         results = results.filter(ans => {
           const rating = insightsMap.get(ans.id);
@@ -123,7 +116,7 @@ const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId, {
         });
       }
 
-      // מיון לפי אופציה
+   
       results.sort((a, b) => {
         switch (sortOption) {
           case 'latest':

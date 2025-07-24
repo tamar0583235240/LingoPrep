@@ -63,7 +63,7 @@ import * as sharedRepo from '../reposioty/sharedRecordings.repository';
 
 export const getSharedRecordingsByUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.query.userId as string; // ✅ שינוי כאן
+    const userId = req.query.userId as string; 
     if (!userId) {
       return res.status(400).json({ error: 'Missing userId in query' });
     }
@@ -84,15 +84,13 @@ export const createFeedback = async (req: Request, res: Response) => {
   try {
     const { sharedRecordingId, comment, rating, givenByUserId } = req.body;
 
-    // בדוק אם כבר קיים פידבק למשתמש הזה עבור ההקלטה
+
     const existing = await sharedRepo.getFeedbackByRecordingAndUser(sharedRecordingId, givenByUserId);
 
     let feedback;
     if (existing) {
-      // אם קיים - עדכן
       feedback = await sharedRepo.updateFeedback(existing.id, comment, rating);
     } else {
-      // אם לא קיים - הוסף חדש
       feedback = await sharedRepo.insertFeedback(sharedRecordingId, comment, rating, givenByUserId);
     }
 
@@ -107,34 +105,7 @@ export const createFeedback = async (req: Request, res: Response) => {
     });
   }
 };
-// export const createFeedback = async (req: Request, res: Response) => {
-//   try {
-    
-//     console.log('BODY RECEIVED:', req.body);
-//     // const { sharedRecordingId, comment, rating } = req.body;
-// const { sharedRecordingId, comment, rating, givenByUserId } = req.body;
-// const feedback = await sharedRepo.insertFeedback(sharedRecordingId, comment, rating, givenByUserId);
-//     // if (!sharedRecordingId || !comment || typeof rating !== 'number') {
-//     //   return res.status(400).json({ message: 'Missing or invalid fields in request body.' });
-//     // }
-// if (!sharedRecordingId || typeof rating !== 'number' || comment === undefined) {
-//   return res.status(400).json({ message: 'Missing or invalid fields in request body.' });
-// }
 
-//     // const feedback = await sharedRepo.insertFeedback(sharedRecordingId, comment, rating);
-//     res.status(201).json(feedback);
-
-//   } catch (error: any) {
-//     // console.error('Error creating feedback:', error);
-//     console.error('Error creating feedback:', error, error?.message);
-//     res.status(500).json({
-//       message: 'Internal server error while creating feedback',
-//       details: error.message,
-//         stack: error.stack,
-//   error: error
-//     });
-//   }
-// };
 
 export const updateFeedback = async (req: Request, res: Response) => {
   try {
