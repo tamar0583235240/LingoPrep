@@ -6,9 +6,7 @@ import feedbackRouter from './src/routes/feedbackRouts';
 import AiInsightsRouter from './src/routes/aIInsightRouts';
 import answerRouter from './src/routes/answerRouts';
 import sharedRecrdingRouter from './src/routes/sharedRecordingRouts';
-// import express, { Application } from 'express';
-// import cors from 'cors';
-// import exampleRouts from './src/routes/exampleRouts';
+import autoDeleteRoutes from './src/routes/autoDeleteRoutes';
 import questionRoute from './src/routes/questionRouts';
 import sharedRecordingsRoutes from './src/routes/sharedRecordingRouts';
 
@@ -34,6 +32,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api/reminders', remindersRouter);
+app.use('/api', autoDeleteRoutes);
 app.use('/api' ,feedbackRouter )
 app.use('/api' , AiInsightsRouter ) 
 app.use('/api' , sharedRecrdingRouter )  
@@ -42,6 +41,7 @@ app.use('/answers', answerRouter);
 app.use('/question', questionRoute); 
 app.use('/shared-recordings', sharedRecordingsRoutes);
 app.use('/auth', authRouts);
+app.use('/api', autoDeleteRoutes);
 // app.use('/interview-materials-hub', interviewMaterialsHub);
 
 export default app

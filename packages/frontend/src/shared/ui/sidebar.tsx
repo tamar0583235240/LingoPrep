@@ -31,6 +31,8 @@ const navItems: NavItem[] = [
   { label: "ניהול משאבים", href: "/manager/resources", adminOnly: true },
   { label: "ניהול חומרים", href: "/manager/interview-materials", adminOnly: true, },
   { label: "מרכז חומרי ראיונות", href: "/interviewMaterialsHub", adminOnly: true },
+  { label: "ניהול הקלטות", href: "/auto-delete-config", adminOnly: true },
+
 ];
 
 const SidebarNavigation = () => {

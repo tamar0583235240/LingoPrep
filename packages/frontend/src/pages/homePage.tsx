@@ -12,6 +12,7 @@ import { FiArrowLeft } from "react-icons/fi";
 import { store } from "../shared/store/store";
 
 const HomePage = () => {
+    console.log("HomePage rendered");
   const navigate = useNavigate();
   const isManager: boolean = store.getState().auth.isAdmin;
   console.log(store.getState().auth.user?.role);
@@ -60,7 +61,9 @@ const HomePage = () => {
             <Paragraph className="text-lg">
               פיתחנו עבורך סט כלים ייחודי שנועד לתת לך יתרון משמעותי בתהליך חיפוש העבודה.
             </Paragraph>
+            
           </div>
+        
           <Button variant="outline" fullWidth onClick={() => navigate("/admin/questions")}>
             ניהול שאלות
           </Button>
@@ -70,7 +73,16 @@ const HomePage = () => {
           <Button variant="outline" fullWidth onClick={() => navigate("/admin/users")}>
             ניהול משתמשים
           </Button>
-          
+          {/* הכפתור החדש של ניהול הקלטות
+          <Button
+            variant="outline"
+            fullWidth
+            onClick={() => navigate("/auto-delete-config")}
+          >
+            ניהול הקלטות
+          </Button> */}
+
+
         </GridContainer>
       </div>
     </div>

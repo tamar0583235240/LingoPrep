@@ -7,7 +7,7 @@ export const AutoDeleteSettings = () => {
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    axios.get("/api/auto-delete/auto-delete-config").then(res => {
+    axios.get("/api/auto-delete-config").then(res => {
       setRetention(res.data.retention_days?.toString() ?? "7");
     });
   }, []);
@@ -15,7 +15,7 @@ export const AutoDeleteSettings = () => {
 const handleSave = async () => {
   setIsSaving(true);
   try {
-    await axios.post("/api/auto-delete/auto-delete-config", {
+    await axios.post("/api/auto-delete-config", {
       is_enabled: true,
       retention_days: Number(retention),
      
@@ -31,7 +31,9 @@ const handleSave = async () => {
 
 
   return (
-    <div className="border rounded-xl p-4 bg-white shadow mt-6 max-w-sm">
+    // <div className="border rounded-xl p-4 bg-white shadow mt-6 max-w-sm">
+    <div className="border rounded-xl p-6 bg-white shadow mt-6 max-w-lg mx-auto">
+
       <label htmlFor="retention-select" className="block mb-2 font-bold text-right">
         מחק הקלטות אוטומטית כל:
       </label>
@@ -41,14 +43,15 @@ const handleSave = async () => {
         onChange={(e) => setRetention(e.target.value)}
         className="w-full p-2 border rounded"
       >
-        <option value="1">1 יום</option>
-        <option value="7">7 ימים</option>
-        <option value="30">30 ימים</option>
-        <option value="90">90 ימים</option>
+        <option value="1"> יום</option>
+        <option value="7">שבוע</option>
+        <option value="30">חודש</option>
+        <option value="182">חצי שנה</option>
+         <option value="365"> שנה</option>
       </select>
 
       <Button className="mt-4 w-full" onClick={handleSave} disabled={isSaving}>
-        {isSaving ? "שומרת..." : "שמור"}
+        {isSaving ? "שומר..." : "שמור"}
       </Button>
     </div>
   );

@@ -30,6 +30,7 @@ import DynamicContentPage from "../../pages/DynamicContentPage";
 import { PublicProfilePage } from "../../pages/PublicProfilePage";
 import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import SharedRecordingsPage from "../../pages/SharedRecordingsPage";
+import { AutoDeleteSettings } from "../../features/admin/components/AutoDeleteSettings";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -200,6 +201,17 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+
+
+<Route
+  path="/auto-delete-config"
+  element={
+    <RoleProtectedRoute allowedRoles={["manager"]}>
+      <AutoDeleteSettings />
+    </RoleProtectedRoute>
+  }
+/>
+
           <Route
             path="/personal-projects"
             element={
