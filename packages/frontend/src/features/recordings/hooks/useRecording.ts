@@ -181,8 +181,8 @@ export const useRecording = () => {
       if (result?.id) {
         dispatch({ type: 'simulation/setCurrentAnswerId', payload: result.id });
       }
-      audioBlobRef.current = null; // איפוס ה-Blob אחרי שמירה
-      setAudioBlob(null); // איפוס גם ב-state
+      // audioBlobRef.current = null; // איפוס ה-Blob אחרי שמירה
+      // setAudioBlob(null); // איפוס גם ב-state
       return result;
     } catch (error) {
       console.error('שגיאה בשמירת ההקלטה:', error);

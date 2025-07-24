@@ -9,7 +9,8 @@ interface AnswerAIProps {
   onClose?: () => void;
   onLoaded?: () => void;
 }
-const AnswerAI: React.FC<AnswerAIProps> = ({ answerId, onClose, onLoaded }) => {
+// audioFile,
+const AnswerAI: React.FC<AnswerAIProps> = ({ answerId,  onClose, onLoaded }) => {
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [retryCount, setRetryCount] = useState(0);

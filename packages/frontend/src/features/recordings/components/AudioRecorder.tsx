@@ -74,37 +74,56 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   const handleSaveRecording = async () => {
     try {
-      console.log(audioBlobRef.current,"saveRecording");
-      
+      console.log(audioBlobRef.current, "saveRecording");
+
       setShowRecordingModal(false);
+      console.log(audioBlobRef.current, "setShowRecordingModal");
+
       const answer = await saveRecording(currentUserId, String(currentQuestion.id), fileName.trim());
       console.log("After saveRecording, answer:", answer);
       setShowSaveModal(false);
-      
+
 
       if (onSaveSuccess && answer?.id) {
         console.log("onSaveSuccess and answer.id exist", { onSaveSuccessExists: !!onSaveSuccess, answerId: answer?.id });
-        onSaveSuccess(answer.id);
+
+        console.log('//////////////////////////////////');
+        console.log(audioBlobRef.current, "saveRecording");
+        console.log('//////////////////////////////////');
 
         if (audioBlobRef.current) {
           console.log("audioBlobRef.current exists", audioBlobRef.current);
-          console.log("AI Analysis Triggered for answer ID:", answer.id);
-          const file = new File([audioBlobRef.current], fileName || "recording.wav", { type: audioBlobRef.current.type });
+          // בדיקת סוג ה-Blob לפני יצירת הקובץ
+          console.log("Blob type:", audioBlobRef.current.type);
+          console.log("Blob size:", audioBlobRef.current.size);
+          // בדיקת הסיומת של שם הקובץ
+          console.log("File name:", fileName || "recording.wav");
+          // בדיקת האם זה באמת webm
+          if (audioBlobRef.current.type === "audio/webm" || audioBlobRef.current.type === "video/webm") {
+            console.warn("הקלטה היא בפורמט webm, לא wav אמיתי. יש להמיר בשרת!");
+          }
+          // שלח תמיד את הקובץ בפורמט webm עם סיומת webm
+          let safeFileName = fileName.trim() || "recording.webm";
+          if (!safeFileName.endsWith('.webm')) {
+            safeFileName += '.webm';
+          }
+          const file = new File([audioBlobRef.current], safeFileName, { type: "audio/webm" });
           analyzeInterview(file, answer.id)
             .then(result => {
               console.log("AI Analysis Result:", result);
-              // אפשר לשמור את התוצאה בסטייט או להציג הודעה
             })
             .catch(err => {
               console.error("AI Analysis Error:", err);
             });
+          onSaveSuccess(answer.id);
+          setFileName('');
+
         } else {
           console.log("audioBlobRef.current is missing");
         }
       } else {
         console.log("onSaveSuccess or answer.id missing", { onSaveSuccessExists: !!onSaveSuccess, answerId: answer?.id });
       }
-      setFileName('');
 
       setNotification?.({
         message: "ההקלטה נשמרה בהצלחה!",
@@ -130,7 +149,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const downloadRecording = () => {
     if (audioBlobRef.current) {
       console.log(audioBlobRef.current);
-      
+
       const url = URL.createObjectURL(audioBlobRef.current);
       const a = document.createElement('a');
       a.href = url;
