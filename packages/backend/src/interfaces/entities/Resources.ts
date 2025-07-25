@@ -1,8 +1,17 @@
 import { Column, Entity, Index } from "typeorm";
-
+import { Users } from "./Users";
+import { ManyToOne } from "typeorm";
 @Index("resources_pkey", ["id"], { unique: true })
 @Entity("resources", { schema: "public" })
 export class Resources {
+
+@ManyToOne(() => Users, (user) => user.resources, {
+  nullable: true, 
+  onDelete: 'SET NULL', 
+})
+@Column({ name: "user_id", nullable: true })
+user: Users | null;
+
   @Column("uuid", { primary: true, name: "id" })
   id: string;
 

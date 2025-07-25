@@ -1,33 +1,27 @@
-
-import { api } from "../../../shared/api/api";
-import { exampleType } from "../types/exampleType";
+import { api } from '../../../shared/api/api';
+import { exampleType } from '../types/exampleType';
 
 export const exampleApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getItems: builder.query<exampleType[], void>({
-      query: () => "users",
-      providesTags: ["users"],
+      query: () => "items",
+      providesTags: ["Item"],
     }),
     addItem: builder.mutation<exampleType, Partial<exampleType>>({
-      query: (item) => ({
+      query: (item: Partial<exampleType>) => ({
         url: "items",
         method: "POST",
         body: item,
       }),
-      invalidatesTags: ["users"],
+      invalidatesTags: ["Item"],
     }),
     deleteItem: builder.mutation<void, string>({
-      query: (id) => ({
+      query: (id: string) => ({
         url: `items/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["users"],
+      invalidatesTags: ["Item"],
     }),
   }),
 });
 
-export const {
-  useGetItemsQuery,
-  useAddItemMutation,
-  useDeleteItemMutation,
-} = exampleApi;

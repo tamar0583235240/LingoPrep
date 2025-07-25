@@ -1,8 +1,10 @@
-// store.ts
+
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { questionsApi } from '../services/questionsApi';
 import { categoriesApi } from '../services/categoriesApi';
 import answeredReducer from './answeredSlice';
+import simulationReducer from './simulationSlice';
+import recordingReducer from "../store/simulationSlice"
 
 import {
   persistStore,
@@ -20,6 +22,9 @@ const rootReducer = combineReducers({
   [questionsApi.reducerPath]: questionsApi.reducer,
   [categoriesApi.reducerPath]: categoriesApi.reducer,
   answered: answeredReducer,
+    simulation: simulationReducer,  
+  recording: recordingReducer, 
+
 });
 
 const persistConfig = {

@@ -1,5 +1,4 @@
 import { Column, Entity, Index } from "typeorm";
-
 @Index("feedback_to_system_pkey", ["id"], { unique: true })
 @Entity("feedback_to_system", { schema: "public" })
 export class FeedbackToSystem {

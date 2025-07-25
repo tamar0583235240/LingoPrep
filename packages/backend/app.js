@@ -29,6 +29,7 @@ const userAdminRouts_1 = __importDefault(require("./src/routes/userAdminRouts"))
 const interviewMaterialsRoutes_1 = __importDefault(require("./src/routes/interviewMaterialsRoutes"));
 const profileRouts_1 = __importDefault(require("./src/routes/profileRouts"));
 const publicProfileRoutes_1 = __importDefault(require("./src/routes/publicProfileRoutes"));
+
 dotenv_1.default.config();
 const allowedOrigins = (process.env.CORS_ORIGIN?.split(",") ?? [
     "http://localhost:3000",
@@ -73,5 +74,6 @@ app.use("/api/aiInsight", aIInsightRouts_3.default);
 app.use("/manager/interview-materials", interviewMaterialsRoutes_1.default);
 app.use("/profiles", profileRouts_1.default);
 app.use('/public-profile', publicProfileRoutes_1.default);
+// app.use('/api/reminders', require('./src/routes/remindersRoutes').default); 
 exports.default = app;
 //# sourceMappingURL=app.js.map
