@@ -5,7 +5,6 @@ import multerConfig from '../config/multerConfig';
 
 const router = Router();
 
-<<<<<<< HEAD
 // הגדרת מגבלות העלאת קבצים
 const upload = multer({
   ...multerConfig,
@@ -34,14 +33,5 @@ const handleMulterErrors = (err: any, req: Request, res: Response, next: NextFun
 };
 
 // Route for file upload with error handling
-router.post('/uploadRecord',
-  upload.single('file'),
-  handleMulterErrors,
-  uploadRecording
-);
-
+router.post('/upload', upload.single('file'), handleMulterErrors, uploadRecording);
 export default router;
-=======
-router.post('/upload', upload.single('file'), uploadRecording);
-export default router;
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568

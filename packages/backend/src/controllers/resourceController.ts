@@ -1,14 +1,154 @@
-// import { Request, Response } from 'express';
-// import { v2 as cloudinary } from 'cloudinary';
-// import { Pool } from 'pg';
-// import { pool } from '../config/dbConnection';
+import { Request, Response } from 'express';
+import { v2 as cloudinary } from 'cloudinary';
+import { pool } from '../config/dbConnection';
 
-// cloudinary.config({
-//   cloud_name: process.env.CLOUD_NAME,
-//   api_key: process.env.API_KEY,
-//   api_secret: process.env.API_SECRET,
-// });
-// console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+export const uploadRecording = async (req: Request, res: Response) => {
+  try {
+    const userId = req.body.userId;
+    const file = req.file;
+    const title = req.body.title || 'Untitled Recording';
+    const description = req.body.description || '';
+
+    if (!file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required' });
+    }
+
+    const uploadStream = () => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            resource_type: 'auto',
+            folder: 'recordings',
+          },
+          (error, result) => {
+            if (error || !result) {
+              reject(error || new Error('Upload failed'));
+            } else {
+              resolve(result);
+            }
+          }
+        );
+
+        // Pass the buffer to the upload stream
+        stream.end(file.buffer);
+      });
+    };
+
+    const uploadResult: any = await uploadStream();
+
+    // שמירת הפרטים במסד הנתונים
+    const query = `
+      INSERT INTO resources (user_id, title, description, url, type)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *
+    `;
+
+    const values = [userId, title, description, uploadResult.secure_url, 'recording'];
+    const dbResult = await pool.query(query, values);
+
+    res.json({
+      message: 'File uploaded successfully',
+      url: uploadResult.secure_url,
+      resource: dbResult.rows[0]
+    });
+
+  } catch (error) {
+    console.error('Error in uploadRecording:', error);
+    res.status(500).json({ message: 'Error uploading file', error: error.message });
+  }
+};
+
+export const getAllResources = async (_req: Request, res: Response) => {
+  try {
+    const query = 'SELECT * FROM resources ORDER BY created_at DESC';
+    const result = await pool.query(query);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error in getAllResources:', error);
+    res.status(500).json({ message: 'Error fetching resources', error: error.message });
+  }
+};
+
+export const getResourceById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const query = 'SELECT * FROM resources WHERE id = $1';
+    const result = await pool.query(query, [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Resource not found' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error in getResourceById:', error);
+    res.status(500).json({ message: 'Error fetching resource', error: error.message });
+  }
+};
+
+export const updateResource = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { title, description } = req.body;
+
+    const query = `
+      UPDATE resources
+      SET title = $1, description = $2, updated_at = CURRENT_TIMESTAMP
+      WHERE id = $3
+      RETURNING *
+    `;
+
+    const result = await pool.query(query, [title, description, id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Resource not found' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error in updateResource:', error);
+    res.status(500).json({ message: 'Error updating resource', error: error.message });
+  }
+};
+
+export const deleteResource = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    // Get resource URL before deletion
+    const getQuery = 'SELECT url FROM resources WHERE id = $1';
+    const getResult = await pool.query(getQuery, [id]);
+
+    if (getResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Resource not found' });
+    }
+
+    const resourceUrl = getResult.rows[0].url;
+
+    // Delete from Cloudinary
+    const publicId = resourceUrl.split('/').slice(-1)[0].split('.')[0];
+    await cloudinary.uploader.destroy(publicId);
+
+    // Delete from database
+    const deleteQuery = 'DELETE FROM resources WHERE id = $1 RETURNING *';
+    const deleteResult = await pool.query(deleteQuery, [id]);
+
+    res.json({ message: 'Resource deleted successfully', resource: deleteResult.rows[0] });
+  } catch (error) {
+    console.error('Error in deleteResource:', error);
+    res.status(500).json({ message: 'Error deleting resource', error: error.message });
+  }
+};
 
 // export const uploadRecording = async (req: Request, res: Response) => {
 //   try {
@@ -119,86 +259,66 @@
 //   }
 // };
 
-import { Request, Response } from 'express';
-import { v2 as cloudinary } from 'cloudinary';
-import { Pool } from 'pg';
-import { pool } from '../config/dbConnection';
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
-<<<<<<< HEAD
-=======
 
 
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
-export const uploadRecording = async (req: Request, res: Response) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
+//למחיקה!
+// export const uploadRecording = async (req: Request, res: Response) => {
+//   try {
+//     if (!req.file) {
+//       return res.status(400).json({ error: 'No file uploaded' });
+//     }
 
-    // Upload to Cloudinary
-    const uploadResult: any = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        {
-          resource_type: 'auto',
-          folder: 'recordings',
-        },
-        (error, result) => {
-          if (error || !result) {
-            reject(error);
-          } else {
-            resolve(result);
-          }
-        }
-      );
-      stream.end(req.file.buffer);
-    });
+//     const userId = req.body.userId;
+//     if (!userId) {
+//       return res.status(400).json({ error: 'User ID is required' });
+//     }
 
-    if (!uploadResult || !uploadResult.secure_url) {
-      throw new Error('Failed to get secure URL from Cloudinary');
-    }
+//     // Upload to Cloudinary
+//     const uploadResult: any = await new Promise((resolve, reject) => {
+//       const stream = cloudinary.uploader.upload_stream(
+//         {
+//           resource_type: 'auto',
+//           folder: 'recordings',
+//         },
+//         (error, result) => {
+//           if (error || !result) {
+//             reject(error);
+//           } else {
+//             resolve(result);
+//           }
+//         }
+//       );
+//       stream.end(req.file.buffer);
+//     });
 
-<<<<<<< HEAD
-    // Return the secure URL from Cloudinary
-    res.status(201).json({ url: uploadResult.secure_url });
-=======
-    const fileUrl = (result as any).secure_url;
+//     if (!uploadResult || !uploadResult.secure_url) {
+//       throw new Error('Failed to get secure URL from Cloudinary');
+//     }
 
- const query = `
-  INSERT INTO "resources" (id, user_id, title, type, description, "file_url", "created_at")
-  VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW())
-`;
+//     const query = `
+//       INSERT INTO "resources" (id, user_id, title, type, description, "file_url", "created_at")
+//       VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, NOW())
+//       RETURNING *
+//     `;
 
-const values = [
-  userId,                     // $1
-  req.body.title || 'Recording',  // $2
-  'link',                    // $3
-  req.body.description || '', // $4
-  fileUrl                    // $5
-];
+//     const values = [
+//       userId,                         // $1
+//       req.body.title || 'Recording',  // $2
+//       'recording',                    // $3
+//       req.body.description || '',     // $4
+//       uploadResult.secure_url         // $5
+//     ];
 
+//     const dbResult = await pool.query(query, values);
 
-    await pool.query(query, values);
+//     res.status(201).json({
+//       message: 'Recording uploaded successfully',
+//       url: uploadResult.secure_url,
+//       resource: dbResult.rows[0]
+//     });
 
-    res.status(201).json({ message: 'Recording uploaded successfully', url: fileUrl });
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
-
-  } catch (err) {
-    console.error('Upload error:', err);
-    res.status(500).json({ error: err instanceof Error ? err.message : 'Unknown error occurred' });
-  }
-<<<<<<< HEAD
-};
-
-
-
-
-
-
-=======
-};
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
+//   } catch (err) {
+//     console.error('Upload error:', err);
+//     res.status(500).json({ error: err instanceof Error ? err.message : 'Unknown error occurred' });
+//   }
+// };

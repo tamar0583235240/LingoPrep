@@ -5,10 +5,7 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-<<<<<<< HEAD
     "useDefineForClassFields": false,
-=======
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
     "strictPropertyInitialization": false,
     "lib": [
       "ES2020"
@@ -22,7 +19,6 @@
     "resolveJsonModule": true,
     "declaration": true,
     "declarationMap": true,
-    "strictPropertyInitialization": false,
     "sourceMap": true,
     "baseUrl": "./src",
     "paths": {

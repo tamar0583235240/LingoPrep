@@ -3,7 +3,7 @@ export const analyzeInterview = async (file: File) => {
   const formData = new FormData();
   formData.append('audio', file);
 
-  const res = await fetch('/api/analyze', {
+  const res = await fetch('/api/ai-insight/analyze', {
     method: 'POST',
     body: formData,
   });

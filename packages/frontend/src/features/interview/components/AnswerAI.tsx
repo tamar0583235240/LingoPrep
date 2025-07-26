@@ -10,6 +10,7 @@ interface AnswerAIProps {
   onLoaded?: () => void;
 }
 
+
 const AnswerAI: React.FC<AnswerAIProps> = ({ answerId, onClose, onLoaded }) => {
   const { analysis, loading } = useFeedbackAnalysis(answerId);
   const [retryCount, setRetryCount] = useState(0);
@@ -19,7 +20,7 @@ const AnswerAI: React.FC<AnswerAIProps> = ({ answerId, onClose, onLoaded }) => {
     if (!loading && !analysis && retryCount < maxRetries) {
       // אם אין תוצאות, ננסה שוב אחרי 2 שניות
       const timer = setTimeout(() => {
-        console.log('🔄 מנסה שוב לקבל ניתוח...', retryCount + 1);
+        console.log(' מנסה שוב לקבל ניתוח...', retryCount + 1);
         setRetryCount(prev => prev + 1);
       }, 2000);
 

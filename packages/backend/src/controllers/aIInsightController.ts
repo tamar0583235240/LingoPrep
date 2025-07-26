@@ -92,10 +92,38 @@ export const updateInsightController = async (req: Request, res: Response) => {
   }
 };
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
+export const analyzeRecordingController = async (req: Request, res: Response) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'לא נשלח קובץ הקלטה' });
+    }
+
+    const filePath = req.file.path;
+    console.log('📂 Analyzing recording from:', filePath);
+
+    // ניתוח האודיו באמצעות Gemini
+    const analysis = await analyzeAudio(filePath);
+
+    // מחיקת הקובץ הזמני אם קיים
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
+    res.json({
+      success: true,
+      analysis
+    });
+
+  } catch (error: any) {
+    console.error('❌ Error analyzing recording:', error);
+    res.status(500).json({
+      error: 'שגיאה בניתוח ההקלטה',
+      details: error.message
+    });
+  }
+};
+
 export const deleteInsightController = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -168,5 +196,4 @@ export const analyzeAndSaveInsight = async (req: Request, res: Response) => {
       details: error.stack
     });
   }
-};
 };

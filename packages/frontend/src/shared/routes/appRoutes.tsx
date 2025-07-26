@@ -1,91 +1,54 @@
 import { Routes, Route } from "react-router-dom";
 import { RoleProtectedRoute } from "../components/roleProtectedRoute";
-import HomePage from "../../pages/homePage";
-<<<<<<< HEAD
-import InterviewPage from "../../pages/InterviewPage";
-import Recorder from "../../features/recordings/components/AudioRecorder";
-import AudioRecorder from "../../features/recordings/components/AudioRecorder";
-
-export default function AppRoutes() {
-    return (
-        <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<p>login</p>} />
-            <Route path="/simulation" element={<RoleProtectedRoute allowedRoles={["student"]}><InterviewPage /></RoleProtectedRoute>} />
-            <Route path="/dashboard" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Dashboard </p></RoleProtectedRoute>} />
-            <Route path="/recordings" element={<RoleProtectedRoute allowedRoles={["student"]}><p><AudioRecorder></AudioRecorder></p></RoleProtectedRoute>} />
-            <Route path="/shared" element={<RoleProtectedRoute allowedRoles={["student"]}><p>SharedRecordings</p></RoleProtectedRoute>} />
-            <Route path="/resources" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Resources</p></RoleProtectedRoute>} />
-            
-            {/* <Route path="/certificate" element={<CertificatePage />} /> */}
-            <Route path="/admin/questions" element={
-                <RoleProtectedRoute allowedRoles={["admin"]}>
-                    <p>AdminQuestions</p>
-                </RoleProtectedRoute>
-            } />
-            <Route path="/admin/users" element={
-                <RoleProtectedRoute allowedRoles={["admin"]}>
-                    <p>AdminUsers</p>
-                </RoleProtectedRoute>
-            } />
-            <Route path="/admin/resources" element={
-                <RoleProtectedRoute allowedRoles={["admin"]}>
-                    <p>AdminResources</p>
-                </RoleProtectedRoute>
-            } />
-        </Routes>
-    );
-=======
-import { RecordingsList } from "../../features/recordings/components/recordingsList";
-import { SearchComponents } from "../../features/recordings/components/searchComponents";
-import { FilteringComponents } from "../../features/recordings/components/filteringComponents";
-import { SortComponents } from "../../features/recordings/components/sortComponents";
-import { AdminQuestions } from "../../features/admin/components/adminQuestions";
-import AdminUser from '../../pages/AdminUser';
-import ForgotPassword from "../../features/auth/components/ForgotPassword";
-import SignupForm from "../../features/auth/components/SignupForm";
-import Dashboard from '../../pages/dashboard';
-import DashboardLayout from "../ui/DashboardLayout";
-import ResetPassword from "../../features/auth/components/ResetPassword";
-import LandingPage from "../../pages/LandingPage";
-import LoginPage from "../../pages/LoginPage";
-import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
+
+// Pages
+import HomePage from "../../pages/homePage";
+import InterviewPage from "../../pages/InterviewPage";
+import LoginPage from "../../pages/LoginPage";
 import ProfilePage from "../../pages/ProfilePage";
 import SettingsPage from "../../pages/SettingsPage";
-// import InterviewMaterialsView from "../../features/knowledge-base/components/InterviewMaterialsView";
-// import ProjectsList from "../../features/profile/components/projects";
-import { WorkExperienceTab } from "../../features/profile/components/WorkExperienceTab";
-import ProfileList from "../../features/profile/components/ProfileList";
 import MyProfileViewPage from "../../pages/my-profile-view";
 import ProfileAccordionPage from "../../pages/ProfileAccordionPage";
+import AdminUser from '../../pages/AdminUser';
+import Dashboard from '../../pages/dashboard';
+import LandingPage from "../../pages/LandingPage";
 import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
-import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
-import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import DynamicContentPage from "../../pages/DynamicContentPage";
 import { PublicProfilePage } from "../../pages/PublicProfilePage";
-import InterviewPage from "../../pages/InterviewPage";
+
+// Components
+import AudioRecorder from "../../features/recordings/components/AudioRecorder";
+import { RecordingsList } from "../../features/recordings/components/recordingsList";
+import { AdminQuestions } from "../../features/admin/components/adminQuestions";
+import ForgotPassword from "../../features/auth/components/ForgotPassword";
+import SignupForm from "../../features/auth/components/SignupForm";
+import DashboardLayout from "../ui/DashboardLayout";
+import ResetPassword from "../../features/auth/components/ResetPassword";
+import ProfileList from "../../features/profile/components/ProfileList";
+import { WorkExperienceTab } from "../../features/profile/components/WorkExperienceTab";
+import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
+import NotAuthorizedPage from "../components/NotAuthorizedPage";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
-  const isLogin = !!user;
+
   return (
     <div dir="rtl">
       <Routes>
-        {/* Routes without sidebar */}
+        {/* Public routes */}
         <Route path="/" element={<LandingPage />} />
-     
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route
-          path="/reset-password"
-          element={
-              <ResetPassword />
-          }
-        />
-        {/* Routes with header */}
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/not-authorized" element={<NotAuthorizedPage />} />
+        <Route path="/u/:slug" element={<PublicProfilePage />} />
+
+        {/* Protected routes with DashboardLayout */}
         <Route element={<DashboardLayout />}>
+          {/* Main routes */}
           <Route
             path="/home"
             element={
@@ -94,6 +57,8 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+          
+          {/* User Profile routes */}
           <Route
             path="/profile"
             element={
@@ -126,15 +91,16 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+          
+          {/* Interview routes */}
           <Route
             path="/simulation"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <InterviewPage/>
+                <InterviewPage />
               </RoleProtectedRoute>
             }
           />
-
           <Route
             path="/dashboard"
             element={
@@ -143,26 +109,11 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
-
-
-          <Route
-            path="/recordings"
-            element={<RecordingsList allowedRoles={["student", "manager"]} />}
-          />
-
-          <Route
-            path="/shared"
-            element={
-              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <Dashboard />
-              </RoleProtectedRoute>
-            }
-          />
           <Route
             path="/recordings"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                <p>Recordings</p>
+                <RecordingsList allowedRoles={["student", "manager"]} />
               </RoleProtectedRoute>
             }
           />
@@ -174,6 +125,8 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+          
+          {/* Materials routes */}
           <Route
             path="/resources"
             element={
@@ -198,12 +151,14 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+          
+          {/* Manager routes */}
           <Route
             path="/manager/questions"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
                 <AdminQuestions allowedRoles={["manager"]}>
-                  <p>AdminQuestions</p>
+                  <></>
                 </AdminQuestions>
               </RoleProtectedRoute>
             }
@@ -218,38 +173,9 @@ export default function AppRoutes() {
           />
           <Route
             path="/manager/resources"
-            element = {
-            <RoleProtectedRoute allowedRoles={["manager"]}>
-                <p>InterviewMaterialsHub</p>
-            </RoleProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/admin/questions"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <AdminQuestions allowedRoles={["manager"]}>
-                  <p>AdminQuestions</p>
-                </AdminQuestions>
-              </RoleProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/admin/users"
-            element={
-              <RoleProtectedRoute allowedRoles={["manager"]}>
-                <AdminUser />
-              </RoleProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/admin/resources"
-            element={
-              <RoleProtectedRoute allowedRoles={["manager"]}>
-                <p>AdminResources</p>
+                <p>Manager Resources</p>
               </RoleProtectedRoute>
             }
           />
@@ -261,11 +187,12 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+          
+          {/* Profile related routes */}
           <Route
             path="/personal-projects"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                {/* <ProjectsList userId={user?.id ?? ""} /> */}
                 <p>ProjectsList</p>
               </RoleProtectedRoute>
             }
@@ -274,12 +201,12 @@ export default function AppRoutes() {
             path="/work-experience"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
-                     <WorkExperienceTab  />
+                <WorkExperienceTab />
               </RoleProtectedRoute>
             }
           />
-
-
+          
+          {/* Admin routes */}
           <Route
             path="/admin/dynamic-content"
             element={
@@ -288,12 +215,35 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+          
+          <Route
+            path="/admin/questions"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <AdminQuestions allowedRoles={["manager"]}>
+                  <></>
+                </AdminQuestions>
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <AdminUser />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/resources"
+            element={
+              <RoleProtectedRoute allowedRoles={["manager"]}>
+                <p>AdminResources</p>
+              </RoleProtectedRoute>
+            }
+          />
         </Route>
-
-        <Route path="/not-authorized" element={<NotAuthorizedPage />} />
-        <Route path="/u/:slug" element={<PublicProfilePage/>} />
       </Routes>
     </div>
   );
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
 }

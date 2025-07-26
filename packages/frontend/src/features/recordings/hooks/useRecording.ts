@@ -7,9 +7,11 @@ import {
   resetRecording,
   addAnswer 
 } from '../store/recordingSlice';
+import type { Answer } from '../types/Answer';
 import { useUploadAnswerMutation } from '../services/recordingApi';
 import { useUploadRecordingMutation } from '../services/resourceApi';
 import { UploadAnswerDto } from '../types/UploadAnswerDto';
+import { useAnswerUpload } from './useAnswerUpload';
 
 export const useRecording = () => {
   const dispatch = useDispatch();
@@ -46,6 +48,55 @@ export const useRecording = () => {
       }
     };
   }, [currentRecording.isRecording, currentRecording.isPaused, currentRecording.recordingTime, dispatch]);
+
+  const { uploadAndAnalyze } = useAnswerUpload();
+
+  const stopRecording = async () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+      dispatch(setRecordingState({ isRecording: false }));
+      
+      // המתנה ליצירת ה-Blob
+      await new Promise<void>((resolve) => {
+        mediaRecorderRef.current!.onstop = () => {
+          const blob = new Blob(chunksRef.current, { type: 'audio/wav' });
+          audioBlobRef.current = blob;
+          setAudioBlob(blob);
+          resolve();
+        };
+      });
+
+      // שליחה לשרת וניתוח
+      try {
+        const { answer, analysis } = await uploadAndAnalyze(
+          currentRecording.questionId,
+          currentRecording.userId,
+          audioBlobRef.current!,
+          `recording_${Date.now()}.wav`
+        );
+
+        // המרה למבנה Answer
+        const formattedAnswer: Answer = {
+          id: answer.id || '',
+          user_id: currentRecording.userId,
+          question_id: currentRecording.questionId,
+          file_url: answer.fileUrl,
+          answer_file_name: answer.fileUrl.split('/').pop() || 'unknown.wav',
+          submitted_at: new Date(),
+          amount_feedbacks: 0
+        };
+
+        // עדכון ה-Redux store
+        dispatch(addAnswer(formattedAnswer));
+        
+        // הצגת התוצאות
+        dispatch(setShowRecordingModal(false));
+        dispatch(resetRecording());
+      } catch (error) {
+        console.error('שגיאה בהעלאת או ניתוח ההקלטה:', error);
+      }
+    }
+  };
 
   const startRecording = async () => {
     try {
@@ -88,35 +139,22 @@ export const useRecording = () => {
         stream.getTracks().forEach(track => track.stop());
       };
 
-<<<<<<< HEAD
-      // התחלת הטיימר
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-      
-      timerRef.current = setInterval(() => {
-        timeRef.current += 1;
-        dispatch(setRecordingState({ recordingTime: timeRef.current }));
-      }, 1000);
-
       // התחלת ההקלטה
       mediaRecorder.start();
-      dispatch(setRecordingState({ recordingTime: 0 }));
       console.log('התחלת הקלטה');
     } catch (error) {
       console.error('שגיאה בהתחלת הקלטה:', error);
     }
   };
 
-  const stopRecording = () => {
-    console.log('עוצר הקלטה...');
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+  const handleStopRecording = () => {
+    if (mediaRecorderRef.current && (currentRecording.isRecording || currentRecording.isPaused)) {
       mediaRecorderRef.current.stop();
-      dispatch(setRecordingState({ 
-        recordingTime: recordingTime,
+      dispatch(setRecordingState({
         isRecording: false,
         isPaused: false
       }));
+      dispatch(setShowRecordingModal(false));
     }
   };
 
@@ -131,15 +169,36 @@ export const useRecording = () => {
   };
 
   const resumeRecording = () => {
-<<<<<<< HEAD
-    if (mediaRecorderRef.current?.state === 'paused') {
+    if (mediaRecorderRef.current && currentRecording.isPaused) {
       mediaRecorderRef.current.resume();
+      dispatch(setRecordingState({
+        isPaused: false,
+        isRecording: true
+      }));
     }
   };
 
-  const restartRecording = () => {
+  const deleteRecording = () => {
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.onstop = null;
+      mediaRecorderRef.current.stop();
+    }
+
+    mediaRecorderRef.current = null;
+    chunksRef.current = [];
+    audioBlobRef.current = null;
+    setAudioBlob(null); // איפוס גם ב-state
+
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+
+    dispatch(resetRecording());
+  };
+
+  const restartRecording = async () => {
     deleteRecording();
-    startRecording();
+    await startRecording();
   };
 
   const saveRecording = async (questionId: string, userId: string, answerFileName: string, amountFeedbacks: number = 0) => {
@@ -165,27 +224,18 @@ export const useRecording = () => {
         ? answerFileName.trim() 
         : `${answerFileName.trim()}.wav`;
 
-      // קודם מעלים את הקובץ לשרת
-      const uploadFormData = new FormData();
-      uploadFormData.append('file', audioBlob);
+      // קודם מעלים את הקובץ לשרת עם הפרטים המלאים
+      const formData = new FormData();
+      formData.append('userId', userId);
+      formData.append('title', finalFileName);
+      formData.append('description', '');
+      formData.append('file', audioBlob, finalFileName);
 
       console.log('📤 מעלה את הקובץ...');
-      const uploadResponse = await fetch('http://localhost:5000/api/resources/upload', {
-        method: 'POST',
-        body: uploadFormData,
-        headers: {
-          'Accept': '*/*'
-        }
-      });
-
-      if (!uploadResponse.ok) {
-        throw new Error('שגיאה בהעלאת הקובץ');
-      }
-
-      const uploadResult = await uploadResponse.json();
+      const uploadResult = await uploadRecording(formData).unwrap();
       console.log('✅ הקובץ הועלה בהצלחה:', uploadResult);
 
-      // עכשיו שומרים את התשובה עם ה-URL
+      // שומרים את התשובה עם ה-URL
       const answerData: UploadAnswerDto = {
         userId,
         questionId,
@@ -198,6 +248,7 @@ export const useRecording = () => {
       const result = await uploadAnswer(answerData).unwrap();
       console.log('✅ התשובה נשמרה בהצלחה:', result);
 
+      // שולחים לניתוח AI
       const aiFormData = new FormData();
       aiFormData.append('audioUrl', uploadResult.url);
       aiFormData.append('answerId', result.id.toString());
@@ -219,7 +270,7 @@ export const useRecording = () => {
       const aiResult = await aiResponse.json();
       console.log('✨ תוצאות ניתוח AI:', aiResult);
 
-      // מעדכנים את התשובה עם הקישור לקובץ
+      // מעדכנים את התשובה אם יש URL חדש מה-AI
       if (aiResult.fileUrl) {
         const updatedAnswerData = {
           ...answerData,
@@ -235,136 +286,14 @@ export const useRecording = () => {
         dispatch({ type: 'simulation/setCurrentAnswerId', payload: result.id });
       }
 
+      // איפוס הבלובים
+      audioBlobRef.current = null;
+      setAudioBlob(null);
+
       return result;
 
     } catch (error) {
       console.error('שגיאה בתהליך השמירה:', error);
-      throw error;
-=======
-    if (mediaRecorderRef.current && currentRecording.isPaused) {
-      mediaRecorderRef.current.resume();
-      dispatch(setRecordingState({
-        isPaused: false,
-        isRecording: true
-      }));
-    }
-  };
-
-  const stopRecording = () => {
-    if (mediaRecorderRef.current && (currentRecording.isRecording || currentRecording.isPaused)) {
-      mediaRecorderRef.current.stop();
-      dispatch(setRecordingState({
-        isRecording: false,
-        isPaused: false
-      }));
-      dispatch(setShowRecordingModal(false));
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
-    }
-  };
-
-  const deleteRecording = () => {
-<<<<<<< HEAD
-    if (mediaRecorderRef.current?.state === 'recording') {
-      mediaRecorderRef.current.stop();
-    }
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-    timeRef.current = 0;
-    chunksRef.current = [];
-    audioBlobRef.current = null;
-    setAudioBlob(null);
-    dispatch(setRecordingState({ recordingTime: 0 }));
-  };
-
-  return {
-    currentRecording: {
-      recordingTime: timeRef.current,
-    },
-    isLoading: false,
-    startRecording,
-    stopRecording,
-    pauseRecording,
-    resumeRecording,
-    restartRecording,
-    deleteRecording,
-    saveRecording,
-    audioBlobRef,
-    audioBlob
-=======
-    if (mediaRecorderRef.current) {
-      mediaRecorderRef.current.onstop = null;
-      mediaRecorderRef.current.stop();
-    }
-
-    mediaRecorderRef.current = null;
-    chunksRef.current = [];
-    audioBlobRef.current = null;
-    setAudioBlob(null); // איפוס גם ב-state
-
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-
-    dispatch(resetRecording());
-  };
-
-  const restartRecording = async () => {
-    deleteRecording();
-    await startRecording();
-  };
-
-  const saveRecording = async (
-    userId: string,
-    questionId: string,
-    answerFileName: string,
-    amountFeedbacks: number = 0
-  ) => {
-    if (!audioBlobRef.current || !answerFileName.trim()) {
-      alert('אנא הזן שם לקובץ');
-      return;
-    }
-
-    const fileNameWithExtension = answerFileName.endsWith('.wav') ? answerFileName : `${answerFileName}.wav`;
-
-    //  העלאת הקלטה לשרת
-    const formData = new FormData();
-    formData.append('userId', userId);
-    formData.append('title', fileNameWithExtension);
-    formData.append('description', '');
-    formData.append('file', audioBlobRef.current, fileNameWithExtension);
-    let fileUrl = '';
-    try {
-      const uploadRes = await uploadRecording(formData).unwrap();
-      fileUrl = uploadRes.url;
-    } catch (e) {
-      console.error('שגיאה בהעלאת הקלטה לשרת');
-      return;
-    }
-
-    //  שליחת תשובה עם ה-URL
-    const answerData: UploadAnswerDto = {
-      userId: userId,
-      questionId: questionId,
-      fileUrl: fileUrl, // ה-URL מהענן
-      amountFeedbacks: amountFeedbacks,
-      answerFileName: fileNameWithExtension,
-    };
-
-    try {
-      const result = await uploadAnswer(answerData as any).unwrap();
-      dispatch(addAnswer(result));
-      dispatch(resetRecording());
-      console.log(result);
-      if (result?.id) {
-        dispatch({ type: 'simulation/setCurrentAnswerId', payload: result.id });
-      }
-      audioBlobRef.current = null; // איפוס ה-Blob אחרי שמירה
-      setAudioBlob(null); // איפוס גם ב-state
-      return result;
-    } catch (error) {
-      console.error('שגיאה בשמירת ההקלטה:', error);
       throw error;
     }
   };
@@ -381,7 +310,6 @@ export const useRecording = () => {
     restartRecording,
     saveRecording,
     audioBlobRef,
-    audioBlob,
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
+    audioBlob
   };
 };

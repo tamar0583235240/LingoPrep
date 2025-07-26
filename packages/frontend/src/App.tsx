@@ -1,32 +1,8 @@
-<<<<<<< HEAD
-import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import AppRoutes from './shared/routes/appRoutes';
-import './App.css';
-import { MessageModalProvider } from './shared/ui/MessageModalContext';
-
-function App() {
-  return (
-    <MessageModalProvider>  
-      <BrowserRouter>
-        <div className="App">
-          {/* <header className="App-header">
-            <h1>Project base viewer</h1>
-          </header> */}
-          <main>
-            <AppRoutes />
-          </main>
-        </div>
-      </BrowserRouter>
-    </MessageModalProvider>
-
-=======
-
-import './App.css';
-import { MessageModalProvider } from './shared/ui/MessageModalContext';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./shared/routes/appRoutes";
+import './App.css';
+import { MessageModalProvider } from './shared/ui/MessageModalContext';
 import { Provider } from 'react-redux';
 import { store } from './shared/store/store';
 import { useAppDispatch } from './shared/hooks/reduxHooks';
@@ -60,25 +36,14 @@ function App() {
  
   return (
     <GoogleOAuthProvider clientId={clientId}>
-    <Provider store={store}>
-        
-     <MessageModalProvider>
-      <>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-       {/* <EditInterviewMaterialsSubForm
-  id="some-id"
-  defaultValues={{ title: "", short_description: "" }}
-  onSuccess={() => console.log("Saved!")}
-  onCancel={() => console.log("Cancelled")}
-  /> */}
-   </>
-    </MessageModalProvider>
-
-       </Provider>
-           </GoogleOAuthProvider>
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
+      <Provider store={store}>
+        <MessageModalProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </MessageModalProvider>
+      </Provider>
+    </GoogleOAuthProvider>
   );
 }
 export default App;

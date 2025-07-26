@@ -72,8 +72,8 @@ export const UploadUsers = () => {
       html: '<div class="spinner"></div>',
       showConfirmButton: false,
       allowOutsideClick: false,
-      willOpen: (popup) => {
-        const confirmButton = popup.querySelector<HTMLButtonElement>('.swal2-confirm');
+      willOpen: (popup: HTMLElement) => {
+        const confirmButton = popup.querySelector('.swal2-confirm') as HTMLButtonElement;
         if (confirmButton) {
           Swal.showLoading(confirmButton);
         }

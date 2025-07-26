@@ -1,40 +1,36 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import multer, { MulterError } from 'multer';
-import { createInsightController } from "../controllers/aIInsightController";
-import multerConfig from "../config/multerConfig";
+// routes/aiInsightRoutes.ts
+import { Router } from 'express';
+import multer from 'multer';
+import {
+  createInsightController,
+  getAllInsightsController,
+  getInsightByIdController,
+  updateInsightController,
+  deleteInsightController,
+  analyzeAndSaveInsight
+} from '../controllers/aIInsightController';
+
+// קונפיגורציה לשמירת קבצים זמנית
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/'),
+  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024, files: 1 }
+});
 
 const router = Router();
 
-// הגדרת מגבלות העלאת קבצים להקלטות
-const upload = multer({
-  ...multerConfig,
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB
-    files: 1
-  }
-});
+// 🔍 ניתוח אודיו
+router.post('/analyze', upload.single('audio'), analyzeAndSaveInsight);
 
-// טיפול בשגיאות העלאה
-const handleUploadErrors = (err: any, req: Request, res: Response, next: NextFunction) => {
-  if (err instanceof MulterError) {
-    console.error('❌ Multer error:', err);
-    return res.status(400).json({
-      error: `File upload error: ${err.message}`
-    });
-  } else if (err) {
-    console.error('❌ Unknown upload error:', err);
-    return res.status(500).json({
-      error: 'Unknown error occurred during file upload'
-    });
-  }
-  next();
-};
-
-// Route for AI analysis with error handling
-router.post("/analyze", 
-  upload.single("audio"),
-  handleUploadErrors,
-  createInsightController
-);
+// 🔁 פעולות CRUD רגילות
+router.post('/', createInsightController);
+router.get('/', getAllInsightsController);
+router.get('/:id', getInsightByIdController);
+router.put('/:id', updateInsightController);
+router.delete('/:id', deleteInsightController);
 
 export default router;

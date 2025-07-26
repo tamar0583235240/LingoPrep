@@ -22,10 +22,7 @@ export class Feedback {
     default: () => "now()",
   })
   createdAt: Date;
-<<<<<<< HEAD
-=======
 
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
   @ManyToOne(() => Users, (users) => users.feedbacks, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "given_by_user_id", referencedColumnName: "id" }])
   givenByUser: Users;

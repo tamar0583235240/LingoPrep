@@ -3,7 +3,14 @@ import { Answer, RecordingState } from '../types/Answer';
 
 interface RecordingSliceState {
   answers: Answer[];
-  currentRecording: Omit<RecordingState, 'audioBlob'>; 
+  currentRecording: {
+    isRecording: boolean;
+    isPaused: boolean;
+    recordingTime: number;
+    fileName: string;
+    questionId: string;
+    userId: string;
+  };
   showRecordingModal: boolean;
   showSuccessMessage: boolean;
   loading: boolean;
@@ -16,6 +23,8 @@ const initialState: RecordingSliceState = {
     isPaused: false,
     recordingTime: 0,
     fileName: '',
+    questionId: '',
+    userId: '',
   },
   showRecordingModal: false,
   showSuccessMessage: false,

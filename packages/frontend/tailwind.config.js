@@ -68,20 +68,13 @@ module.exports = {
         muted: "#F7FAFC",
         success: "#38A169",
         danger: "#E53E3E",
-        "text-main": "#1F2937", // gray-800
-        "text-secondary": "#64748B", // slate-500
-<<<<<<< HEAD
+        "text-main": "#1F2937",
+        "text-secondary": "#64748B",
         background: "var(--color-background)",
         text: "var(--color-text)",
         "secondary-text": "var(--color-secondary-text)",
         border: "var(--color-border)",
-=======
-          background: "var(--color-background)",
-          text: "var(--color-text)",
-          "secondary-text": "var(--color-secondary-text)",
-          border: "var(--color-border)",
-            surface: "var(--color-surface)",
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
+        surface: "var(--color-surface)"
       },
       fontSize: {
         xs: ["0.75rem", { lineHeight: "1rem" }],
@@ -99,7 +92,6 @@ module.exports = {
         bold: "700",
         extrabold: "800",
       },
-<<<<<<< HEAD
       keyframes: {
         pulseWave: {
           '0%': {
@@ -112,13 +104,13 @@ module.exports = {
           },
         },
         fadeIn: {
-          '0%': {
+          '0%': { 
             opacity: '0',
-            transform: 'scale(0.95)',
+            transform: 'translateY(10px)'
           },
           '100%': {
             opacity: '1',
-            transform: 'scale(1)',
+            transform: 'translateY(0)'
           },
         },
         fadeOut: {
@@ -134,28 +126,15 @@ module.exports = {
       },
       animation: {
         'pulse-wave': 'pulseWave 1.5s ease-out infinite',
-        'fade-in': 'fadeIn 0.3s ease-out',
+        'fade-in': 'fadeIn 0.4s ease-out',
         'fade-out': 'fadeOut 0.3s ease-in forwards',
       },
-=======
-      // tailwind.config.js
-
-  animation: {
-    'fade-in': 'fadeIn 0.4s ease-out',
-  },
-  keyframes: {
-    fadeIn: {
-      '0%': { opacity: 0, transform: 'translateY(10px)' },
-      '100%': { opacity: 1, transform: 'translateY(0)' },
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
     },
   },
-}
-
-    },
-  
   plugins: [],
 };
+
+
 // /** /** @type {import('tailwindcss').Config} */
 // module.exports = {
 //   content: [

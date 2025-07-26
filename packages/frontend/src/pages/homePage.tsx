@@ -15,29 +15,28 @@ const HomePage = () => {
 
   return (
    
-    // </GridContainer>
     <div className="flex h-screen">
       <SidebarNavigation />
-
-<<<<<<< HEAD
-      {isManager && (
-        <>
-          <div className="col-span-full mt-6 text-right">
-            <h2 className="text-xl font-bold text-text-main">מנהל מערכת</h2>
-          </div>
-          <Button variant="outline" fullWidth onClick={() => navigate("/admin/questions")}>
-            ניהול שאלות
-          </Button>
-          <Button variant="outline" fullWidth onClick={() => navigate("/admin/resources")}>
-            ניהול משאבים
-          </Button>
-          <Button variant="outline" fullWidth onClick={() => navigate("/admin/users")}>
-            ניהול משתמשים          </Button>
-        </>
-      )}
-    </GridContainer>
-=======
       <div className="flex-1 mr-64">
+        {isManager && (
+          <div className="bg-white shadow-sm p-4 mb-6">
+            <div className="max-w-7xl mx-auto">
+              <h2 className="text-xl font-bold text-text-main mb-4">פאנל ניהול</h2>
+              <div className="flex gap-4">
+                <Button variant="outline" onClick={() => navigate("/admin/questions")}>
+                  ניהול שאלות
+                </Button>
+                <Button variant="outline" onClick={() => navigate("/admin/resources")}>
+                  ניהול משאבים
+                </Button>
+                <Button variant="outline" onClick={() => navigate("/admin/users")}>
+                  ניהול משתמשים
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Hero Section */}
         <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-[--color-bg] p-6 md:p-20 gap-8">
           <div className="text-right max-w-xl space-y-6">
@@ -63,8 +62,8 @@ const HomePage = () => {
             alt="משרד מודרני"
             className="w-full max-w-md rounded-xl shadow-md"
           />
-
         </div>
+
         <GridContainer maxWidth="lg" mt="mt-8" mb="mb-8" className="min-h-screen px-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="text-center mb-10">
             <Heading1 className="mb-2">הכלים שלך להצלחה</Heading1>
@@ -98,7 +97,6 @@ const HomePage = () => {
         </GridContainer>
       </div>
     </div>
->>>>>>> 511ac081870e1132ef1c22bd80103b735959f568
   );
 };
 

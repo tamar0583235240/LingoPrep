@@ -1,8 +1,11 @@
-import { Column, Entity, Index } from "typeorm";
+import { Column, Entity, Index, ManyToOne, JoinColumn } from "typeorm";
+import { Users } from "./Users";
 
 @Index("resources_pkey", ["id"], { unique: true })
 @Entity("resources", { schema: "public" })
 export class Resources {
+  declare user: Users;
+
   @Column("uuid", { primary: true, name: "id" })
   id: string;
 
@@ -23,4 +26,11 @@ export class Resources {
     default: () => "now()",
   })
   createdAt: Date;
+
+  @ManyToOne(() => Users, (user) => user.resources)
+  @JoinColumn({ name: "user_id" })
+  user!: Users;
+
+  @Column("uuid", { name: "user_id" })
+  userId: string;
 }
