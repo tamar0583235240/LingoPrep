@@ -311,9 +311,10 @@ export async function analyzeAudio(filePath: string): Promise<IAiAnalysis> {
     console.log('פרומפט הניתוח מוכן.');
     // קביעת סוג ה-MIME של קובץ האודיו בהתבסס על הסיומת שלו
     const mimeType = filePath.endsWith('.mp3') ? 'audio/mpeg' :
-                     filePath.endsWith('.wav') ? 'audio/wav' :
-                     filePath.endsWith('.ogg') ? 'audio/ogg' :
-                     'application/octet-stream';
+      filePath.endsWith('.wav') ? 'audio/wav' :
+        filePath.endsWith('.ogg') ? 'audio/ogg' :
+          filePath.endsWith('.webm') ? 'audio/webm' :
+            'application/octet-stream';
     if (mimeType === 'application/octet-stream') {
       console.warn(`אזהרה: סוג קובץ אודיו לא נתמך באופן מובהק לקלט ישיר: ${filePath}. ממשיך, אך ייתכן שיכשל בניתוח מפורט.`);
     }
