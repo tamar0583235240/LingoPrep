@@ -4,10 +4,14 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import { useUploadRecordingMutation } from "../services/resourceApi";
 import { Spinner } from "../../../shared/ui/Spinner";
 import Notification from "./../../interview/components/Notification";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentAnswerId, } from "../../interview/store/simulationSlice";
+import { RootState } from "../../../shared/store/store";
+
 interface FileUploadProps {
   answered?: boolean;
   userId: string;
-  onUploaded: (fileUrl: string, fileName: string) => void;
+  onUploaded: (fileUrl: string, fileName: string, fileObj: File) => void;
   onError?: (error: any) => void;
 }
 const FileUpload: React.FC<FileUploadProps> = ({
@@ -17,12 +21,16 @@ const FileUpload: React.FC<FileUploadProps> = ({
   onError
 }) => {
   const [file, setFile] = useState<File | null>(null);
+  const { currentAnswerId } = useSelector(
+    (state: RootState) => state.simulation
+  );
   const [isUploading, setIsUploading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [uploadRecording] = useUploadRecordingMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  // הוספת state עבור notification פנימי
+  const dispatch = useDispatch();
+
   const [notification, setNotification] = useState<{
     message: string;
     type: "success" | "error";
@@ -48,7 +56,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
     if (fileInputRef.current) fileInputRef.current.value = "";
     setShowModal(false);
   };
-  // ניקוי URL כשהקומפוננטה נהרסת
   useEffect(() => {
     return () => {
       if (fileUrl) {
@@ -56,6 +63,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
       }
     };
   }, [fileUrl]);
+
   const handleUpload = async () => {
     if (!file) return;
     setIsUploading(true);
@@ -66,18 +74,18 @@ const FileUpload: React.FC<FileUploadProps> = ({
     formData.append("file", file);
     try {
       const res = await uploadRecording(formData).unwrap();
-      // הצגת notification פנימי
+      console.log("uploadRecording response:", res);
+
       setNotification({
         message: "הקובץ נשמר בהצלחה!",
         type: "success",
         icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
       });
-      // סגירת המודל וניקוי
+
+      onUploaded(res.url, file.name, file); // העברת הקובץ עצמו
       handleRemove();
-      // קריאה לפונקציה החיצונית אחרי עיכוב
       setTimeout(() => {
         setNotification(null);
-        onUploaded(res.url, file.name);
       }, 3500);
     } catch (e) {
       setNotification({
