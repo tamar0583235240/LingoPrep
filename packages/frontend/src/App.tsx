@@ -11,6 +11,7 @@ import { useRefreshTokenMutation } from './shared/api/authApi';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ToastContainer } from 'react-toastify';
 import { FeedbackNotificationListener } from './features/feedback/components/AllFeedbackNotificationListener';
+import { NotificationListener } from './features/dashboard/components/NotificationListener';
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
         <BrowserRouter>
           <AppRoutes />
           <FeedbackNotificationListener />
+          <NotificationListener />
           <ToastContainer />
         </BrowserRouter>
        {/* <EditInterviewMaterialsSubForm

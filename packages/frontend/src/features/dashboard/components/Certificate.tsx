@@ -6,6 +6,7 @@ import jsPDF from "jspdf";
 import { Download, Printer } from "lucide-react";
 import { Button } from "../../../shared/ui/button";
 import { useDynamicContents } from "../../dynamicContent/hooks/useDynamicContents";
+import { useCreateCertificateNotificationMutation } from "../services/notificationApi";
 
 interface CertificateProps {
   first_name: string;
@@ -20,6 +21,8 @@ export const Certificate: React.FC<CertificateProps> = ({ first_name, last_name 
   console.log("✅ fullName from props in Certificate:", first_name );
 
    const { contents, loading, error } = useDynamicContents();
+
+   const [createCertificateNotification] = useCreateCertificateNotificationMutation();
 
   // חיפוש התוכן הדינמי לפי key_name מתאים
   const certificateDescriptionItem = contents.find(
@@ -40,6 +43,10 @@ export const Certificate: React.FC<CertificateProps> = ({ first_name, last_name 
     });
     pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
     pdf.save("certificate.pdf");
+
+    if (authState.user?.id) {
+      createCertificateNotification({ userId: authState.user.id, type: "download" });
+    }
   };
 
   const handlePrint = () => {
@@ -55,6 +62,10 @@ export const Certificate: React.FC<CertificateProps> = ({ first_name, last_name 
       </html>
     `);
     printWindow.document.close();
+
+    if (authState.user?.id) {
+      createCertificateNotification({ userId: authState.user.id, type: "print" });
+    }
   };
 
   return (

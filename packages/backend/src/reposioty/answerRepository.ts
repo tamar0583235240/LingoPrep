@@ -15,4 +15,33 @@ const getAllAnswersByIdUser = async (userId:string): Promise<Answers[]> => {
   }
 }
 
+export const notificationRepository = {
+  async insertNotification(notification: {
+    user_id: string;
+    type: string;
+    message: string;
+    is_seen?: boolean;
+    created_at?: Date;
+  }) {
+    console.log("Inserting notification:", notification);
+    const { user_id, type, message, is_seen = false, created_at = new Date() } = notification;
+
+    const query = `
+      INSERT INTO notifications (user_id, type, message, is_seen, created_at)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *;
+    `;
+
+    const values = [user_id, type, message, is_seen, created_at];
+
+    const client = await pool.connect();
+    try {
+      const result = await client.query(query, values);
+      return result.rows[0];
+    } finally {
+      client.release();
+    }
+  },
+};
+
 export default { getAllAnswersByIdUser };

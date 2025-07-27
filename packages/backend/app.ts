@@ -47,6 +47,7 @@ app.use('/api' ,feedbackRouter )
 app.use('/api' , AiInsightsRouter ) 
 app.use('/api' , sharedRecrdingRouter )  
 app.use('/answers', answerRouter);
+app.use('/notifications', answerRouter);
 app.use('/question', questionRoute); 
 app.use('/shared-recordings', sharedRecordingsRoutes);
 app.use('/auth', authRouts);
@@ -59,4 +60,5 @@ app.use("/api/aiInsight", aiInsightRoutes);
 app.use("/manager/interview-materials", interviewMaterialsRoutes);
 app.use("/profiles", profileRoutes);
 app.use('/public-profile', publicProfileRoutes);
+
 export default app;
