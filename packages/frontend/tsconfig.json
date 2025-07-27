@@ -15,11 +15,10 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "noEmit": true,
     "types": [
-      "jest",
-      "react"
+      "jest"
     ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
