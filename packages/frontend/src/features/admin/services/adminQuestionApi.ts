@@ -6,19 +6,21 @@ export const AdminQuestionApi = api.injectEndpoints({
     endpoints: (builder) => ({
         addQuestion: builder.mutation<void, Question>({
             query: (question) => ({
-                url: "question/addQuestion",
+                url: "questions/addQuestion",
                 method: "POST",
                 body: question,
             }),
             invalidatesTags: ["question"],
         }),
         getAllQuestions: builder.query<Question[], void>({
-            query: () => 'question/getAllQuestions',
+
+            query: () => 'questions/getAllQuestions',
+
             providesTags: ['question'],
         }),
         updateQuestion: builder.mutation<Question, Partial<Question>>({
             query: (data) => ({
-                url: `question/updateQuestion`,
+                url: `questions/updateQuestion`,
                 method: "PUT",
                 body: data,
             }),
@@ -26,7 +28,7 @@ export const AdminQuestionApi = api.injectEndpoints({
         }),
         deleteQuestionById: builder.mutation<string, string>({
             query: (id) => ({
-                url: `question/deleteQuestionById/${id}`,
+                url: `questions/deleteQuestionById/${id}`,
                 method: 'PATCH',
             }),
             invalidatesTags: ['question'],

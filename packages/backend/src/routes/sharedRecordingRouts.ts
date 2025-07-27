@@ -1,12 +1,22 @@
 import { Router } from 'express';
-import { getSharedRecordingParticipants, getPreviouslySharedEmails, deleteParticipant, addParticipant } from '../controllers/sharedRecordingController';
+import {
+  getSharedRecordingsByUser,
+  getRecordingDetails,
+  createFeedback,
+  updateFeedback
+} from '../controllers/sharedRecordingController';
+import { sharedRecordingMiddleware } from '../middlewares/sharedRecordingMiddleware';
 
 const router = Router();
 
-router.get('/getSharedRecordingParticipants/:answerId/:ownerId', getSharedRecordingParticipants);
-router.get('/sharedEmails/:userId', getPreviouslySharedEmails);
-router.delete('/deleteParticipant', deleteParticipant);
-router.post('/addParticipant', addParticipant);
+router.use(sharedRecordingMiddleware);
 
+router.get('/', getSharedRecordingsByUser);
+
+router.get('/details/:recordingId', getRecordingDetails);
+
+router.post('/feedback', createFeedback);
+
+router.put('/feedback/:id', updateFeedback);
 
 export default router;

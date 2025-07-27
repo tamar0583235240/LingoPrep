@@ -1,4 +1,5 @@
 import { pool } from '../config/dbConnection';
+
 import { Questions } from "../interfaces/entities/Questions";
 import { v4 as uuid4 } from 'uuid';
 
@@ -26,29 +27,28 @@ const addQustion = async (question: Questions): Promise<Questions> => {
 
 
 
-const getAllQuestionById = async (Id: string): Promise<Questions> => {
 
+const getAllQuestionById = async (Id: string): Promise<Questions> => {
   try {
-    const query = 'SELECT * FROM questions WHERE id = \$1';
+    const query = 'SELECT * FROM questions WHERE id = $1';
     const value = [Id];
     const { rows } = await pool.query(query, value);
     return rows[0] as Questions;
-
   } catch (error) {
-    console.error("Error fetching question from Supabase:", error);
+    console.error("Error fetching question from PostgreSQL:", error);
     throw error;
   }
 }
 
-const getAllQuestions = async (): Promise<Questions[]> => {
 
+
+const getAllQuestions = async (): Promise<Questions[]> => {
   try {
     const query = 'SELECT * FROM questions';
     const { rows } = await pool.query(query);
     return rows as Questions[];
-
   } catch (error) {
-    console.error("Error fetching questions from Supabase:", error);
+    console.error("Error fetching questions from PostgreSQL:", error);
     throw error;
   }
 }
@@ -99,23 +99,5 @@ const deleteQuestionById = async (id: string, is_active: boolean): Promise<strin
     throw error;
   }
 }
-
-
-const getQuestionsByCategory = async (category_id: string): Promise<Questions[]> => {
-  try {
-    const query = `
-      SELECT q.*
-      FROM questions q
-      JOIN question_categories qc ON qc.question_id = q.id
-      WHERE qc.category_id = $1
-    `;
-    const result = await pool.query(query, [category_id]);
-    return result.rows as Questions[];
-  } catch (error) {
-    console.error(":x: Error fetching questions by category:", error);
-    throw error;
-  }
-};
-
-export default { getAllQuestionById, getAllQuestions, deleteQuestionById, addQustion, updateQuestionById, getQuestionsByCategory };
+export default { getAllQuestionById, getAllQuestions, deleteQuestionById, addQustion, updateQuestionById };
 

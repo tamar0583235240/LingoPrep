@@ -17,11 +17,17 @@ import { useGetAiInsightsQuery } from "../services/AiInsightsApi";
 import ShareButton from "../../shared-recordings/components/ShareButton";
 import ShareDialog from "../../shared-recordings/components/ShareDialog";
 
+
 export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRoles }) => {
     const user = useSelector((state: RootState) => state.auth.user);
     const userId = user?.id ?? '';
     console.log(user?.id);
-    const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId);
+
+
+const { data, error, isLoading } = useGetAnswersByIdUserQuery(userId, {
+  skip: !userId,
+});
+
     const { data: allInsights } = useGetAiInsightsQuery();
 
   const insightsMap = useMemo(() => {
@@ -68,14 +74,14 @@ export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRo
     (async () => {
       let results = [...data];
 
-      // סינון חיפוש
+
       if (searchText.trim()) {
         results = results.filter(a =>
           a.answer_file_name.toLowerCase().includes(searchText.toLowerCase())
         );
       }
 
-      // סינון לפי שאלה ופידבקים
+
       results = results.filter(a => {
         const qok = !filterCriteria.questionName || a.question_id === filterCriteria.questionName;
         const fb = filterCriteria.feedbackCategory;
@@ -87,7 +93,6 @@ export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRo
         return qok && fbok;
       });
 
-      // סינון לפי תאריך
       if (filterCriteria.dateFilter === 'latest') {
         const latest = results.reduce((a, b) =>
           new Date(b.submitted_at) > new Date(a.submitted_at) ? b : a
@@ -103,7 +108,7 @@ export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRo
         results = results.filter(a => new Date(a.submitted_at) >= mAgo);
       }
 
-      // סינון לפי דירוג
+   
       if (filterCriteria.ratingFilter !== null) {
         results = results.filter(ans => {
           const rating = insightsMap.get(ans.id);
@@ -111,7 +116,7 @@ export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRo
         });
       }
 
-      // מיון לפי אופציה
+   
       results.sort((a, b) => {
         switch (sortOption) {
           case 'latest':
@@ -299,4 +304,4 @@ export const RecordingsList: React.FC<{ allowedRoles: string[] }> = ({ allowedRo
       )}
     </GridContainer>
   );
-};
+}; 

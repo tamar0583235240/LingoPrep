@@ -6,7 +6,7 @@ export const recordingApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAnswers: builder.query<Answer[], void>({
       query: () => "answers",
-      providesTags: ["Answer"],
+      providesTags: ["answers"],
     }),
     uploadAnswer: builder.mutation<Answer, UploadAnswerDto>({
       query: (answerData) => ({
@@ -15,14 +15,14 @@ export const recordingApi = api.injectEndpoints({
         body: answerData,
         headers: { "Content-Type": "application/json" },
       }),
-      invalidatesTags: ["Answer"],
+      invalidatesTags: ["answers"],
     }),
     deleteAnswer: builder.mutation<void, string>({
       query: (id) => ({
         url: `answers/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Answer"],
+      invalidatesTags: ["answers"],
     }),
   }),
 });
