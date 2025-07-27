@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:5000",
-
-
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -24,6 +22,8 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "axios": "^1.4.0",
+    "build": "^0.1.4",
+    "bulid": "^1.0.0",
     "clsx": "^2.1.1",
     "core-js-pure": "^3.43.0",
     "cross-fetch": "^4.1.0",
@@ -54,7 +54,10 @@
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5",
     "yup": "^1.6.1",
-    "zustand": "^5.0.6"
+    "zustand": "^5.0.6",
+    "@headlessui/react": "^2.2.4",
+    "node-cron": "^4.2.1",
+    "pg": "^8.16.2"
   },
   "devDependencies": {
     "@nodelib/fs.walk": "^1.2.8",
@@ -96,6 +99,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://localhost:5000"
+  }
 }
