@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import {  getAiInsightsByAnswerId ,getAiInsights} from "../controllers/aIInsightController";
+import { auth } from 'google-auth-library';
+import { authenticate } from '../middlewares/authenticateMiddleware';
 
-const AiInsightsRouter = Router();
+const router = Router();
 
-AiInsightsRouter.get('/AiInsights/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
-AiInsightsRouter.get('/AiInsights/getAiInsights', getAiInsights);  
+router.get('/AiInsights/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
+router.get('/AiInsights/getAiInsights', getAiInsights);  
 
 
-export default AiInsightsRouter;
+export default router;

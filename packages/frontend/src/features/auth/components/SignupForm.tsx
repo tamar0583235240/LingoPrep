@@ -101,7 +101,7 @@ export default function SignupForm() {
           return;
         }
         const res = await signupConfirm({ email: form.email, code }).unwrap();
-        dispatch(loginSuccess({ user: res.user}));
+        dispatch(loginSuccess({ user: res.user, token: res.token}));
         setMessage("ההרשמה הושלמה בהצלחה!");
         setIsSuccessMsg(true);
         navigate("/home");

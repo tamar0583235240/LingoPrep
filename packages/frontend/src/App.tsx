@@ -21,8 +21,8 @@ function App() {
   refreshTokenTrigger()
     .unwrap()
     .then((res) => {
-      console.log("הצלחה!", res);
-      dispatch(loginSuccess({ user: res.user }));
+      console.log("הצלחה!");
+      dispatch(loginSuccess({ token: res.token, user: res.user }));
     })
     .catch((err) => {
       console.log("נכשל ברענון הטוקן", err);

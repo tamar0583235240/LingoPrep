@@ -84,6 +84,14 @@ export default function AppRoutes() {
             }
           />
           <Route
+            path="/work-experience"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                     <WorkExperienceTab  />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
             path="/settings"
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>

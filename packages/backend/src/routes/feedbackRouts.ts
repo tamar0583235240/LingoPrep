@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getFeedbackesByanswerId } from '../controllers/feedbackController';
 
-const feedbackRouter = Router();
+const router = Router();
 
-feedbackRouter.get('/feedbackes/getFeedbackesByanswerId/:sharedRecordingId', getFeedbackesByanswerId);  
-export default feedbackRouter;        
+router.get('/feedbackes/getFeedbackesByanswerId/:sharedRecordingId', getFeedbackesByanswerId);  
+export default router;        

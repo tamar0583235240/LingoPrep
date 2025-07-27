@@ -15,9 +15,9 @@ const ProfileAccordionPage = () => {
       </Accordion>
 
       {/* דוגמא, צריך להוריד */}
-      {/* <Accordion title="ניסיון תעסוקתי">
+      <Accordion title="ניסיון תעסוקתי">
         <WorkExperienceTab />
-      </Accordion> */}
+      </Accordion>
 
     </div>
   );

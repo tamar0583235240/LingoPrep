@@ -4,6 +4,7 @@ import { User } from "../types/types";
 
 interface AuthState {
   user: User | null;
+  token: string | null;
   loggedIn: boolean;
   loading: boolean;
   error: string | null;
@@ -12,6 +13,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
+  token: null,
   loggedIn: false,
   loading: false,
   error: null,
@@ -26,10 +28,11 @@ const authSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    loginSuccess(state, action: PayloadAction<{ user: User; }>) {
+    loginSuccess(state, action: PayloadAction<{ user: User; token: string}>) {
       state.loading = false;
       state.loggedIn = true;
       state.user = action.payload.user;
+      state.token = action.payload.token;
       state.error = null;
       state.isAdmin = action.payload.user.role === "manager";
     },
@@ -39,11 +42,15 @@ const authSlice = createSlice({
     },
     logout(state) {
       state.user = null;
+      state.token = null;
       state.loggedIn = false;
       state.loading = false;
       state.error = null;
       state.isAdmin = false; 
     },
+    setToken(state, action: PayloadAction<string | null>) {
+      state.token = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder.addMatcher(
@@ -51,6 +58,7 @@ const authSlice = createSlice({
       (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
+        state.token = action.payload.token;
         state.loggedIn = true;
         state.isAdmin = action.payload.user.role === "manager";
         state.error = null;
@@ -68,6 +76,7 @@ const authSlice = createSlice({
       (state, action) => {
         state.loading = false;
         state.error = "Failed to refresh token";
+        state.token = null;
         state.user = null;
         state.loggedIn = false;
         state.isAdmin = false;
@@ -76,6 +85,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout } = authSlice.actions;
+export const { loginStart, loginSuccess, loginFailure, logout, setToken } = authSlice.actions;
 
 export default authSlice.reducer;

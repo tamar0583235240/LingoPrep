@@ -1,6 +1,5 @@
 import { api } from "./api";
 import { User } from "../../features/auth/types/types";
-import { logout } from "../../features/auth/store/authSlice";
 
 interface LoginRequest {
   email: string;
