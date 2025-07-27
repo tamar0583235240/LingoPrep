@@ -23,7 +23,7 @@ const AIInsightsList: React.FC = () => {
         <ul className="list-inside space-y-3 text-[--color-text] text-base">
           {insights.map((insight: { id: Key | null | undefined; summary: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }) => (
             <li key={insight.id} className="flex items-center gap-3 text-[--color-text] bg-white p-2 rounded-lg">
-              <span>{insight.summary}</span>
+              <span>{String(insight.summary)}</span>
             </li>
           ))}
         </ul>
