@@ -18,6 +18,12 @@ import {
   sendVerificationCodeEmail,
 } from "../utils/emailSender";
 import { generateUniqueSlug } from "../utils/generateSlug";
+import { Profiles } from "@interfaces/entities/Profiles";
+import {
+  createProfile,
+  getProfileByUserId,
+  insertProfile,
+} from "../reposioty/profileRepository";
 
 // Map לשמירת קודי אימות זמניים
 type CodeData = { code: string; expiresAt: number };
@@ -63,12 +69,10 @@ export const validateCode = async (req: Request, res: Response) => {
 
   const validCode = codesPerEmail.get(email);
   if (!validCode) {
-    return res
-      .status(200)
-      .json({
-        valid: false,
-        message: "שגיאה. לא נמצא בקשה לקבלת קוד למייל הזה. אנא נסה שנית.",
-      });
+    return res.status(200).json({
+      valid: false,
+      message: "שגיאה. לא נמצא בקשה לקבלת קוד למייל הזה. אנא נסה שנית.",
+    });
   }
   if (Date.now() > validCode.expiresAt) {
     codesPerEmail.delete(email);
@@ -102,7 +106,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
         .json({ message: "If email exists, reset link sent" });
     }
 
-    const token = crypto.randomBytes(32).toString('hex');
+    const token = crypto.randomBytes(32).toString("hex");
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
 
     await createToken(user.id, token, expiresAt);
@@ -135,7 +139,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     }
 
     const SALT_ROUNDS = 10;
-    
+
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     await userRepository.updateUserPassword(tokenData.user_id, hashedPassword);
     await deleteToken(token);
@@ -152,10 +156,7 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password, rememberMe } = req.body;
 
-    const user = await authRepository.login(
-      email,
-      password
-    );
+    const user = await authRepository.login(email, password);
     if (!user) {
       return res.status(401).json({ message: "אימייל או סיסמה שגויים" });
     }
@@ -182,7 +183,7 @@ export const login = async (req: Request, res: Response) => {
 
     res.json({ user, token });
   } catch (error: Error | any) {
-    res.status(500).json({ message: error.message});
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -235,7 +236,9 @@ export const requestSignup = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "חסרים פרטים חובה" });
   }
 
-  const existing = (await userRepository.getAllUsers()).find((u: Users) => u.email === email);
+  const existing = (await userRepository.getAllUsers()).find(
+    (u: Users) => u.email === email
+  );
   if (existing) {
     return res.status(409).json({ message: "Email already exists" });
   }
@@ -278,10 +281,9 @@ export const requestSignup = async (req: Request, res: Response) => {
         preferredJobType: null,
         createdAt: new Date(),
         updatedAt: new Date(),
-        isPublic: false,// This w // This will be set after user creation
-        user: {} as Users
+        isPublic: false, // This w // This will be set after user creation
+        user: {} as Users,
       },
-
     },
     code,
     expiresAt,
@@ -289,51 +291,61 @@ export const requestSignup = async (req: Request, res: Response) => {
 
   await sendVerificationCodeEmail(email, `קוד האימות להרשמה שלך הוא: ${code}`);
 
-  res
-    .status(200)
-    .json({
-      message: "קוד אימות נשלח למייל. נא הזן את הקוד כדי להשלים הרשמה.",
-    });
+  res.status(200).json({
+    message: "קוד אימות נשלח למייל. נא הזן את הקוד כדי להשלים הרשמה.",
+  });
 };
 
 // אישור הרשמה עם קוד
 export const confirmSignup = async (req: Request, res: Response) => {
   const { email, code } = req.body;
 
-  if (!email || !code) return res.status(400).json({ message: "אימייל וקוד דרושים" });
+  if (!email || !code) {
+    return res.status(400).json({ message: "אימייל וקוד דרושים" });
+  }
 
   const pending = pendingSignups.get(email);
-  if (!pending) return res.status(400).json({ message: "לא נמצאה בקשה הרשמה למייל זה." });
+  if (!pending) {
+    return res.status(400).json({ message: "לא נמצאה בקשת הרשמה." });
+  }
 
   if (pending.expiresAt < Date.now()) {
     pendingSignups.delete(email);
-    return res.status(400).json({ message: "Code expired. Please request a new code." });
+    return res.status(400).json({ message: "הקוד פג תוקף." });
   }
 
-  if (pending.code !== code) return res.status(400).json({ message: "הקוד שגוי." });
+  if (pending.code !== code) {
+    return res.status(400).json({ message: "הקוד שגוי." });
+  }
 
-  await authRepository.signup(pending.userData);
+  const {
+    profiles,
+    ...userOnlyData
+  }: { profiles: Profiles; [key: string]: any } = pending.userData;
+
+  // Insert user
+  await authRepository.signup(userOnlyData as Users);
+
+  // Insert profile
+  await insertProfile({
+    ...profiles,
+    userId: userOnlyData.id,
+  });
+
+  // Remove from pending
   pendingSignups.delete(email);
 
-  const token = jwt.sign(
-    {
-      id: pending.userData.id,
-      email: pending.userData.email,
-      role: pending.userData.role,
-    },
-    JWT_SECRET,
-    { expiresIn: "1h" }
-  );
+  // Tokens
+  const tokenPayload = {
+    id: userOnlyData.id,
+    email: userOnlyData.email,
+    role: userOnlyData.role,
+  };
 
-  const refreshToken = jwt.sign(
-    {
-      id: pending.userData.id,
-      email: pending.userData.email,
-      role: pending.userData.role,
-    },
-    REFRESH_SECRET,
-    { expiresIn: "2h" }
-  );
+  const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: "1h" });
+  const refreshToken = jwt.sign(tokenPayload, REFRESH_SECRET, {
+    expiresIn: "2h",
+  });
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
@@ -343,13 +355,18 @@ export const confirmSignup = async (req: Request, res: Response) => {
     maxAge: 2 * 60 * 60 * 1000,
   });
 
-  res.status(201).json({ user: pending.userData, token });
+  const newUser = await userRepository.getUserById(userOnlyData.id);
+  res.status(201).json({ user: newUser, token });
 };
 
 export const signup = async (req: Request, res: Response) => {
+  console.log("signup");
+
   const { first_name, last_name, email, phone, password } = req.body;
 
-  const existing = (await userRepository.getAllUsers()).find((user: Users) => user.email === email);
+  const existing = (await userRepository.getAllUsers()).find(
+    (user: Users) => user.email === email
+  );
   if (existing) {
     return res.status(409).json({ message: "Email already exists" });
   }
@@ -391,12 +408,10 @@ export const signup = async (req: Request, res: Response) => {
       updatedAt: new Date(),
       isPublic: false,
       user: {} as Users, // This will be set after user creation
-    }
+    },
   };
 
-
-
-await authRepository.signup(newUser);
+  await authRepository.signup(newUser);
 
   const token = jwt.sign(
     { id: newUser.id, email: newUser.email, role: newUser.role },
@@ -404,12 +419,9 @@ await authRepository.signup(newUser);
     { expiresIn: "1h" }
   );
 
-
-res.status(201).json({ user: newUser, token });
-
+  res.status(201).json({ user: newUser, token });
 
   await authRepository.signup(newUser);
-
 
   res.status(201).json({ user: newUser, token });
 };
@@ -431,14 +443,16 @@ export const authWithGoogle = async (req: Request, res: Response) => {
 
     const googleUser = ticket.getPayload();
     if (!googleUser?.email) {
-      return res.status(400).json({ message: "Invalid token or email not found" });
+      return res
+        .status(400)
+        .json({ message: "Invalid token or email not found" });
     }
 
     let user = await userRepository.getUserByEmail(googleUser.email);
 
     if (!user) {
-      const first_name = googleUser.given_name ?? '';
-      const last_name = googleUser.family_name ?? '';
+      const first_name = googleUser.given_name ?? "";
+      const last_name = googleUser.family_name ?? "";
       const slug = await generateUniqueSlug(first_name, last_name);
 
       user = await userRepository.insertUser({
@@ -459,6 +473,16 @@ export const authWithGoogle = async (req: Request, res: Response) => {
       return res
         .status(500)
         .json({ message: "Failed to create or retrieve user" });
+    }
+
+     const profile = await getProfileByUserId(user.id);
+    if (!profile) {
+      await createProfile(user.id, {
+        is_public: true,
+        profile_image_url: null,
+        bio: "",
+        created_at: new Date(),
+      });
     }
 
     const token = jwt.sign(

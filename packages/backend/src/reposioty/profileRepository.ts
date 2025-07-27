@@ -1,3 +1,4 @@
+import { Profiles } from "@interfaces/entities/Profiles";
 import { pool } from "../config/dbConnection";
 export const getAllProfiles = async () => {
   const result = await pool.query(`
@@ -59,6 +60,31 @@ export const createProfile = async (userId: string, data: any) => {
     ]
   );
   return result.rows[0];
+};
+
+export const insertProfile = async (profile: Profiles): Promise<void> => {
+  const query = `
+    INSERT INTO profiles (
+      id, user_id, image_url, location, external_links, status,
+      preferred_job_type, created_at, updated_at, is_public
+    )
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+  `;
+
+  const values = [
+    profile.id,
+    profile.userId,
+    profile.imageUrl,
+    profile.location,
+    profile.externalLinks,
+    profile.status,
+    profile.preferredJobType,
+    profile.createdAt,
+    profile.updatedAt,
+    profile.isPublic,
+  ];
+
+  await pool.query(query, values);
 };
 export const updateProfile = async (profileId: string, data: any) => {
   const {

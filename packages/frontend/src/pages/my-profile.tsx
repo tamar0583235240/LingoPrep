@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../shared/store/store";
 import { AiFillDelete, AiOutlineClose, AiOutlineSave } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
@@ -14,6 +14,7 @@ import {
   useUpdateProfileMutation,
 } from "../features/profile/services/profileApi";
 import { Profile } from "../features/profile/types/profileTypes";
+import { setUser } from "../features/auth/store/auth";
 
 interface ExternalLink {
   url: string;
@@ -52,6 +53,8 @@ const EditProfilePage = () => {
     error: fetchProfileError,
     refetch,
   } = useGetProfileByIdQuery(user?.id || "");
+
+  const dispatch = useDispatch();
 
   const API_BASE_URL = "http://localhost:5000";
 
@@ -233,6 +236,13 @@ const EditProfilePage = () => {
     try {
       await updateProfile({ id: user.id, formData: fd }).unwrap();
       await refetch();
+
+      dispatch(
+        setUser({
+          ...user,
+          firstName: formData.first_name
+        })
+      );
 
       showMessage("", "הפרופיל עודכן בהצלחה");
       setTimeout(() => {
