@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { cn } from "../utils/cn";
 import { FaRegBell, FaCheck } from "react-icons/fa";
 interface Reminder {
@@ -81,7 +81,8 @@ export const ReminderBell: React.FC = () => {
 
     const fetchReminders = () => {
         setLoading(true);
-        fetch("/api/reminders/")
+        fetch("http://localhost:5000/api/reminders/")
+
             .then(async (res) => {
                 const text = await res.text();
                 try {
@@ -104,6 +105,10 @@ export const ReminderBell: React.FC = () => {
                 setLoading(false);
             });
     };
+
+useEffect(() => {
+  fetchReminders();
+}, []);
 
     const handleOpen = () => {
         fetchReminders();

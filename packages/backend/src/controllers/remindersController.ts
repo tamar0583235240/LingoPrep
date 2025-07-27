@@ -12,7 +12,9 @@ export const getRemindersController = async (req: Request, res: Response) => {
   } catch (error) {
       console.error("שגיאה בשליפת תזכורות:", (error as any).message || error);
 
-        console.error("שגיאה בשליפת תזכורות", error);
+        // console.error("שגיאה בשליפת תזכורות", error);
+        console.error("שגיאה בשליפת תזכורות:", error instanceof Error ? error.message : error);
+
     res.status(500).json({ error: "Failed to fetch reminders" });
 
   }

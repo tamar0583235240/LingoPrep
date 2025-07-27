@@ -16,9 +16,10 @@ import dotenv from 'dotenv';
 import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
 import cookieParser from 'cookie-parser';
-import remindersRouts from './src/routes/remindersRouts';
+// import remindersRouts from './src/routes/remindersRouts';
 // import remindersRouter from './src/routes/remindersRouts';
-
+// import remindersroutes from './src/routes/remindersRoutes';
+import remindersRoutes from './src/routes/remindersRoutes';
 const corsOptions = {
   origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
   credentials: true,
@@ -30,7 +31,8 @@ console.log("🔔 Starting server with CORS options:", corsOptions);
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
-app.use('/api/reminders', remindersRouts);
+console.log("🚦 טוען ראוט reminders לפני הקישור ל-express...");
+app.use('/api/reminders', remindersRoutes);
 
 
 app.use('/api' ,feedbackRouts )

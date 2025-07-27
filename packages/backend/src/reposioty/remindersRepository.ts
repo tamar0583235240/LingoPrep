@@ -1,5 +1,6 @@
 import { pool } from '../config/dbConnection';
 export const getReminders = async () => {
+      console.log("📦 נכנסנו לפונקציית getReminders ב־repository");
     const query = `
     SELECT id, suggestion_for_improvement, treatment_status
     FROM feedback_to_system

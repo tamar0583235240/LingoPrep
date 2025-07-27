@@ -5,7 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const autoDeleteRoutes_1 = __importDefault(require("./src/routes/autoDeleteRoutes"));
 console.log("Auto delete routes initialized");
-const remindersRoutes_1 = __importDefault(require("./src/routes/remindersRouts"));
+
+const remindersRoutes_1 = __importDefault(require("./src/routes/remindersRoutes"));
+
+
 const feedbackRouts_1 = __importDefault(require("./src/routes/feedbackRouts"));
 const aIInsightRouts_1 = __importDefault(require("./src/routes/aIInsightRouts"));
 const answerRouts_1 = __importDefault(require("./src/routes/answerRouts"));
@@ -50,9 +53,13 @@ app.use((0, cors_1.default)({
     origin: 'http://localhost:3000',
     credentials: true
 }));
+console.log("✅ טעינת ראוט לתזכורות מתבצעת כעת");
+
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use('/auth', authRouts_1.default);
+console.log("🚦 טוען ראוט reminders לפני הקישור ל-express...");
+app.use("/api/reminders", remindersRoutes_1.default);
 app.use('/api/categories', categoryRoutes_1.default);
 app.use('/api', resourceRouts_1.default);
 app.use('/api', feedbackRouts_1.default);
@@ -79,7 +86,6 @@ app.use("/profiles", profileRouts_1.default);
 app.use('/public-profile', publicProfileRoutes_1.default);
 app.use('/api', autoDeleteRoutes_1.default);
 
-app.use("/api/reminders", remindersRoutes_1.default);
 
 exports.default = app;
 //# sourceMappingURL=app.js.map
