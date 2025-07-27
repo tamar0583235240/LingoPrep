@@ -3,6 +3,7 @@ import { Accordion } from "../shared/ui/Accordion";
 import EditProfilePage from "./my-profile";
 // import { WorkExperienceTab } from "../features/profile/components/WorkExperienceTab";
 import { WorkExperienceTab } from "../features/profile/components/WorkExperienceTab";
+import ExpertiseSkillsList from "../features/profile/components/ExpertiseSkillsList";
 const ProfileAccordionPage = () => {
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -16,6 +17,10 @@ const ProfileAccordionPage = () => {
 
       <Accordion title="ניסיון תעסוקתי">
         <WorkExperienceTab />
+      </Accordion>
+
+      <Accordion title="מיומנויות">
+        <ExpertiseSkillsList />
       </Accordion>
 
     </div>

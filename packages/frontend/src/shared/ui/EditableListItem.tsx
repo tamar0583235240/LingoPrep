@@ -6,18 +6,23 @@ import { Button } from "./button";
 import { ToggleSwitch } from "./ToggleSwitch";
 import { FaEdit, FaTrashAlt, FaSave, FaTimes } from "react-icons/fa";
 
-interface EditableListItemProps<T> extends React.HTMLAttributes<HTMLDivElement> {
-  itemData: T; 
+interface EditableListItemProps<T>
+  extends React.HTMLAttributes<HTMLDivElement> {
+  itemData: T;
   isEditing: boolean;
   onEdit: (id: string | number) => void;
   onDelete: (id: string | number) => void;
   onSave: (id: string | number, updatedData: T) => void;
   onCancelEdit: () => void;
-  onToggleVisibility: (id: string | number, isVisible: boolean) => void;
-  isPubliclyVisible: boolean;
-  renderDisplay: (data: T) => React.ReactNode; 
-  renderEditForm: (data: T, onChange: (key: keyof T, value: any) => void) => React.ReactNode; 
+  onToggleVisibility?: (id: string | number, isVisible: boolean) => void;
+  isPubliclyVisible?: boolean;
+  renderDisplay: (data: T) => React.ReactNode;
+  renderEditForm: (
+    data: T,
+    onChange: (key: keyof T, value: any) => void
+  ) => React.ReactNode;
   itemIdKey?: keyof T;
+  showToggle?: boolean;
 }
 
 export function EditableListItem<T extends { id?: string | number }>({
@@ -29,9 +34,10 @@ export function EditableListItem<T extends { id?: string | number }>({
   onCancelEdit,
   onToggleVisibility,
   isPubliclyVisible,
+  showToggle,
   renderDisplay,
   renderEditForm,
-  itemIdKey = 'id' as keyof T,
+  itemIdKey = "id" as keyof T,
   className,
   ...props
 }: EditableListItemProps<T>) {
@@ -56,24 +62,32 @@ export function EditableListItem<T extends { id?: string | number }>({
       )}
       {...props}
     >
-      <div className="absolute top-4 left-4 flex items-center gap-2">
-        <ToggleSwitch
-          checked={isPubliclyVisible}
-          onToggle={() => onToggleVisibility(itemId, !isPubliclyVisible)}
-          label={isPubliclyVisible ? "מוצג לציבור" : "פרטי"}
-        />
-        {!isPubliclyVisible && (
-          <span className="text-xs text-text-secondary">
-            (לא יוצג בפרופיל הציבורי)
-          </span>
+      {showToggle &&
+        typeof isPubliclyVisible === "boolean" &&
+        onToggleVisibility && (
+          <div className="absolute top-4 left-4 flex items-center gap-2">
+            <ToggleSwitch
+              checked={isPubliclyVisible}
+              onToggle={() => onToggleVisibility(itemId, !isPubliclyVisible)}
+              label={isPubliclyVisible ? "מוצג לציבור" : "פרטי"}
+            />
+            {!isPubliclyVisible && (
+              <span className="text-xs text-text-secondary">
+                (לא יוצג בפרופיל הציבורי)
+              </span>
+            )}
+          </div>
         )}
-      </div>
 
       <div className="flex justify-end gap-2">
         {isEditing ? (
           <>
-            <Button size="sm" variant="primary-dark" onClick={() => onSave(itemId, editedData)}>
-             {FaSave && <FaSave />}שמור
+            <Button
+              size="sm"
+              variant="primary-dark"
+              onClick={() => onSave(itemId, editedData)}
+            >
+              {FaSave && <FaSave />}שמור
             </Button>
             <Button size="sm" variant="outline" onClick={onCancelEdit}>
               <FaTimes /> בטל
@@ -81,18 +95,30 @@ export function EditableListItem<T extends { id?: string | number }>({
           </>
         ) : (
           <>
-            <Button size="sm" variant="ghost" onClick={() => onEdit(itemId)} aria-label="ערוך">
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onEdit(itemId)}
+              aria-label="ערוך"
+            >
               <FaEdit />
             </Button>
-            <Button size="sm" variant="ghost" onClick={() => onDelete(itemId)} aria-label="מחק">
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onDelete(itemId)}
+              aria-label="מחק"
+            >
               <FaTrashAlt />
             </Button>
           </>
         )}
       </div>
 
-      <div className="mt-8"> 
-        {isEditing ? renderEditForm(editedData, handleInputChange) : renderDisplay(itemData)}
+      <div className="mt-8">
+        {isEditing
+          ? renderEditForm(editedData, handleInputChange)
+          : renderDisplay(itemData)}
       </div>
     </CardSimple>
   );

@@ -17,6 +17,7 @@ import userAdminRouts from './src/routes/userAdminRouts';
 import interviewMaterialsRoutes from './src/routes/interviewMaterialsRoutes';
 import profileRoutes from './src/routes/profileRouts'; 
 import publicProfileRoutes from './src/routes/publicProfileRoutes';
+import experienceSkillsRoutes from './src/routes/experienceSkillsRoutes';
 
 dotenv.config();
 
@@ -60,5 +61,7 @@ app.use("/api/aiInsight", aiInsightRoutes);
 app.use("/manager/interview-materials", interviewMaterialsRoutes);
 app.use("/profiles", profileRoutes);
 app.use('/public-profile', publicProfileRoutes);
+app.use("/expertise-skills", experienceSkillsRoutes);
+
 
 export default app;
