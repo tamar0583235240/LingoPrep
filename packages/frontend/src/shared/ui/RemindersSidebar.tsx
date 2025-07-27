@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { cn } from "../utils/cn";
 import { FaRegBell, FaCheck } from "react-icons/fa";
-
 interface Reminder {
     id: string;
     subject: string;
@@ -82,7 +81,7 @@ export const ReminderBell: React.FC = () => {
 
     const fetchReminders = () => {
         setLoading(true);
-        fetch("/api/reminders")
+        fetch("/api/reminders/")
             .then(async (res) => {
                 const text = await res.text();
                 try {
@@ -113,6 +112,7 @@ export const ReminderBell: React.FC = () => {
 
     const handleDone = (id: string) => {
           console.log("סימנתי תזכורת כבוצע עם id:", id);
+console.log("Sending request to mark reminder as done, id:", id);
 
         fetch(`/api/reminders/${id}/done`, { method: "POST" })
         

@@ -14,6 +14,7 @@ export const getRemindersController = async (req: Request, res: Response) => {
 
         console.error("שגיאה בשליפת תזכורות", error);
     res.status(500).json({ error: "Failed to fetch reminders" });
+
   }
 };
 export const markReminderAsDoneController = async (req: Request, res: Response) => {
@@ -23,7 +24,8 @@ export const markReminderAsDoneController = async (req: Request, res: Response) 
 
     await markReminderAsDone(id);
     res.json({ success: true });
-  } catch (error) {
+  } 
+  catch (error) {
         console.error("Error in markReminderAsDoneController:", error);
 
     res.status(500).json({ error: "Failed to update reminder status" });

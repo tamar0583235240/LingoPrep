@@ -73,14 +73,13 @@ const HomePage = () => {
           <Button variant="outline" fullWidth onClick={() => navigate("/admin/users")}>
             ניהול משתמשים
           </Button>
-          {/* הכפתור החדש של ניהול הקלטות
           <Button
             variant="outline"
             fullWidth
             onClick={() => navigate("/auto-delete-config")}
           >
             ניהול הקלטות
-          </Button> */}
+          </Button>
 
 
         </GridContainer>
