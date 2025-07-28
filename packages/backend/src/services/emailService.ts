@@ -1,22 +1,16 @@
+
 // src/services/emailService.ts
 import { ReminderType } from "@interfaces/reminderInterfaces";
 import { getUserEmailById } from "../reposioty/userRepository2";
 import sendEmail from "../utils/sendEmail";
-
 export async function sendReminderEmail(userId: string, type: ReminderType, content: string): Promise<boolean> {
   const email = await getUserEmailById(userId);
   if (!email) return false;
-
   const env = process.env.NODE_ENV;
   const isProduction = env === "production";
-
-  if (!isProduction && email !== "t0527146247@gmail.com") return false;
-
-  const subject = type === "tip" ? "💡 טיפ יומי" : "📌 שאלה לתרגול";
-
-  const emoji = type === "tip" ? "" : "";
-  const title = type === "tip" ? "טיפ יומי" : "שאלה לתרגול";
-
+  // if (!isProduction && email !== "example@gmail.com") return false;
+  const subject = type === "tip" ? ":bulb: תזכורת " : ":pushpin:  תזכורת";
+  const title = type === "tip" ? "טיפ " : "שאלה לתרגול";
   const htmlContent = `
     <div dir="rtl" style="
       font-family: Arial, sans-serif;
@@ -33,17 +27,14 @@ export async function sendReminderEmail(userId: string, type: ReminderType, cont
         font-weight: 700;
         font-size: 1.5rem;
         margin-bottom: 8px;
-      ">${emoji} ${title}</h2>
-
+      "> ${title}</h2>
       <hr style="border: none; border-bottom: 1px solid #00B894; margin: 10px 0;" />
-
       <p style="
         font-size: 1rem;
         line-height: 1.5;
-        color: #34495e;
+        color: #34495E;
         margin-bottom: 20px;
       ">${content}</p>
-
       <footer style="
         font-size: 0.875rem;
         color: #64748B; /* secondary-text */
@@ -55,13 +46,10 @@ export async function sendReminderEmail(userId: string, type: ReminderType, cont
       </footer>
     </div>
   `;
-
   await sendEmail({
     to: email,
     subject,
     html: htmlContent,
   });
-
   return true;
 }
-
