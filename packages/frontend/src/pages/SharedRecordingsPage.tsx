@@ -11,10 +11,19 @@ import toast from 'react-hot-toast';
 
 export default function SharedRecordingsPage() {
 
-  const userId = useSelector((state: RootState) => state.auth.user?.id);
-  const { data, isLoading, error, refetch } = useGetSharedRecordingsQuery(userId!, {
-    skip: !userId,
-  });
+  const user = useSelector((state: RootState) => state.auth.user);
+  const userId = user?.id;
+  const userRole = user?.role;
+
+  if (!userId || !userRole) {
+    return <p>לא נמצאו הקלטות משותפות</p>;
+  }
+
+  const { data, isLoading, error, refetch } = useGetSharedRecordingsQuery(
+    { role: userRole, userId },
+    { skip: false }
+  );
+
 
 
   const [selectedRecordingId, setSelectedRecordingId] = useState<string | null>(null);
@@ -37,13 +46,13 @@ export default function SharedRecordingsPage() {
 
   // if (!data || data.length === 0) return <p>אין הקלטות משותפות</p>;
   if (!data || data.length === 0) {
-  return (
-    <div className="flex flex-col items-center justify-center text-[#00B894] mt-10">
-      <span className="text-4xl mb-2">🎧</span>
-      <p className="text-lg font-semibold">אין הקלטות משותפות</p>
-    </div>
-  );
-}
+    return (
+      <div className="flex flex-col items-center justify-center text-[#00B894] mt-10">
+        <span className="text-4xl mb-2">🎧</span>
+        <p className="text-lg font-semibold">אין הקלטות משותפות</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-3xl mx-auto py-6">
@@ -73,10 +82,10 @@ export default function SharedRecordingsPage() {
                 rating,
               }).unwrap();
               await refetch();
-             alert(' נשלח בהצלחה! 🎉');
+              alert(' נשלח בהצלחה! 🎉');
               setSelectedRecordingId(null);
             } catch (err) {
-            alert('אירעה שגיאה בשליחת הפידבק');
+              alert('אירעה שגיאה בשליחת הפידבק');
               console.error(err);
             }
           }}

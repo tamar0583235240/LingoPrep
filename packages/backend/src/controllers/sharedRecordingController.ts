@@ -61,16 +61,32 @@ export const addParticipant = async (req: Request, res: Response): Promise<void>
 };
 import * as sharedRepo from '../reposioty/sharedRecordings.repository';
 
+// export const getSharedRecordingsByUser = async (req: Request, res: Response) => {
+//   try {
+//     const userId = req.query.userId as string; 
+//     if (!userId) {
+//       return res.status(400).json({ error: 'Missing userId in query' });
+//     }
+//     const recordings = await sharedRepo.getSharedRecordingsByUserId(userId);
+//     res.json(recordings);
+//   } catch (error) {
+//     res.status(500).json({ error });
+//   }
+// };
+
 export const getSharedRecordingsByUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.query.userId as string; 
-    if (!userId) {
-      return res.status(400).json({ error: 'Missing userId in query' });
+    const userId = req.query.userId as string;
+    const role = req.query.role as string;
+
+    if (!userId || !role) {
+      return res.status(400).json({ error: 'Missing userId or role in query' });
     }
-    const recordings = await sharedRepo.getSharedRecordingsByUserId(userId);
-    res.json(recordings);
+    const recordings = await sharedRepo.getSharedRecordingsByUserId(userId, role);
+    res.status(200).json(recordings);
   } catch (error) {
-    res.status(500).json({ error });
+    console.error('Error in getSharedRecordingsByUser:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
