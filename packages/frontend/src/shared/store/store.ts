@@ -13,6 +13,7 @@ import simulationReducer from '../../features/interview/store/simulationSlice';
 import recordingReducer from '../../features/recordings/store/recordingSlice';
 import answeredReducer from '../../features/interview/store/answeredSlice';
 import { profilesApi } from "../../features/profile/services/profileApi";
+import  AI_Insight from "../../features/interview/store/AI_InsightSlice";
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
@@ -27,12 +28,13 @@ const rootReducer = combineReducers({
   simulation: simulationReducer,
   recording: recordingReducer,
   answered: answeredReducer,
+  AI_Insight:AI_Insight
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'user', 'example', 'simulation', 'recording', 'answered'], // reducers to persist
+  whitelist: ['auth', 'user', 'example', 'simulation', 'recording', 'answered','AI_Insight'], // reducers to persist
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -19,7 +19,8 @@ import { CheckCircle2, Lightbulb, X } from "lucide-react";
 import { Button } from "../shared/ui/button";
 import CategoryTabs from "../features/interview/components/showCategories";
 import { useGetAnsweredQuestionsQuery } from "../features/interview/services/statusAPI";
-import { AiInsightsList } from "../features/recordings/components/AiInsightsList";
+import { AI_Insight } from "../features/interview/components/AI-Insight";
+// import { AiInsightsList } from "../features/recordings/components/AiInsightsList";
 
 const InterviewPage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -236,20 +237,21 @@ const InterviewPage = () => {
                 </button>
               </div>
               <div className="p-6 max-h-[70vh] overflow-y-auto">
-                {isLoadingAI ? (
+                {/* {isLoadingAI ? (
                   <div className="text-center py-12">
                     <h3 className="text-xl font-bold text-purple-800 mb-6">מנתח תשובה...</h3>
                     <MagicLoader />
                   </div>
                 ) : (
-                  // <AnswerAI
+                  <AnswerAI
                   <AiInsightsList
                     answerId={currentAnswerId}
                     // audioFile={}
                     onClose={() => dispatch(setCurrentAnswerId(null))}
                     onLoaded={() => setIsLoadingAI(false)}
                   />
-                )}
+                )} */}
+                <AI_Insight/>
               </div>
             </div>
           </div>
