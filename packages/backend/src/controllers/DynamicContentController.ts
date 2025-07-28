@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import dynamicContentRepository from '../reposioty/dynamicContentRepository';
+import dynamicContentRepository from '../repository/dynamicContentRepository';
 
 export const getAllDynamicContents = async (req: Request, res: Response) => {
   try {

@@ -9,17 +9,19 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendResetEmail = async (email: string, token: string): Promise<void> => {
-  const resetUrl = `http://localhost:3000/reset-password?token=${token}`;
+  const resetUrl = `http://localhost:${process.env.PGPORT}/reset-password?token=${token}`;
+
   const mailOptions = {
     from: `"LingoPrep" <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: 'איפוס סיסמה',
-    text: ` קישור לאיפוס הסיסמה שלך: ${resetUrl}`,
-    html: `<p> קישור לאיפוס הסיסמה שלך:</p><p><a href="${resetUrl}">${resetUrl}</a></p>`,
+    subject: "איפוס סיסמה - LingoPrep",
+    text: `קישור לאיפוס הסיסמה שלך: ${resetUrl}`,
+    html: `<p>קישור לאיפוס הסיסמה שלך:</p><p><a href="${resetUrl}">${resetUrl}</a></p>`,
   };
 
   await transporter.sendMail(mailOptions);
 };
+
 
 export const sendVerificationCodeEmail = async (to: string, text: string): Promise<void> => {
   const transporter = nodemailer.createTransport({

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getReminders, markReminderAsDone } from "../reposioty/remindersRepository";
+import { getReminders, markReminderAsDone } from "../repository/remindersRepository";
 export const getRemindersController = async (req: Request, res: Response) => {
    console.log("📥 נכנסנו ל־getAllReminders");
   try {

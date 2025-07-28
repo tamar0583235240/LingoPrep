@@ -39,3 +39,13 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
 );
 Card.displayName = "Card";
 
+
+
+interface IconWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
+  size?: "sm" | "md" | "lg"
+  color?: "primary-dark" | "secondary" | "accent" | "muted" | "success" | "danger"
+  children: React.ReactNode
+}
+
+
+

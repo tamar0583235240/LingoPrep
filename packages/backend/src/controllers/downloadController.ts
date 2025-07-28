@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getInterviewMaterialSubById } from "../reposioty/interviewMaterialSubRepository";
+import { getInterviewMaterialSubById } from "../repository/interviewMaterialSubRepository";
 // import { fetch } from "undici";
 // import { InterviewMaterialsSub } from "@interfaces/entities/InterviewMaterialsSub";
 

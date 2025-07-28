@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import  answerRepository  from '../reposioty/answerRepository';
+import  answerRepository  from '../repository/answerRepository';
 import { pool } from "../config/dbConnection";
 import { validate as isUuid } from "uuid";  
 import {
@@ -8,7 +8,7 @@ import {
   deleteAnswer,
   updateAnswer,
   getAnswerById,
-} from '../reposioty/answerRepository';
+} from '../repository/answerRepository';
 
 
 export const answerController = async (req: Request, res: Response): Promise<void> => {

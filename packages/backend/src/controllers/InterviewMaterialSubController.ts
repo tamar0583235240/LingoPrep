@@ -3,14 +3,18 @@ import {
   deleteFileFromCloudinary,
   uploadFileToCloudinary,
 } from "../config/cloudinary";
-import * as interviewMaterialSubRepository from "../reposioty/interviewMaterialSubRepository";
+import * as interviewMaterialSubRepository from "../repository/interviewMaterialSubRepository";
 
 //getting all interview material subs
 const getInterviewMaterialSub = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  console.log("in comt");
+  
   try {
+    console.log("🔥 מגיעים לפה ב־GET materials");
+
     const items =
       await interviewMaterialSubRepository.getInterviewMaterialsSubs();
     const itemsWithUrls = items.map((item) => ({

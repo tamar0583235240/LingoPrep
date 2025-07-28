@@ -1,5 +1,6 @@
 
 import './App.css';
+
 import { MessageModalProvider } from './shared/ui/MessageModalContext';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter } from "react-router-dom";
@@ -37,6 +38,7 @@ function App() {
  const clientId = '412263291390-jkirnvmjnk6qbera6qcdq3k6cotqk9o7.apps.googleusercontent.com';
  
   return (
+
     <GoogleOAuthProvider clientId={clientId}>
     <Provider store={store}>
         

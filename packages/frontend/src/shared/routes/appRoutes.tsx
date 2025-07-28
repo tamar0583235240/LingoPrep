@@ -20,18 +20,20 @@ import LoginPage from "../../pages/LoginPage";
 import ProfilePage from "../../pages/ProfilePage";
 import MyProfileViewPage from "../../pages/my-profile-view";
 import ProfileAccordionPage from "../../pages/ProfileAccordionPage";
+import InterviewMaterials from "../../pages/InterviewMaterials";
 import SettingsPage from "../../pages/SettingsPage";
-import InterviewPage from "../../pages/InterviewPage";
-import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
 import ProfileList from "../../features/profile/components/ProfileList";
 import InterviewMaterialPage from "../../features/knowledge-base/components/interviewMaterialPage";
 import { WorkExperienceTab } from "../../features/profile/components/WorkExperienceTab";
 import DynamicContentPage from "../../pages/DynamicContentPage";
 import { PublicProfilePage } from "../../pages/PublicProfilePage";
+import InterviewPage from "../../pages/InterviewPage";
+import InterviewMaterialsHub from "../../pages/InterviewMaterialsHub";
 import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import SharedRecordingsPage from "../../pages/SharedRecordingsPage";
 import { AutoDeleteSettings } from "../../features/admin/components/AutoDeleteSettings";
 import { ReminderBell } from "../ui/RemindersSidebar";
+import PracticeQuestionsUser from "../../pages/PracticeQuestionsUser";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -140,6 +142,14 @@ export default function AppRoutes() {
             }
           />
           <Route
+            path="/practiceQuestionsUser"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <PracticeQuestionsUser />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
             path="/manager/questions"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
@@ -159,6 +169,7 @@ export default function AppRoutes() {
           />
           <Route
             path="/manager/resources"
+
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
                 <p>InterviewMaterialsHub</p>
@@ -242,8 +253,6 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
-
-
           <Route
             path="/admin/dynamic-content"
             element={
@@ -253,7 +262,6 @@ export default function AppRoutes() {
             }
           />
         </Route>
-
         <Route path="/not-authorized" element={<NotAuthorizedPage />} />
         <Route path="/u/:slug" element={<PublicProfilePage />} />
       </Routes>

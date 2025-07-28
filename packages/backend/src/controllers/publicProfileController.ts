@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getPublicProfileBySlug } from "../reposioty/publicProfileRepository";
+import { getPublicProfileBySlug } from "../repository/publicProfileRepository";
 import { log } from "console";
 export const getPublicProfileBySlugHandler = async (
   req: Request,

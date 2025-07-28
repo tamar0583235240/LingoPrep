@@ -1,29 +1,45 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
 import { api } from "../api/api";
 import { questionsApi } from '../../features/interview/services/questionsApi';
 import { categoriesApi } from "../../features/interview/services/categoriesApi";
-import simulationReducer from '../../features/interview/store/simulationSlice';
-import recordingReducer from '../../features/recordings/store/recordingSlice';
-
-// import { profilesApi } from ''; // לדוגמה
 
 import authReducer from '../../features/auth/store/authSlice';
 import userReducer from '../../features/auth/store/userSlice';
+import exampleReducer from '../../features/exampleFeatures/store/exampleSlice';
+import simulationReducer from '../../features/interview/store/simulationSlice';
+import recordingReducer from '../../features/recordings/store/recordingSlice';
+import answeredReducer from '../../features/interview/store/answeredSlice';
 import { profilesApi } from "../../features/profile/services/profileApi";
-import { persistStore } from "redux-persist";
+import { interviewMaterialSubApi } from "../../features/interview-materials-hub/store/interviewMaterialSubApi";
+
+const rootReducer = combineReducers({
+  [api.reducerPath]: api.reducer,
+  [questionsApi.reducerPath]: questionsApi.reducer,
+  [categoriesApi.reducerPath]: categoriesApi.reducer,
+  [profilesApi.reducerPath]: profilesApi.reducer,
+  [interviewMaterialSubApi.reducerPath]: interviewMaterialSubApi.reducer,
+
+  auth: authReducer,
+  user: userReducer,
+  example: exampleReducer,
+  simulation: simulationReducer,
+  recording: recordingReducer,
+  answered: answeredReducer,
+});
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['auth', 'user', 'example', 'simulation', 'recording', 'answered',], // reducers to persist
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: {
-    [api.reducerPath]: api.reducer,
-    [questionsApi.reducerPath]: questionsApi.reducer,
-    [categoriesApi.reducerPath]: categoriesApi.reducer,
-    [profilesApi.reducerPath]: profilesApi.reducer,
-    recording: recordingReducer,
-    user: userReducer,
-    auth: authReducer,
-    simulation: simulationReducer, 
-
-  },
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
@@ -31,7 +47,9 @@ export const store = configureStore({
       api.middleware,
       questionsApi.middleware,
       categoriesApi.middleware,
-      profilesApi.middleware
+      profilesApi.middleware,
+      interviewMaterialSubApi.middleware
+
     ),
 });
 

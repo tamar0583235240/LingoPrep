@@ -1,13 +1,12 @@
 import { Request, Response } from 'express';
 import { Users } from '../interfaces/entities/Users';
-import userRepository from '../reposioty/userRepository';
+import userRepository from '../repository/userRepository';
 import bcrypt from 'bcrypt';
 import { generateUniqueSlug } from '../utils/generateSlug';
 import { pool } from '../config/dbConnection';
 import { v4 as uuidv4 } from 'uuid';
-
 import { createUserByAdminSchema , updateUserByAdminSchema  } from '../validations/userValidations';
-import { insertUsersFromExcel } from '../reposioty/userRpository';
+import  insertUsersFromExcel  from '../repository/userRpository';
 
 const SALT_ROUNDS = 10;
 
@@ -294,7 +293,7 @@ export const uploadUsersExcel = async (req: Request, res: Response) => {
       return res.status(400).send('לא נשלח קובץ');
     }
 
-    const { insertedUsers, skippedUsers } = await insertUsersFromExcel(req.file.path);
+    const { insertedUsers, skippedUsers } = await userRepository.insertUsersFromExcel(req.file.path);
 
     res.status(200).json({
       message: 'עיבוד הקובץ הסתיים',

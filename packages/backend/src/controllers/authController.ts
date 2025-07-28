@@ -10,9 +10,9 @@ import {
   createToken,
   getToken,
   deleteToken,
-} from "../reposioty/passwordResetRepository";
-import userRepository from "../reposioty/userRepository";
-import authRepository from "../reposioty/authRepository";
+} from "../repository/passwordResetRepository";
+import userRepository from "../repository/userRepository";
+import authRepository from "../repository/authRepository";
 import {
   sendResetEmail,
   sendVerificationCodeEmail,

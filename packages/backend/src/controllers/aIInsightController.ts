@@ -1,7 +1,7 @@
 
 
 import { Request, Response } from 'express';
-import aiInsightsRepository from '../reposioty/AiInsightsReposiory';
+import aiInsightsRepository from '../repository/AiInsightsReposiory';
 
 export const getAiInsights = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -29,7 +29,7 @@ import {
   deleteInsight,
   updateInsight,
   getInsightById,
-} from '../reposioty/AiInsightsReposiory';
+} from '../repository/AiInsightsReposiory';
 
 export const createInsightController = async (req: Request, res: Response) => {
   const answerId = req.body.answerId || req.body.answer_id;

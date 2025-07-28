@@ -5,7 +5,8 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-} from "typeorm";
+} 
+from "typeorm";
 import { AiInsights } from "./AiInsights";
 import { Questions } from "./Questions";
 import { Users } from "./Users";
@@ -14,11 +15,13 @@ import { Feedback } from "./Feedback";
 @Index("answers_pkey", ["id"], { unique: true })
 @Entity("answers", { schema: "public" })
 export class Answers {
+
   @Column("uuid", {
     primary: true,
     name: "id",
     default: () => "uuid_generate_v4()",
   })
+
   id: string;
 
   @Column("text", { name: "file_url" })

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import questionRepository from '../reposioty/questionRepository';
+import questionRepository from '../repository/questionRepository';
 import { Questions } from '../interfaces/entities/Questions';
 const addQuestion = async (req: Request, res: Response):Promise<Questions | void> => {
   try {

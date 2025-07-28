@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import statusRepository from '../reposioty/statusRepository';
+import statusRepository from '../repository/statusRepository';
 
 export const getUserAnsweredQuestionsControler = async (req: Request, res: Response) => {
   try {

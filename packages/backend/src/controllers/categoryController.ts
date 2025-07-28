@@ -1,4 +1,4 @@
-import  categoryRepository  from "../reposioty/categoryRepoisitory";
+import  categoryRepository  from "../repository/categoryRepoisitory";
 import { Request, Response } from "express";
 
 

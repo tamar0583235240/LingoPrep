@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { addParticipantRepo, deleteEmailFromSharedRecordingRepo, getAllPreviouslySharedEmails, getSharedWithByAnswerAndOwner } from '../reposioty/sharedRecordingRpository';
+import { addParticipantRepo, deleteEmailFromSharedRecordingRepo, getAllPreviouslySharedEmails, getSharedWithByAnswerAndOwner } from '../repository/sharedRecordingRpository';
 import { log } from 'console';
 
 export const getSharedRecordingParticipants = async (req: Request, res: Response) => {
@@ -59,7 +59,7 @@ export const addParticipant = async (req: Request, res: Response): Promise<void>
     res.status(500).json({ error: 'Error creating shared recording' });
   }
 };
-import * as sharedRepo from '../reposioty/sharedRecordings.repository';
+import * as sharedRepo from '../repository/sharedRecordings.repository';
 
 export const getSharedRecordingsByUser = async (req: Request, res: Response) => {
   try {

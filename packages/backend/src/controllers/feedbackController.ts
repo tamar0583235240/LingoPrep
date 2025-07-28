@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Feedback } from '../interfaces/entities/Feedback';
-import { getFeedbackesByanswerIdRepo } from '../reposioty/feedBackRepository';
+import { getFeedbackesByanswerIdRepo } from '../repository/feedBackRepository';
 
 export const getFeedbackesByanswerId = async (req: Request, res: Response): Promise<void> => {
     try {

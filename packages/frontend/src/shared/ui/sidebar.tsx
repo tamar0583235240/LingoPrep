@@ -24,13 +24,15 @@ const navItems: NavItem[] = [
   { label: "ההקלטות שלי", href: "/recordings" },
   { label: "הקלטות משותפות", href: "/shared" },
   { label: "משאבים", href: "/resources" },
+  { label: "מרכז חומרי ראיונות", href: "/interviewMaterialsHub" },
+  { label: "Programming Questions", href: "/practiceQuestionsUser" },
   { label: "פרופילים", href: "/profiles" },
   { label: "מנהל", href: "", isSectionTitle: true, adminOnly: true },
   { label: "ניהול שאלות", href: "/manager/questions", adminOnly: true },
   { label: "ניהול משתמשים", href: "/manager/users", adminOnly: true },
   { label: "ניהול משאבים", href: "/manager/resources", adminOnly: true },
   { label: "ניהול חומרים", href: "/manager/interview-materials", adminOnly: true, },
-  { label: "מרכז חומרי ראיונות", href: "/interviewMaterialsHub", adminOnly: true },
+
   { label: "ניהול הקלטות", href: "/auto-delete-config", adminOnly: true },
 
 ];
@@ -38,9 +40,9 @@ const navItems: NavItem[] = [
 const SidebarNavigation = () => {
   const location = useLocation();
 
-const isAdmin = useSelector((state: RootState) =>
-  (state.auth.user?.role ?? "").toLowerCase().includes("manager")
-);
+  const isAdmin = useSelector((state: RootState) =>
+    (state.auth.user?.role ?? "").toLowerCase().includes("manager")
+  );
 
   return (
     <aside
@@ -85,7 +87,7 @@ const isAdmin = useSelector((state: RootState) =>
             )
           )}
       </nav>
-    
+
       <ExitButton />
     </aside>
   );

@@ -3,9 +3,9 @@ import {
   getAllProfiles,
   getProfileByUserId,
   updateProfile,
-} from "../reposioty/profileRepository";
+} from "../repository/profileRepository";
 import { uploadFileToCloudinary } from "../config/cloudinary";
-import userRepository from "../reposioty/userRepository";
+import userRepository from "../repository/userRepository";
 export const getAllProfilesHandler = async (_req: Request, res: Response) => {
   try {
     const profiles = await getAllProfiles();
