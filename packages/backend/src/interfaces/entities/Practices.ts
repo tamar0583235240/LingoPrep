@@ -1,10 +1,10 @@
 import { Column, Entity, Index } from "typeorm";
 
-@Index("tips_pkey", ["id"], { unique: true })
-@Index("tips_sequence_number_key", ["sequenceNumber"], { unique: true })
-@Index("idx_tips_sequence", ["sequenceNumber"], {})
-@Entity("tips", { schema: "public" })
-export class Tips {
+@Index("practices_pkey", ["id"], { unique: true })
+@Index("practices_sequence_number_key", ["sequenceNumber"], { unique: true })
+@Index("idx_practices_sequence", ["sequenceNumber"], {})
+@Entity("practices", { schema: "public" })
+export class Practices {
   @Column("uuid", {
     primary: true,
     name: "id",

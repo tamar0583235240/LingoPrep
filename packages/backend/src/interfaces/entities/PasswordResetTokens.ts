@@ -8,7 +8,7 @@ export class PasswordResetTokens {
   @Column("uuid", {
     primary: true,
     name: "id",
-    default: () => "uuid_generate_v4()",
+    default: () => "gen_random_uuid()",
   })
   id: string;
 

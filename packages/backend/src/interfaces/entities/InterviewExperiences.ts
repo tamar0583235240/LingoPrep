@@ -29,9 +29,6 @@ export class InterviewExperiences {
   @Column("date", { name: "interview_date", nullable: true })
   interviewDate: string | null;
 
-  @Column("text", { name: "questions", nullable: true, array: true })
-  questions: string[] | null;
-
   @Column("text", { name: "tips", nullable: true })
   tips: string | null;
 
@@ -57,6 +54,9 @@ export class InterviewExperiences {
     default: () => "CURRENT_TIMESTAMP",
   })
   createdAt: Date | null;
+
+  @Column("text", { name: "questions", nullable: true })
+  questions: string | null;
 
   @OneToMany(
     () => ContentReports,

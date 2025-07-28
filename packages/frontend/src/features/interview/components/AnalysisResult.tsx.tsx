@@ -1,5 +1,4 @@
 const AnalysisResult = () => {
-  //נתוח השרת אם השיפורים שהוצעו
   return (
     <div>
       <h2>תוצאות הניתוח</h2>

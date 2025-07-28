@@ -14,26 +14,22 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // localStorage כברירת מחדל
+import storage from 'redux-persist/lib/storage'; 
 
-// שילוב כל הרדיוסרים
 const rootReducer = combineReducers({
   [questionsApi.reducerPath]: questionsApi.reducer,
   [categoriesApi.reducerPath]: categoriesApi.reducer,
   answered: answeredReducer,
 });
 
-// הגדרות persist
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['answered'], // רק answered יישמר
+  whitelist: [],
 };
 
-// רדיוסר עם persist
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// יצירת store עם middleware של RTK Query ותמיכה ב-persist
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>

@@ -4,8 +4,7 @@ import { Questions } from "../interfaces/entities/Questions";
 import { v4 as uuid4 } from 'uuid';
 
 
-//צריך לשנות פה בגלל שמחקנו category 
-//מטבלת שאלות
+
 const addQustion = async (question: Questions): Promise<Questions> => {
   try {
 
@@ -13,8 +12,8 @@ const addQustion = async (question: Questions): Promise<Questions> => {
     let exists = true;
     id = uuid4();
     const query = `
-      INSERT INTO questions (id , title , content  , tips , ai_guidance , is_active)
-      VALUES ('${id}', '${question.title}', '${question.content}', '${"question.category"}', '${question.tips}', '${question.aiGuidance}','${question.isActive}')
+      INSERT INTO questions (id , title , content , tips , ai_guidance , is_active)
+      VALUES ('${id}', '${question.title}', '${question.content}', '${question.tips}', '${question.aiGuidance}','${question.isActive}')
     `;
 
     const result = await pool.query(query);
@@ -97,8 +96,6 @@ const deleteQuestionById = async (id: string, is_active: boolean): Promise<strin
     throw error;
   }
 }
-
-
 
 
 const getQuestionsByCategory = async (category_id: string): Promise<Questions[]> => {

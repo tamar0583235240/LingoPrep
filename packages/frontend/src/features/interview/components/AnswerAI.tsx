@@ -7,10 +7,17 @@ import { X } from "lucide-react";
 interface AnswerAIProps {
   answerId: string;
   onClose: () => void;
+  onLoaded?: () => void
 }
 
-const AnswerAI: React.FC<AnswerAIProps> = ({ answerId, onClose }) => {
+const AnswerAI: React.FC<AnswerAIProps> = ({ answerId, onClose, onLoaded }) => {
   const { analysis, loading } = useFeedbackAnalysis(answerId);
+
+  useEffect(() => {
+  if (analysis) {
+    onLoaded?.(); // ברגע שסיים לטעון
+  }
+}, [analysis]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">

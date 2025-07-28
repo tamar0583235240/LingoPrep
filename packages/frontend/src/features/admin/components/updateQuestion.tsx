@@ -43,6 +43,7 @@ export const UpdateQuestion = (props: { question: Question,categorySelected:Cate
             id: question.id,
             title: titleQ,
             content: contentQ,
+            // category: categoryQ,
             tips: tipsQ,
             ai_guidance: ai_guidanceQ,
             is_active: true
