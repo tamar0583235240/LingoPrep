@@ -66,7 +66,7 @@ export const practiceApi = api.injectEndpoints({
     // שליחת מייל
     sendEmail: builder.mutation<{ success: boolean; message: string }, { to: string; subject: string; text: string }>({
       query: ({ to, subject, text }) => ({
-        url: `api/codeQuestions/send-email`,
+        url: `api/codeQuestions/sendEmail`,
         method: 'POST',
         body: { to, subject, text },
       }),

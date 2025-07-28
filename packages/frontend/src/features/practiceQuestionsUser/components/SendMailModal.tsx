@@ -7,19 +7,27 @@ interface SendMailModalProps {
   questionContent: string;
   answer: string;
   onClose: () => void;
-  onSend: (email: string, message: string) => void;
+  onSend: (email: string, question: string, answer: string, senderName: string, senderEmail: string) => void;
 }
 
 export const SendMailModal = ({ questionContent, answer, onClose, onSend }: SendMailModalProps) => {
   const [email, setEmail] = useState("");
-
-  // שליפת המשתמש מהסטור
   const user = useSelector((state: RootState) => state.auth.user);
-
   const senderName = user?.firstName || "משתמש";
   const senderEmail = user?.email || "לא ידוע";
 
-  const message = `שלום,\n\n${senderName} החליט לשתף אותך בשאלה הזו:\n${questionContent}\n\nהתשובה שלו:\n${answer}\n\nאשמח לקבל תגובה:\n${senderEmail}`;
+  const message = `שלום,
+
+${senderName} רצה לשתף אותך בשאלה שהוא ענה עליה:
+
+שאלה:
+${questionContent}
+
+תשובה:
+${answer}
+
+ניתן להגיב למייל של המשתמש:
+${senderEmail}`;
 
   return (
     <Dialog open={true} onClose={onClose} className="fixed inset-0 z-50 flex items-center justify-center">
@@ -49,12 +57,11 @@ export const SendMailModal = ({ questionContent, answer, onClose, onSend }: Send
         </div>
 
         <div className="flex justify-between mt-6">
-          <button onClick={onClose} className="text-sm text-gray-600 hover:underline">
-            ביטול
-          </button>
+          <button onClick={onClose} className="text-sm text-gray-600 hover:underline">ביטול</button>
           <button
-            onClick={() => onSend(email, message)}
+            onClick={() => onSend(email, questionContent, answer, senderName, senderEmail)}
             className="bg-[#64748B] text-white px-4 py-2 rounded"
+            disabled={!email}
           >
             שלח מייל
           </button>

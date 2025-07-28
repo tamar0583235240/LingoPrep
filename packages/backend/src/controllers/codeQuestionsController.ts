@@ -32,32 +32,6 @@ export const getAllQuestions = async (req: Request, res: Response) => {
   }
 };
 
-// שמירת תשובת המשתמש ועדכון הסטטוס
-// export const setQuestionStatus = async (req: Request, res: Response) => {
-//   const { userId, questionId, status, answer } = req.body;
-
-//   if (!userId || !questionId || !status) {
-//     return res.status(400).json({ message: "Missing userId, questionId or status" });
-//   }
-
-//   try {
-//     const safeAnswer = typeof answer === 'string' ? answer : null;
-
-//     const updatedAnswer = await codeQuestionsRepository.upsertQuestionStatus(
-//       userId,
-//       questionId,
-//       status,
-//       safeAnswer
-//     );
-
-//     res.json({ success: true, data: updatedAnswer });
-//   } catch (error) {
-//     console.error("Error setting status mode", error);
-//     res.status(500).json({ success: false, message: "Server error" });
-//   }
-// };
-
-
 // עדכון סטטוס שאלה
 export const updateQuestionStatus = async (req: Request, res: Response) => {
   const { userId, questionId, status } = req.body;

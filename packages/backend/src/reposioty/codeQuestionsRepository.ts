@@ -1,4 +1,3 @@
-import { UserPracticeAnswers } from "@interfaces/entities/UserPracticeAnswers";
 import { pool } from "../config/dbConnection";
 
 

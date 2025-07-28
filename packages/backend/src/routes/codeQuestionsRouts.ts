@@ -43,7 +43,6 @@ router.get("/likes/:questionId", getQuestionLikes);
 // שליפת כל הלייקים לכל השאלות
 router.get("/allLikes", getAllLikes);
 
-router.post("/send-email", sendEmail);
-
+router.post('/sendEmail', sendEmail);
 
 export default router;

@@ -32,12 +32,6 @@ export const QuestionsList = ({ topicName, level, type }: Props) => {
   const [questionStatuses, setQuestionStatuses] = useState<Record<string, Status>>({});
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
 
-  // const { data: userAnswer, isLoading, error } = useGetUserAnswerQuery(
-  //   selectedQuestion
-  //     ? { userId, questionId: selectedQuestion.id }
-  //     : skipToken // דילוג אם אין עדיין שאלה
-  // );
-
   const {
     data: userAnswer,
     isLoading,
@@ -133,16 +127,14 @@ export const QuestionsList = ({ topicName, level, type }: Props) => {
     fetchStatuses();
   }, [userId]);
 
-  // const handleStatusChange = (id: string, newStatus: Status) => {
-  //   setQuestionStatuses((prev) => ({
-  //     ...prev,
-  //     [id]: newStatus,
-  //   }));
-
-  //   if (selectedQuestion?.id === id) {
-  //     setSelectedQuestion(null);
-  //   }
-  // };
+  useEffect(() => {
+    if (userAnswer && selectedQuestion) {
+      setAnswers((prev) => ({
+        ...prev,
+        [selectedQuestion.id]: userAnswer.answer || "",
+      }));
+    }
+  }, [userAnswer, selectedQuestion]);
 
   const handleStatusChange = async (id: string, newStatus: Status) => {
     setQuestionStatuses((prev) => ({
@@ -203,17 +195,26 @@ export const QuestionsList = ({ topicName, level, type }: Props) => {
                       התשובה שלך
                     </button>
 
-                    {/* <button
-                      onClick={() => setMailQuestion(q)}
-                      
-                      className={`group w-36 h-10 flex-shrink-0 flex items-center justify-center gap-2 ${answers[q.id]
-                        ? "bg-green-600 hover:bg-green-700 active:scale-95"
-                        : "bg-gray-300 cursor-not-allowed"
-                        } text-white text-sm font-medium rounded-md transition-transform duration-200 shadow-sm`}
+                    <button
+                      onClick={() => {
+                        const status = questionStatuses[q.id] ?? "not_started";
+                        if (status === "completed") {
+                          setMailQuestion(q);
+                        } else {
+                          Swal.fire({
+                            icon: 'warning',
+                            iconColor: 'red',
+                            title: 'לא ניתן לשלוח מייל',
+                            text: 'ניתן לשלוח מייל רק על שאלות שהושלמו.',
+                            confirmButtonText: 'סגור',
+                            confirmButtonColor: '#00B894',
+                          });
+                        }
+                      }}
+                      className="group w-36 h-10 flex items-center justify-center gap-2 bg-gray-300 hover:bg-gray-400 text-white text-sm font-medium rounded-md"
                     >
-                      <FiMail className="text-base" />
-                      שלח מייל
-                    </button> */}
+                      <FiMail className="text-base" /> שלח מייל
+                    </button>
                   </div>
                 </div>
               </li>
@@ -238,33 +239,38 @@ export const QuestionsList = ({ topicName, level, type }: Props) => {
           questionContent={mailQuestion.content}
           answer={answers[mailQuestion.id] ?? "עדיין לא ענית על שאלה זו"}
           onClose={() => setMailQuestion(null)}
-          onSend={async (email, message) => {
+          onSend={async (email, question, answer, senderName, senderEmail) => {
             try {
               const subject = `שאלה מעניינת בנושא ${topicName}`;
+              const message = `שלום,
 
-              // שליחת המייל
+              ${senderName} רצה לשתף אותך בשאלה שהוא ענה עליה:
+              שאלה:
+              ${question}
+              תשובה:
+              ${answer}
+              ניתן להגיב למייל של המשתמש:
+              ${senderEmail}`;
+
               await sendEmail({ to: email, subject, text: message }).unwrap();
 
-              // הודעת הצלחה יפה
               Swal.fire({
                 icon: 'success',
                 title: 'המייל נשלח בהצלחה!',
                 text: 'השאלה נשלחה לחבר שלך בדוא"ל.',
                 confirmButtonText: 'סגור',
-                // iconColor: '#00D6AD',
                 confirmButtonColor: '#00B894',
               });
 
               setMailQuestion(null);
             } catch (error) {
-              // הודעת שגיאה
               Swal.fire({
                 icon: 'error',
+                iconColor: 'red',
                 title: 'שגיאה בשליחת המייל',
                 text: 'נסה שוב מאוחר יותר או בדוק את כתובת המייל.',
                 confirmButtonText: 'סגור',
-                // iconColor: '#64748B',
-                confirmButtonColor: '#64748B',
+                confirmButtonColor: '#00B894',
               });
               console.error("Send email error:", error);
             }
