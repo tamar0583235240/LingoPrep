@@ -110,18 +110,18 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
-          <Route path="/recordings" element={<RecordingsList allowedRoles={["student"]} />} />
+          <Route path="/recordings" element={<RecordingsList allowedRoles={["student", "manager"]} />} />
           {/* <Route path="/shared" element={<RoleProtectedRoute allowedRoles={["student"]}><p>SharedRecordings</p></RoleProtectedRoute>} /> */}
 
           <Route
             path="/shared"
             element={
-              <RoleProtectedRoute allowedRoles={["student"]}>
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <SharedRecordingsPage />
               </RoleProtectedRoute>
             }
           />
-          <Route path="/resources" element={<RoleProtectedRoute allowedRoles={["student"]}><p>Resources</p></RoleProtectedRoute>} />
+          <Route path="/resources" element={<RoleProtectedRoute allowedRoles={["student", "manager"]}><p>Resources</p></RoleProtectedRoute>} />
 
           <Route
             path="/interviewMaterialsHub"
