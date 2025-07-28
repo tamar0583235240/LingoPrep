@@ -30,10 +30,10 @@ export const AnswerModal = ({ question, userId, userAnswer, onClose, onStatusCha
 
     
     useEffect(() => {
-        if (userAnswer && userAnswer.status == "in_progress") {
+        if (userAnswer && userAnswer.status === "in_progress") {
             setAnswer(userAnswer.answer);
         }
-        else if (!userAnswer || userAnswer.status == "not_started"){
+        else if (!userAnswer || userAnswer.status === "not_started"){
             console.log(answer, "not_started");
             setAnswer("");
         }

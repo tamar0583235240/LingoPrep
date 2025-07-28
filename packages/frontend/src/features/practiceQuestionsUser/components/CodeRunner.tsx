@@ -62,7 +62,6 @@ const commentSymbols: Record<Language, string> = {
   c: '//',
   cpp: '//',
   javascript: '//',
-
 };
 
 const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
