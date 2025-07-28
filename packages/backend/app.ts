@@ -18,6 +18,7 @@ import interviewMaterialsRoutes from './src/routes/interviewMaterialsRoutes';
 import profileRoutes from './src/routes/profileRouts'; 
 import publicProfileRoutes from './src/routes/publicProfileRoutes';
 import experienceSkillsRoutes from './src/routes/experienceSkillsRoutes';
+import newRecordingNotificationsRoutes from './src/routes/newRecordingNotificationsRoutes';
 
 dotenv.config();
 
@@ -62,6 +63,7 @@ app.use("/manager/interview-materials", interviewMaterialsRoutes);
 app.use("/profiles", profileRoutes);
 app.use('/public-profile', publicProfileRoutes);
 app.use("/expertise-skills", experienceSkillsRoutes);
+app.use("/recordings-notifications", newRecordingNotificationsRoutes);
 
 
 export default app;
