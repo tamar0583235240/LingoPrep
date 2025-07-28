@@ -1,11 +1,10 @@
-// packages/backend/src/interfaces/entities/UserReminderSettings.ts
-import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
-import { Users } from "./Users";
+import { Column, Entity, Index } from "typeorm";
 
 @Index("user_reminder_settings_pkey", ["id"], { unique: true })
 @Index("user_reminder_settings_user_id_type_key", ["type", "userId"], {
   unique: true,
 })
+@Index("idx_user_reminder_settings_user_type", ["type", "userId"], {})
 @Entity("user_reminder_settings", { schema: "public" })
 export class UserReminderSettings {
   @Column("uuid", {
@@ -23,26 +22,27 @@ export class UserReminderSettings {
 
   @Column("enum", {
     name: "frequency",
+    nullable: true,
     enum: ["daily", "every_2_days", "every_3_days", "weekly"],
   })
-  frequency: "daily" | "every_2_days" | "every_3_days" | "weekly";
+  frequency: "daily" | "every_2_days" | "every_3_days" | "weekly" | null;
 
   @Column("boolean", { name: "is_enabled", default: () => "true" })
   isEnabled: boolean;
 
+  @Column("integer", { name: "last_seen_sequence", nullable: true })
+  lastSeenSequence: number | null;
+
   @Column("timestamp without time zone", {
-    name: "last_sent_at",
+    name: "created_at",
     nullable: true,
     default: () => "now()",
   })
-  lastSentAt: Date | null;
+  createdAt: Date | null;
 
-  @Column("uuid", { name: "tip_id", nullable: true })
-  tipId: string | null;
-
-  @ManyToOne(() => Users, (users) => users.userReminderSettings, {
-    onDelete: "CASCADE",
+  @Column("timestamp without time zone", {
+    name: "last_sent_at",
+    nullable: true,
   })
-  @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
-  user: Users;
+  lastSentAt: Date | null;
 }

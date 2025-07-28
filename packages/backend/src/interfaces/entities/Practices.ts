@@ -1,3 +1,4 @@
+// packages/backend/src/interfaces/entities/Practices.ts
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("practices", { schema: "public" })
