@@ -13,13 +13,14 @@ import simulationReducer from '../../features/interview/store/simulationSlice';
 import recordingReducer from '../../features/recordings/store/recordingSlice';
 import answeredReducer from '../../features/interview/store/answeredSlice';
 import { profilesApi } from "../../features/profile/services/profileApi";
+import { interviewMaterialSubApi } from "../../features/interview-materials-hub/store/interviewMaterialSubApi";
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
   [questionsApi.reducerPath]: questionsApi.reducer,
   [categoriesApi.reducerPath]: categoriesApi.reducer,
   [profilesApi.reducerPath]: profilesApi.reducer,
-
+[interviewMaterialSubApi.reducerPath]: interviewMaterialSubApi.reducer,
 
   auth: authReducer,
   user: userReducer,
@@ -32,7 +33,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'user', 'example', 'simulation', 'recording', 'answered'], // reducers to persist
+  whitelist: ['auth', 'user', 'example', 'simulation', 'recording', 'answered',], // reducers to persist
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -46,7 +47,9 @@ export const store = configureStore({
       api.middleware,
       questionsApi.middleware,
       categoriesApi.middleware,
-      profilesApi.middleware
+      profilesApi.middleware,
+      interviewMaterialSubApi.middleware
+
     ),
 });
 

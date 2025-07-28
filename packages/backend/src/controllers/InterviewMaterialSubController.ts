@@ -10,7 +10,11 @@ const getInterviewMaterialSub = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  console.log("in comt");
+  
   try {
+    console.log("🔥 מגיעים לפה ב־GET materials");
+
     const items =
       await interviewMaterialSubRepository.getInterviewMaterialsSubs();
     const itemsWithUrls = items.map((item) => ({

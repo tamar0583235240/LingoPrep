@@ -17,7 +17,6 @@ import aIInsightRouts from './src/routes/aIInsightRouts';
 import questionRoutes from './src/routes/questionRouts';
 import statusRoutes from '../backend/src/routes/statusRoutes';
 import useDynamicContentRouter from './src/routes/dynamicContentRoutes'; // ודאי שזה שם הקובץ המדויק
-import InterviewMaterialSubRouts from './src/routes/interviewMaterialsHubRoutes';
 import resourceRouts from './src/routes/resourceRouts';
 import usersRoutes from './src/routes/userRouts';
 import answerRoutes from './src/routes/answerRouts';
@@ -56,33 +55,35 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use('/auth', authRouts);
+
+app.use('/api/interviewMaterialSub', interviewMaterialsRoutes);
+
 app.use('/api/categories', categoryRoutes)
-app.use('/api', resourceRouts);
-app.use('/api', feedbackRouter)
-app.use('/api', AiInsightsRouter)
-app.use('/api', sharedRecrdingRouter)
-app.use('/answers', answerRouter);
-app.use('/question', questionRoute);
-app.use('/shared-recordings', sharedRecordingsRoutes);
-app.use('/interview-materials-hub', interviewMaterialsRoutes);
-app.use('/api/users', userRouts);
-app.use('/api/admin', userAdminRouts);
-app.use("/api/aiInsight", aiInsightRoutes);
-app.use('/api/simulation', questionRoutes);
-app.use('/api/questions', questionRoutes);
-app.use('/api/status', statusRoutes);
+// app.use('/api', resourceRouts);
+// app.use('/api', feedbackRouter)
+// app.use('/api', AiInsightsRouter)
+// app.use('/api', sharedRecrdingRouter)
+// app.use('/answers', answerRouter);
+// app.use('/question', questionRoute);
+// app.use('/shared-recordings', sharedRecordingsRoutes);
+// app.use('/api/users', userRouts);
+// app.use('/api/admin', userAdminRouts);
+// app.use("/api/aiInsight", aiInsightRoutes);
+// app.use('/api/simulation', questionRoutes);
+// app.use('/api/questions', questionRoutes);
+// app.use('/api/status', statusRoutes);
 app.use('/api/answers', answerRoutes);
 app.use('/api/status', statusRouts);
 app.use('/api/insights', aIInsightRouts);
 app.use('/api/dynamic-contents', useDynamicContentRouter);
 
-app.use('/api/interviewMaterialSub', InterviewMaterialSubRouts);
 app.use('/api/resources', resourceRouts);
 // רישום הראוטים
 app.use("/api/users", usersRoutes);
 app.use("/api/questions", answerRoutes);
 app.use("/api/aiInsight", aiInsightRoutes);
-app.use("/manager/interview-materials", interviewMaterialsRoutes);
+
+// app.use("/manager/interview-materials", interviewMaterialsRoutes);
 app.use("/profiles", profileRoutes);
 app.use('/public-profile', publicProfileRoutes);
 

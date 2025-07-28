@@ -19,13 +19,14 @@ const navItems: NavItem[] = [
   { label: "ההקלטות שלי", href: "/recordings" },
   { label: "הקלטות משותפות", href: "/shared" },
   { label: "משאבים", href: "/resources" },
+  
   { label: "פרופילים", href: "/profiles" },
   { label: "מנהל", href: "", isSectionTitle: true, adminOnly: true },
   { label: "ניהול שאלות", href: "/manager/questions", adminOnly: true },
   { label: "ניהול משתמשים", href: "/manager/users", adminOnly: true },
   { label: "ניהול משאבים", href: "/manager/resources", adminOnly: true },
   { label: "ניהול חומרים", href: "/manager/interview-materials", adminOnly: true, },
-  { label: "מרכז חומרי ראיונות", href: "/interviewMaterialsHub", adminOnly: true },
+  { label: "מרכז חומרי ראיונות", href: "/interviewMaterialsHub"},
 ];
 
 const SidebarNavigation = () => {

@@ -96,11 +96,7 @@ const InterviewMaterialsHub: React.FC = () => {
         hasSearched={hasSearched}
         didSearch={didSearch}
         isSearchEmpty={isSearchEmpty}
-      />
-    <div className="p-6" dir="rtl">
-      <h1 className="text-2xl font-bold mb-4">מרכז חומרי ראיון</h1>
-      <InterviewMaterialsList />
-    </div>
+      />    
     </div>
   );
 }

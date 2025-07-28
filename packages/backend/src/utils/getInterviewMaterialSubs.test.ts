@@ -16,7 +16,7 @@ describe('בדיקות ל־InterviewMaterialSub Controller', () => {
     jest.clearAllMocks();
   });
 
-  test('GET /api/interviewMaterialSub מחזיר 200 עם נתונים תקינים', async () => {
+  test('GET /api/interview_materials_hub מחזיר 200 עם נתונים תקינים', async () => {
     const mockData = [
       {
         id: 1,
@@ -28,33 +28,33 @@ describe('בדיקות ל־InterviewMaterialSub Controller', () => {
 
     (pool.query as jest.Mock).mockResolvedValueOnce({ rows: mockData });
 
-    const res = await request(app).get('/api/interviewMaterialSub');
+    const res = await request(app).get('/api/interview_materials_hub');
 
     expect(res.status).toBe(200);
     expect(res.body.length).toBe(1);
     expect(res.body[0].title).toBe('מבני נתונים');
   });
 
-  test('GET /api/interviewMaterialSub מחזיר 500 אם יש שגיאה', async () => {
+  test('GET /api/interview_materials_hub מחזיר 500 אם יש שגיאה', async () => {
     (pool.query as jest.Mock).mockRejectedValueOnce(new Error('DB error'));
 
-    const res = await request(app).get('/api/interviewMaterialSub');
+    const res = await request(app).get('/api/interview_materials_hub');
 
     expect(res.status).toBe(500);
     expect(res.body).toHaveProperty('error');
   });
 
-  test('GET /api/interviewMaterialSub מחזיר 400 אם הבקשה לא חוקית (מדומה)', async () => {
+  test('GET /api/interview_materials_hub מחזיר 400 אם הבקשה לא חוקית (מדומה)', async () => {
     // לדוגמה – אם את מוסיפה קוד שדורש query param מסוים
-    const res = await request(app).get('/api/interviewMaterialSub?badParam=1');
+    const res = await request(app).get('/api/interview_materials_hub?badParam=1');
 
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error', 'Bad request');
   });
 
-  test('GET /api/interviewMaterialSub מחזיר 300 (מדומה)', async () => {
+  test('GET /api/interview_materials_hubמחזיר 300 (מדומה)', async () => {
     const res = await request(app)
-      .get('/api/interviewMaterialSub')
+      .get('/api/interview_materials_hub')
       .set('x-test-redirect', 'true');
 
     expect(res.status).toBe(300);

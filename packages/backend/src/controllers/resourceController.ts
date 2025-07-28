@@ -9,7 +9,7 @@ cloudinary.config({
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+console.log('PGPASSWORD:', process.env.PGPASSWORD);
 
 
 export const uploadRecording = async (req: Request, res: Response) => {

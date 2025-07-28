@@ -5,6 +5,8 @@ import { InterviewMaterialsSub } from "../interfaces/entities/InterviewMaterials
 export const getInterviewMaterialsSubs = async (): Promise<InterviewMaterialsSub[]> => {
   try {
     const result = await pool.query("SELECT * FROM interview_materials_sub");
+    console.log(result+"result");
+    
     return result.rows as InterviewMaterialsSub[];
   } catch (error) {
     console.error("Error fetching AIInsight from PostgreSQL:", error);
@@ -110,15 +112,37 @@ export const deleteInterviewMaterialSub = async (id: string) => {
   }
 };
  export const searchFiles= async(queryText: string)=> {
-  const tsQuery = queryText.trim().split(/\s+/).join(" & "); 
-  const result = await pool.query(
-    `SELECT id, title, thumbnail, short_description,
-            ts_rank(document_with_weights, to_tsquery('simple', $1)) AS rank
-     FROM interview_materials_sub
-     WHERE document_with_weights @@ to_tsquery('simple', $1)
-     ORDER BY rank DESC
-     LIMIT 20`,
-    [tsQuery]
-  );
-  return result.rows;
+  try {
+    if (!queryText || !queryText.trim()) {
+      // אם אין טקסט חיפוש, נחזיר את כל הרשומות
+      const result = await pool.query("SELECT id, title, thumbnail, short_description FROM interview_materials_sub LIMIT 20");
+      return result.rows;
+    }
+    // חיפוש חכם אם document_with_weights לא ריק, אחרת fallback ל-title
+    let result;
+    if (queryText.length > 1) {
+      result = await pool.query(
+        `SELECT id, title, thumbnail, short_description,
+                ts_rank(document_with_weights, to_tsquery('simple', $1)) AS rank
+         FROM interview_materials_sub
+         WHERE (document_with_weights IS NOT NULL AND document_with_weights @@ to_tsquery('simple', $1))
+            OR title ILIKE '%' || $1 || '%'
+         ORDER BY rank DESC
+         LIMIT 20`,
+        [queryText.trim().split(/\s+/).join(' & ')]
+      );
+    } else {
+      result = await pool.query(
+        `SELECT id, title, thumbnail, short_description
+         FROM interview_materials_sub
+         WHERE title ILIKE '%' || $1 || '%'
+         LIMIT 20`,
+        [queryText]
+      );
+    }
+    return result.rows;
+  } catch (error) {
+    console.error("Error searching files:", error);
+    throw error;
+  }
 }
