@@ -1,3 +1,4 @@
+// backend/src/interfaces/entities/Tips.ts
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("tips", { schema: "public" })
