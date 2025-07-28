@@ -1,5 +1,5 @@
 // בס"ד
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { data } from "react-router-dom";
 import { useGetAllInterviewExperiencesQuery } from "../services/interviewExperiencesApi";
 import { useGetAllExperienceThanksQuery } from '../services/experienceThanksApi';
@@ -7,22 +7,59 @@ import { useGetUsersQuery } from '../../../shared/api/userApi'
 import { experienceThanks } from "../types/experienceThanks";
 import { InterviewExperienceView } from "./interviewExperienceView";
 import { GridContainer } from "../../../shared/ui/GridContainer";
-import { CardSimple } from "../../../shared/ui/card";
+import { Card, CardSimple } from "../../../shared/ui/card";
 import { Spinner } from "../../../shared/ui/Spinner";
 import { EmptyState } from "../../../shared/ui/EmptyState";
-import { Heading1, Paragraph } from "../../../shared/ui/typography";
+import { Heading1, Heading2, Paragraph } from "../../../shared/ui/typography";
 import { IconWrapper } from "../../../shared/ui/IconWrapper";
-import { FaBriefcase, FaHeart, FaCalendarAlt, FaEye, FaPlus } from "react-icons/fa";
+import { FaHeart, FaCalendarAlt, FaEye, FaBriefcase, FaPlus } from "react-icons/fa";
 import { AddInterviewExperience } from "./addInterviewExperience";
+import { Button } from '../../../shared/ui/button';
+import { Input } from "../../../shared/ui/input";
+import { Grid } from "../../../shared/ui/grid";
+import { Sidebar } from "lucide-react";
+import { SectionWrapper } from "../../../shared/ui/SectionWrapper";
 
 export const InterviewExperiencesList = () => {
   const { data: interviewExperiences, isLoading, isError } = useGetAllInterviewExperiencesQuery();
-  const { data: experienceThanks, isLoading: thanksLoading, isError: thanksError } = useGetAllExperienceThanksQuery();  
+  const { data: experienceThanks, isLoading: thanksLoading, isError: thanksError } = useGetAllExperienceThanksQuery();
   const { data: users, isLoading: usersLoading, isError: usersError } = useGetUsersQuery();
   const [addInterviewExperiences, setAddInterviewExperiences] = useState(false);
 
+  const [searchCompany, setSearchCompany] = useState("");
+  const [filterPosition, setFilterPosition] = useState("");
+  const [minThanks, setMinThanks] = useState(0);
+  const [filterDate, setFilterDate] = useState("");
+  const [sortOption, setSortOption] = useState("");
+
+  function getThanksCount(id: string): number {
+    return experienceThanks?.filter(thank => thank.experience_id === id).length || 0;
+  }
+
+  if (isLoading) return <p>טוען...</p>;
+  if (isError || !interviewExperiences) return <p>שגיאה בטעינת נתונים</p>;
+
+  const filteredData = interviewExperiences
+    .filter((item) => item.company_name.toLowerCase().includes(searchCompany.toLowerCase()))
+    .filter((item) => item.position.toLowerCase().includes(filterPosition.toLowerCase()))
+    .filter((item) => getThanksCount(item.id) >= minThanks)
+    .filter((item) => {
+      if (!filterDate) return true;
+      const itemDate = new Date(item.created_at || '').toLocaleDateString();
+      return itemDate === new Date(filterDate).toLocaleDateString();
+    });
+
+  const sortedData = [...filteredData].sort((a, b) => {
+    if (sortOption === "thanks") {
+      return getThanksCount(b.id) - getThanksCount(a.id);
+    } else if (sortOption === "date") {
+      return new Date(b.created_at ?? '').getTime() - new Date(a.created_at ?? '').getTime();
+    }
+    return 0;
+  });
+
   function getThunksByInterviewExperienceId(interviewExperienceId: string): experienceThanks[] {
-    return ( experienceThanks? experienceThanks.filter(thanks => thanks.experience_id === interviewExperienceId) : [] );
+    return (experienceThanks ? experienceThanks.filter(thanks => thanks.experience_id === interviewExperienceId) : []);
   }
 
   if (isLoading) {
@@ -60,7 +97,7 @@ export const InterviewExperiencesList = () => {
     );
   }
 
-  const handleAddInterviewExperience=()=>{
+  const handleAddInterviewExperience = () => {
     setAddInterviewExperiences(true);
   }
 
@@ -75,26 +112,88 @@ export const InterviewExperiencesList = () => {
           למדו מחוויות של נשים אחרות וקבלו השראה להצלחה בראיונות העבודה שלכן
         </Paragraph>
       </div>
+      {/* אפשרויות סינון ומיון */}
+      <GridContainer maxWidth="lg">
+        <div className="space-y-6">
+          <h2 className="text-xl font-semibold">סנן לפי</h2>
+
+          <Grid className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="flex flex-col">
+              <label className="text-sm font-medium mb-1">שם חברה</label>
+              <Input
+                placeholder="הקלד שם חברה"
+                value={searchCompany}
+                onChange={(e) => setSearchCompany(e.target.value)}
+                className="border p-2 rounded"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="text-sm font-medium mb-1">תפקיד</label>
+              <Input
+                placeholder="הקלד תפקיד"
+                value={filterPosition}
+                onChange={(e) => setFilterPosition(e.target.value)}
+                className="border p-2 rounded"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="text-sm font-medium mb-1">כמות תודות מינימלית</label>
+              <Input
+                type="number"
+                value={minThanks}
+                onChange={(e) => setMinThanks(Number(e.target.value))}
+                className="border p-2 rounded"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="text-sm font-medium mb-1">תאריך</label>
+              <Input
+                type="date"
+                value={filterDate}
+                onChange={(e) => setFilterDate(e.target.value)}
+                className="border p-2 rounded"
+              />
+            </div>
+          </Grid>
+
+
+          <h2 className="text-xl font-semibold">מיין לפי</h2>
+          <div className="flex gap-4">
+            <label className="flex items-center gap-2">
+              <input type="radio" name="sort" value="thanks" checked={sortOption === "thanks"} onChange={() => setSortOption("thanks")} />
+              הכי הרבה תודות
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="radio" name="sort" value="date" checked={sortOption === "date"} onChange={() => setSortOption("date")} />
+              הכי חדשות
+            </label>
+          </div>
+
+        </div>
+      </GridContainer>
       {/* כפתור הוספה */}
       <div className="flex justify-center">
         <button className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[--color-primary] to-[--color-primary-dark] text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-105 border border-[--color-border]"
-       onClick={()=>setAddInterviewExperiences(true)}>  
+          onClick={() => setAddInterviewExperiences(true)}>
           הוסף חוויה
           <FaPlus />
         </button>
       </div>
       {/* רשימת החוויות */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {interviewExperiences.map((interviewExperience) => (
-          <CardSimple 
+        {sortedData.map((interviewExperience) => (
+          <CardSimple
             key={interviewExperience.id}
             className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-white border border-[--color-border] overflow-hidden"
           >
             {/* Header עם אייקון אנונימי/לא אנונימי */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <IconWrapper 
-                  size="sm" 
+                <IconWrapper
+                  size="sm"
                   color={interviewExperience.anonymous ? "muted" : "primary-dark"}
                 >
                   {interviewExperience.anonymous ? "👤" : "💁‍♂️"}
@@ -103,7 +202,7 @@ export const InterviewExperiencesList = () => {
                   {interviewExperience.anonymous ? "אנונימית" : "משתמשת רשומה"}
                 </span>
               </div>
-              
+
               {/* תאריך פרסום */}
               <div className="flex items-center gap-1 text-xs text-[--color-secondary-text]">
                 <FaCalendarAlt />
@@ -143,11 +242,10 @@ export const InterviewExperiencesList = () => {
                 {Array.from({ length: 5 }, (_, index) => {
                   const rating = interviewExperience.rating || 0;
                   return (
-                    <span 
-                      key={index} 
-                      className={`text-xl transition-colors ${
-                        index < rating ? 'text-yellow-500' : 'text-gray-300'
-                      }`}
+                    <span
+                      key={index}
+                      className={`text-xl transition-colors ${index < rating ? 'text-yellow-500' : 'text-gray-300'
+                        }`}
                     >
                       {index < rating ? '★' : '☆'}
                     </span>
@@ -169,10 +267,10 @@ export const InterviewExperiencesList = () => {
                   {getThunksByInterviewExperienceId(interviewExperience.id).length} תודות
                 </span>
               </div>
-              
-              <InterviewExperienceView 
-                interviewExperience={interviewExperience} 
-                experienceThanks={getThunksByInterviewExperienceId(interviewExperience.id)} 
+
+              <InterviewExperienceView
+                interviewExperience={interviewExperience}
+                experienceThanks={getThunksByInterviewExperienceId(interviewExperience.id)}
                 users={users || []}
               />
             </div>
@@ -186,7 +284,7 @@ export const InterviewExperiencesList = () => {
         />
       )}
     </GridContainer>
-    
+
   );
 }
 
