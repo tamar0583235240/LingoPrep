@@ -18,7 +18,7 @@ export default function MessageModal({ title, message, onClose }: MessageModalPr
                         className="text-gray-500 hover:text-gray-700 transition-colors"
                         aria-label="סגור"
                     >
-                        {/* <X size={20} /> */}
+                        <X size={20} />
                     </button>
                 </div>
                 <div className="text-left text-gray-600 mt-2">

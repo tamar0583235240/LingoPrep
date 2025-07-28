@@ -44,9 +44,9 @@ export const adminqQuestionController = async (req: Request, res: Response): Pro
 export const updateQuestionController = async (req: Request, res: Response): Promise<void> => {
   console.log('updateQuestionController called');
   try {
-    const {updates,categor} = req.body;
-    console.log('Received updates:', updates);
-    const updatedQuestion = await questionRepository.updateQuestionById(updates,categor);
+    const {data,category} = req.body;
+    console.log('Received updates:', data);
+    const updatedQuestion = await questionRepository.updateQuestionById(data,category);
     res.json(updatedQuestion);
   } catch (error) {
     console.error('Error in updateQuestionController:', error);

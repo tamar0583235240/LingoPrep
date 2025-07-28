@@ -1,3 +1,4 @@
+import { UUID } from "crypto";
 import { api } from "../../../shared/api/api";
 import { Question } from "../../recordings/types/Question";
 import { Category } from "../types/Categories";
@@ -21,7 +22,7 @@ export const AdminQuestionApi = api.injectEndpoints({
             query: ({ data, category }) => ({
                 url: `question/updateQuestion`, 
                 method: "PUT",
-                body: data,
+                body: {data,category}
             }),
             invalidatesTags: ["question"],
         }),
@@ -47,7 +48,7 @@ export const AdminQuestionApi = api.injectEndpoints({
             }),
             invalidatesTags: ["question"],
         }),
-        getCategoryForQuestion: builder.query< Category,string>({
+        getCategoryForQuestion: builder.query<Category, string>({
             query: (id) => `question/getCategoryForQuestions/${id}`,
             providesTags: ['categories'],
         }),

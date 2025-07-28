@@ -23,6 +23,10 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
   const [questionToDelete, setQuestionToDelete] = useState<string | null>(null);
   const [searchText, setSearchText] = useState('');
   const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
+  // const { data: selectedCategoryData, error: selectedCategoryError } =
+  //   useGetCategoryForQuestionQuery(questionToEdit?.id!, { skip: !questionToEdit });
+
+
 
   useEffect(() => {
     if (!data) return;
@@ -34,20 +38,20 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
     setFilteredQuestions(results);
   }, [searchText, data]);
 
-  const getCategory = (questionId: string) => {
-    const { data, error } = useGetCategoryForQuestionQuery(questionId);
-    if (data) {
-      const c: Category = {
-        id: data.id,
-        name: data.name,
-      };
-      return c;
-    }
-    if (error) {
-      console.error("Error fetching category for question:", error);
-      return null;
-    }
-  }
+  // const getCategory = (questionId: string) => {
+  //   const { data, error } = useGetCategoryForQuestionQuery(questionId);
+  //   if (data) {
+  //     const c: Category = {
+  //       id: data.id,
+  //       name: data.name,
+  //     };
+  //     return c;
+  //   }
+  //   if (error) {
+  //     console.error("Error fetching category for question:", error);
+  //     return null;
+  //   }
+  // }
 
   if (isLoading)
     return (
@@ -107,6 +111,12 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
     setQuestionToDelete(idQuestion);
   };
 
+  const editClick = (question: Question) => {
+    setQuestionToEdit(question);
+
+  };
+
+
   return (
     <div className="min-h-screen bg-[--color-background]" dir="rtl">
       <div className="bg-white border-b border-[--color-border]">
@@ -165,15 +175,14 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
                 <div className="flex items-center justify-end gap-3">
                   <Button
                     variant="outline"
-                    onClick={() => setQuestionToEdit(question)}
+                    onClick={() => editClick(question)}
                     size="sm"
                     icon={<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>}
                     iconPosition="right"
                   />
-                  {questionToEdit?.id === question.id && (
+                  {questionToEdit && (
                     <UpdateQuestion
                       question={questionToEdit}
-                      categorySelected={getCategory(questionToEdit.id)!}
                       questionSaveClick={() => setQuestionToEdit(null)}
                     />
                   )}
