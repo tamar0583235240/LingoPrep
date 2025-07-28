@@ -17,13 +17,31 @@ export async function getActiveUserReminderSettingsByDay(dayName: string) {
   return rows;
 }
 
+// export async function getNextContent(type: ReminderType, lastSeen: number | null) {
+//   const table = type === "tip" ? "tips" : "practices";
+//   const { rows } = await pool.query(
+//     `SELECT * FROM ${table} WHERE sequence_number > $1 ORDER BY sequence_number ASC LIMIT 1`,
+//     [lastSeen ?? 0]
+//   );
+//   return rows[0];
+// }
 export async function getNextContent(type: ReminderType, lastSeen: number | null) {
   const table = type === "tip" ? "tips" : "practices";
+
   const { rows } = await pool.query(
     `SELECT * FROM ${table} WHERE sequence_number > $1 ORDER BY sequence_number ASC LIMIT 1`,
     [lastSeen ?? 0]
   );
-  return rows[0];
+
+  if (rows.length > 0) {
+    return rows[0]; // יש תוכן הבא
+  }
+
+  // אין תוכן חדש – נחזור להתחלה
+  const { rows: firstRow } = await pool.query(
+    `SELECT * FROM ${table} ORDER BY sequence_number ASC LIMIT 1`
+  );
+  return firstRow[0] ?? null;
 }
 
 export async function updateLastSeen(userId: string, type: ReminderType, sequence: number) {
