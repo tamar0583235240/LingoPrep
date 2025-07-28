@@ -11,6 +11,7 @@ import { insertUsersFromExcel } from '../reposioty/userRpository';
 
 const SALT_ROUNDS = 10;
 export const getAllUsers = async (req: Request, res: Response) => {
+  console.log("Enter getAllUsers ❎✅")
   const users = await userRepository.getAllUsers();
   if (!users || users.length === 0) {
     return res.status(404).json({ message: 'No users found' });

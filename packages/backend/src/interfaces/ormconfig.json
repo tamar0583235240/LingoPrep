@@ -5,8 +5,8 @@
     "host": "localhost",
     "port": 5432,
     "username": "postgres",
-    "password": "huser",
-    "database": "lingo-prep",
+    "password": "shani",
+    "database": "postgres",
     "synchronize": true,
     "logging": true,
     "entities": ["dist/entities/*.js"]
