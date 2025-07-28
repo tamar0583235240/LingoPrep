@@ -10,7 +10,7 @@ from "typeorm";
 import { AiInsights } from "./AiInsights";
 import { Questions } from "./Questions";
 import { Users } from "./Users";
-import { SharedRecordings } from "./SharedRecordings";
+import { Feedback } from "./Feedback";
 
 @Index("answers_pkey", ["id"], { unique: true })
 @Entity("answers", { schema: "public" })
@@ -56,9 +56,6 @@ export class Answers {
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: Users;
 
-  @OneToMany(
-    () => SharedRecordings,
-    (sharedRecordings) => sharedRecordings.answer
-  )
-  sharedRecordings: SharedRecordings[];
+  @OneToMany(() => Feedback, (feedback) => feedback.answerCode)
+  feedbacks: Feedback[];
 }

@@ -59,3 +59,61 @@ export const addParticipant = async (req: Request, res: Response): Promise<void>
     res.status(500).json({ error: 'Error creating shared recording' });
   }
 };
+import * as sharedRepo from '../reposioty/sharedRecordings.repository';
+
+export const getSharedRecordingsByUser = async (req: Request, res: Response) => {
+  try {
+    const userId = req.query.userId as string; 
+    if (!userId) {
+      return res.status(400).json({ error: 'Missing userId in query' });
+    }
+    const recordings = await sharedRepo.getSharedRecordingsByUserId(userId);
+    res.json(recordings);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
+
+export const getRecordingDetails = async (req: Request, res: Response) => {
+  try {
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
+export const createFeedback = async (req: Request, res: Response) => {
+  try {
+    const { sharedRecordingId, comment, rating, givenByUserId } = req.body;
+
+
+    const existing = await sharedRepo.getFeedbackByRecordingAndUser(sharedRecordingId, givenByUserId);
+
+    let feedback;
+    if (existing) {
+      feedback = await sharedRepo.updateFeedback(existing.id, comment, rating);
+    } else {
+      feedback = await sharedRepo.insertFeedback(sharedRecordingId, comment, rating, givenByUserId);
+    }
+
+    res.status(201).json(feedback);
+  } catch (error: any) {
+    console.error('Error creating feedback:', error, error?.message);
+    res.status(500).json({
+      message: 'Internal server error while creating feedback',
+      details: error.message,
+      stack: error.stack,
+      error: error
+    });
+  }
+};
+
+
+export const updateFeedback = async (req: Request, res: Response) => {
+  try {
+    const feedbackId = req.params.id;
+    const { comment, rating } = req.body;
+    const updated = await sharedRepo.updateFeedback(feedbackId, comment, rating);
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};

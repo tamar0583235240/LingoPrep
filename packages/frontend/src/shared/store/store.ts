@@ -20,7 +20,7 @@ const rootReducer = combineReducers({
   [questionsApi.reducerPath]: questionsApi.reducer,
   [categoriesApi.reducerPath]: categoriesApi.reducer,
   [profilesApi.reducerPath]: profilesApi.reducer,
-[interviewMaterialSubApi.reducerPath]: interviewMaterialSubApi.reducer,
+  [interviewMaterialSubApi.reducerPath]: interviewMaterialSubApi.reducer,
 
   auth: authReducer,
   user: userReducer,

@@ -258,6 +258,7 @@ export const requestSignup = async (req: Request, res: Response) => {
       isActive: true,
       answers: [],
       feedbacks: [],
+      feedbacktypes: [],
       passwordResetTokens: [],
       createdAt: new Date(),
       sharedRecordings: [],
@@ -268,6 +269,7 @@ export const requestSignup = async (req: Request, res: Response) => {
       userSessions: [],
       userActivities: [],
       workExperiences: [],
+      resources: [],
       profiles: {
         id: uuidv4(),
         userId: userId, // This will be updated after user creation
@@ -369,6 +371,7 @@ export const signup = async (req: Request, res: Response) => {
     isActive: true,
     answers: [],
     feedbacks: [],
+    feedbacktypes: [],
     passwordResetTokens: [],
     sharedRecordings: [],
     createdAt: new Date(),
@@ -379,6 +382,7 @@ export const signup = async (req: Request, res: Response) => {
     userSessions: [],
     userActivities: [],
     workExperiences: [],
+    resources: [],
     profiles: {
       id: uuidv4(),
       userId: uuidv4(), // This will be updated after user creation

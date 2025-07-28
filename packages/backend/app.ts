@@ -1,11 +1,17 @@
-import feedbackRouter from './src/routes/feedbackRouts';
+
+import express, { Application } from 'express';
+import cors from 'cors';
+
+import feedbackRouts from './src/routes/feedbackRouts';
 import AiInsightsRouter from './src/routes/aIInsightRouts';
 import answerRouter from './src/routes/answerRouts';
 import sharedRecrdingRouter from './src/routes/sharedRecordingRouts';
-import express, { Application } from 'express';
-import cors from 'cors';
+import autoDeleteRoutes from './src/routes/autoDeleteRoutes';
 import questionRoute from './src/routes/questionRouts';
 import sharedRecordingsRoutes from './src/routes/sharedRecordingRouts';
+
+
+
 import dotenv from 'dotenv';
 import userRouts from './src/routes/userRouts';
 import authRouts from './src/routes/authRouts';
@@ -25,6 +31,7 @@ import userAdminRouts from './src/routes/userAdminRouts';
 import interviewMaterialsRoutes from './src/routes/interviewMaterialsRoutes';
 import profileRoutes from './src/routes/profileRouts';
 import publicProfileRoutes from './src/routes/publicProfileRoutes';
+import feedbackRouter from './src/routes/feedbackRouts';
 
 dotenv.config();
 
@@ -36,8 +43,9 @@ console.log("Allowed CORS origins:", allowedOrigins);
 
 const normalize = (url: string) => url.replace(/\/+$/, ""); // מסיר / מיותר בסוף
 
+
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN,
+  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
   credentials: true,
 };
 dotenv.config();
@@ -59,19 +67,19 @@ app.use('/auth', authRouts);
 app.use('/api/interviewMaterialSub', interviewMaterialsRoutes);
 
 app.use('/api/categories', categoryRoutes)
-// app.use('/api', resourceRouts);
-// app.use('/api', feedbackRouter)
-// app.use('/api', AiInsightsRouter)
-// app.use('/api', sharedRecrdingRouter)
-// app.use('/answers', answerRouter);
-// app.use('/question', questionRoute);
-// app.use('/shared-recordings', sharedRecordingsRoutes);
-// app.use('/api/users', userRouts);
-// app.use('/api/admin', userAdminRouts);
-// app.use("/api/aiInsight", aiInsightRoutes);
-// app.use('/api/simulation', questionRoutes);
-// app.use('/api/questions', questionRoutes);
-// app.use('/api/status', statusRoutes);
+app.use('/api', resourceRouts);
+app.use('/api', feedbackRouter)
+app.use('/api', AiInsightsRouter)
+app.use('/api', sharedRecrdingRouter)
+app.use('/answers', answerRouter);
+app.use('/question', questionRoute);
+app.use('/shared-recordings', sharedRecordingsRoutes);
+app.use('/api/users', userRouts);
+app.use('/api/admin', userAdminRouts);
+app.use("/api/aiInsight", aiInsightRoutes);
+app.use('/api/simulation', questionRoutes);
+app.use('/api/questions', questionRoutes);
+app.use('/api/status', statusRoutes);
 app.use('/api/answers', answerRoutes);
 app.use('/api/status', statusRouts);
 app.use('/api/insights', aIInsightRouts);
@@ -88,3 +96,4 @@ app.use("/profiles", profileRoutes);
 app.use('/public-profile', publicProfileRoutes);
 
 export default app;
+
