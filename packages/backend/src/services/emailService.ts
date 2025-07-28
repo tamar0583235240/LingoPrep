@@ -1,4 +1,3 @@
-
 // src/services/emailService.ts
 import { ReminderType } from "@interfaces/reminderInterfaces";
 import { getUserEmailById } from "../reposioty/userRepository2";
@@ -8,8 +7,7 @@ export async function sendReminderEmail(userId: string, type: ReminderType, cont
   if (!email) return false;
   const env = process.env.NODE_ENV;
   const isProduction = env === "production";
-  // if (!isProduction && email !== "example@gmail.com") return false;
-  const subject = type === "tip" ? ":bulb: תזכורת " : ":pushpin:  תזכורת";
+  const subject = type === "tip" ? "💡 תזכורת " : "📌 תזכורת";
   const title = type === "tip" ? "טיפ " : "שאלה לתרגול";
   const htmlContent = `
     <div dir="rtl" style="
