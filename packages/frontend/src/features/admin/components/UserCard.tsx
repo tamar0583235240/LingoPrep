@@ -10,6 +10,10 @@ interface Props {
 
 const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
   const [showPassword, setShowPassword] = useState(false);
+  // console.log('USER:', user);
+console.log('שם פרטי:', user.firstName, 'שם משפחה:', user.lastName);
+console.log('כל היוזר:', user);
+
 
   return (
     // <div className="rounded-xl p-4 flex flex-col bg-white shadow-md h-full">
@@ -29,6 +33,7 @@ const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
         {user.role === 'manager' && (
           <p className="mb-1 text-sm text-gray-500">מנהל</p>
         )}
+       
 
         <p className="flex items-center justify-center gap-2">
           <span className="font-mono tracking-widest select-text">
@@ -43,9 +48,8 @@ const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
             {showPassword ? <EyeOffIcon size={20} /> : <Eye size={20} />}
           </button>
         </p>
-
         <p className="font-semibold">
-          {user.first_name} {user.last_name}
+          {user.firstName} - {user.lastName}
         </p>
         <p>{user.email}</p>
         <p>{user.phone || 'אין טלפון'}</p>

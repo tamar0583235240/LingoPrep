@@ -61,7 +61,7 @@ export const adminApi = api.injectEndpoints({
     }),
     updateUser: builder.mutation<user, { id: string; data: Partial<user> }>({
       query: ({ id, data }) => ({
-        url: `users/${id}`,
+        url: `admin/user/${id}`,
         method: "PUT",
         body: data,
       }),

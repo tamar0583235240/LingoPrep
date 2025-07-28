@@ -1,5 +1,6 @@
 import { api } from "./api";
-import { UploadResponse, user } from "../../features/admin/types/userType";
+import { user } from "../../features/admin/types/userType";
+import { UploadResponse } from "../../features/admin/types/userTypes";
 
 export const adminApi = api.injectEndpoints({
   endpoints: (build) => ({

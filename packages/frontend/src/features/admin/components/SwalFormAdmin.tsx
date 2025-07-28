@@ -1,8 +1,8 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Swal from 'sweetalert2';
-import { userSchema } from '../validation/userSchema';
-import { UserFormFields, user } from '../types/userType';
+import { UserFormFields, userSchema } from '../validation/userSchema';
+import { user } from '../types/userType';
 import { useCreateUserMutationAdmin } from '../../../shared/api/adminApi';
 import { ChevronDown } from "lucide-react";
 const SwalForm = () => {
@@ -23,8 +23,8 @@ const SwalForm = () => {
     const fullUser: user = {
       id: Math.random().toString(36).substring(2, 15),
       ...data,
-      first_name: data.firstName,
-      last_name: data.lastName,
+      firstName: data.firstName,
+      lastName: data.lastName,
       phone: data.phone || '',
       createdAt: new Date(),
       isActive: false,

@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { user } from '../types/userType';
 import { Eye, EyeOffIcon, Trash2, Pencil } from 'lucide-react';
+import { UserFormFields } from '../validation/userSchema';
 interface Props {
   user: user;
   onEdit: (user: user) => void;
   onDelete: (id: string) => void;
 }
+
 const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
   const [showPassword, setShowPassword] = useState(false);
+
   return (
     // <div className="rounded-xl p-4 flex flex-col bg-white shadow-md h-full">
     <div className="rounded-xl p-4 flex flex-col bg-white shadow-md h-full transition duration-300 ease-in-out hover:scale-105">
@@ -23,6 +26,9 @@ const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
         {user.role === 'manager' && (
           <p className="mb-1 text-sm text-gray-500">מנהל</p>
         )}
+         {user.role === 'student' && (
+          <p className="mb-1 text-sm text-gray-500"></p>
+        )}
         <p className="flex items-center justify-center gap-2">
           <span className="font-mono tracking-widest select-text">
             {showPassword ? user.password : '••••••••'}
@@ -37,7 +43,7 @@ const UserCard: React.FC<Props> = ({ user, onEdit, onDelete }) => {
           </button>
         </p>
         <p className="font-semibold">
-          {user.first_name} {user.last_name}
+          {user.firstName} {user.lastName}          
         </p>
         <p>{user.email}</p>
         <p>{user.phone || 'אין טלפון'}</p>

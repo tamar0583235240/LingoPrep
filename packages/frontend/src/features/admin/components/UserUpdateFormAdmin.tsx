@@ -15,8 +15,8 @@ const UserUpdateForm: React.FC<Props> = ({ user, onSubmit }) => {
     formState: { errors },
   } = useForm<UserFormFields>({
     defaultValues: {
-      firstName: user.first_name,
-      lastName: user.last_name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       phone: user.phone ?? '',
       password: user.password ?? undefined,

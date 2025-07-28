@@ -38,8 +38,8 @@ const UserList = () => {
   const [updateUser] = useUpdateUserMutationAdmin();
 
   const filteredUsers = users.filter((user) => {
-    const firstName = user.first_name || "";
-    const lastName = user.last_name || "";
+    const firstName = user.firstName || "";
+    const lastName = user.lastName || "";
     const matchName =
       firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       lastName.toLowerCase().includes(searchTerm.toLowerCase());

@@ -24,6 +24,7 @@ export const getUserByEmail = async (email: string): Promise<Users | null> => {
 
 // קבלת כל המשתמשים
 const getAllUsers = async (): Promise<Users[]> => {
+  
   try {
     const res = await pool.query("SELECT * FROM users");
     return res.rows as Users[];

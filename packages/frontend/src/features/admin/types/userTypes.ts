@@ -1,6 +1,8 @@
 import { User } from "../../../../../backend/src/interfaces/User";
 
 export interface user extends User {
+  // firstName: string;
+  // lastName: string;
   isSelected?: boolean; // שדה פנימי לצרכי UI בלבד
 }
 
