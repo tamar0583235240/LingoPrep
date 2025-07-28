@@ -23,6 +23,12 @@ export class Questions {
   @Column("boolean", { name: "is_active", default: () => "true" })
   isActive: boolean;
 
+  @Column("text", { name: "options", nullable: true, array: true })
+  options: string[] | null;
+
+  @Column("text", { name: "question_type", nullable: true })
+  questionType: string | null;
+
   @OneToMany(() => Answers, (answers) => answers.question)
   answers: Answers[];
 

@@ -13,10 +13,10 @@ export class Users {
   id: string;
 
   @Column("text", { name: "first_name" })
-  firstName: string;
+  first_name: string;
 
   @Column("text", { name: "last_name" })
-  lastName: string;
+  last_name: string;
 
   @Column("text", { name: "email", unique: true })
   email: string;
@@ -28,7 +28,7 @@ export class Users {
   role: string;
 
   @Column("timestamp without time zone", {
-    name: "created_dat",
+    name: "created_at",
     default: () => "now()",
   })
   createdAt: Date;

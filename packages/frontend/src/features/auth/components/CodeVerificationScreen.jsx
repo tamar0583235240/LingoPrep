@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+// import React, { useEffect, useState } from "react";
 import {
   useGenerateCodeMutation,
   useValidateCodeMutation,
 } from "../../../shared/api/verifyCodeApi";
+import { Button } from "../../../shared/ui/button";
+import { Input } from "../../../shared/ui/input";
+import { CardSimple } from "../../../shared/ui/cardSimple";
 
 const CodeVerificationScreen = ({ email, onSuccess }) => {
   const [code, setCode] = useState("");
@@ -18,11 +21,11 @@ const CodeVerificationScreen = ({ email, onSuccess }) => {
       setMessage("אין אפשרות לשלוח קוד לאימייל.");
       return;
     }
-    console.log(`Sending code to email: ${email}`);
     try {
       const res = await generateAndSendCode({ email }).unwrap();
       if (!res?.isSent) {
         setIsCodeSent(false);
+        setMessage("לא הצלחנו לשלוח את הקוד, נסה שוב.");
       } else {
         setMessage("קוד נשלח לאימייל שלך.");
         setIsCodeSent(true);
@@ -32,6 +35,7 @@ const CodeVerificationScreen = ({ email, onSuccess }) => {
       setMessage("שגיאה בשליחת הקוד. נא לנסות שנית.");
     }
   };
+
   useEffect(() => {
     if (!email) {
       setMessage("נא להזין אימייל תקין.");
@@ -39,63 +43,74 @@ const CodeVerificationScreen = ({ email, onSuccess }) => {
       return;
     }
     if (!isCodeSent) sendCodeToEmail();
-    setIsCodeSent(true);
   }, []);
 
   const validateCode = async () => {
     if (code.length !== 6) {
       setMessage("נא להזין קוד בן 6 ספרות.");
-    } else {
-      try {
-        const response = await verifyCode({ email, code }).unwrap();
-        console.log("Response from validateCode:", response);
-
-        if (response && response.valid) {
-          setMessage(response.message || "הקוד תקין. ניתן להמשיך.");
-          onSuccess();
-        } else {
-          setMessage(response?.message || "הקוד לא תקין. נא לנסות שנית.");
-        }
-      } catch (e) {
-        console.error("Error validating code:", e);
+      return;
+    }
+    try {
+      const response = await verifyCode({ email, code }).unwrap();
+      if (response && response.valid) {
+        setMessage(response.message || "הקוד תקין. ניתן להמשיך.");
+        onSuccess();
+      } else {
+        setMessage(response?.message || "הקוד לא תקין. נא לנסות שנית.");
       }
+    } catch (e) {
+      console.error("Error validating code:", e);
+      setMessage("שגיאה באימות הקוד. נא לנסות שוב.");
     }
   };
 
   return (
-    <>
-      <div>
-        <CardSimple className="max-w-md w-full mx-auto p-6 space-y-4">
-          <h3>הזן את קוד האימות שנשלח למייל שלך</h3>
+    <div className="flex justify-center mt-10 px-4">
+      <CardSimple className="max-w-md w-full p-8 space-y-6 bg-white rounded-lg shadow-md">
+        <h3 className="text-xl font-semibold text-gray-900 text-center">
+          הזן את קוד האימות שנשלח למייל שלך
+        </h3>
 
-          <Button onClick={() => sendCodeToEmail()}>
-            לא קיבלת קוד? שלח מחדש
-          </Button>
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={sendCodeToEmail}
+          disabled={isCodeSent === false}
+        >
+          לא קיבלת קוד? שלח מחדש
+        </Button>
 
-          <div>
-            <Input
-              type={showCode ? "text" : "password"}
-              maxLength={6}
-              pattern="\d{6}"
-              value={code}
-              onChange={(e) => setCode(e.target.value.slice(0, 6))}
-              InputMode="numeric"
-              autoComplete="one-time-code"
-            />
-            <span
-              onClick={() => setShowCode((s) => !s)}
-              title={showCode ? "הסתר קוד" : "הצג קוד"}
-            >
-              {showCode ? "הסתר" : "הצג"}
-            </span>
-          </div>
+        <div className="relative">
+          <Input
+            type={showCode ? "text" : "password"}
+            maxLength={6}
+            pattern="\d{6}"
+            value={code}
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            placeholder="******"
+            className="pr-16 text-center tracking-widest text-lg font-mono"
+          />
+          <button
+            type="button"
+            onClick={() => setShowCode((s) => !s)}
+            className="absolute top-1/2 right-4 -translate-y-1/2 text-primary hover:text-primary-dark transition-colors"
+            aria-label={showCode ? "הסתר קוד" : "הצג קוד"}
+          >
+            {showCode ? "הסתר" : "הצג"}
+          </button>
+        </div>
 
-          {message && <p>{message}</p>}
+        {message && (
+          <p className="text-center text-sm text-red-600 select-text">{message}</p>
+        )}
 
-          <Button onClick={validateCode}>אשר קוד</Button>
-        </CardSimple>
-      </div>
-    </>
+        <Button className="w-full" onClick={validateCode}>
+          אשר קוד
+        </Button>
+      </CardSimple>
+    </div>
   );
 };
 

@@ -11,8 +11,8 @@ const UserForm: React.FC<Props> = ({ user, onSubmit }) => {
   });
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
-      <input {...register('firstName')} placeholder="שם פרטי" className="input text-right" />
-      <input {...register('lastName')} placeholder="שם משפחה" className="input text-right" />
+      <input {...register('first_name')} placeholder="שם פרטי" className="input text-right" />
+      <input {...register('last_name')} placeholder="שם משפחה" className="input text-right" />
       <input {...register('email')} placeholder="אימייל" className="input text-right" />
       <input {...register('phone')} placeholder="טלפון" className="input text-right" />
       <button

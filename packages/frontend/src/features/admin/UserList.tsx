@@ -1,4 +1,3 @@
-// import { useState } from 'react';
 import Swal from 'sweetalert2';
 import { useState, useEffect } from 'react';
 import withReactContent from 'sweetalert2-react-content';
@@ -17,36 +16,42 @@ import { createRoot } from 'react-dom/client';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { AdminUsersTitle } from './components/AdminQuestionsTitle';
 
-
 const MySwal = withReactContent(Swal);
 const UserList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const {
     data: users = [],
-     isLoading,
+    isLoading,
     isError,
     error,
   } = useGetUsersQueryAdmin();
 
-    useEffect(() => {
+  useEffect(() => {
     console.log("✅ users data:", users);
     if (isError) {
       console.log("❌ שגיאה בשליפת המשתמשים:", error);
     }
   }, [users, isError, error]);
+
   const [deleteUser] = useDeleteUserMutationAdmin();
   const [updateUser] = useUpdateUserMutationAdmin();
+
   const filteredUsers = users.filter((user) => {
+    const firstName = user.first_name || "";
+    const lastName = user.last_name || "";
     const matchName =
-      user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.lastName.toLowerCase().includes(searchTerm.toLowerCase());
+      firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      lastName.toLowerCase().includes(searchTerm.toLowerCase());
+
     const matchStatus =
       statusFilter === 'all' ||
       (statusFilter === 'active' && user.isActive) ||
       (statusFilter === 'inactive' && !user.isActive);
+
     return matchName && matchStatus;
   });
+
   const handleDelete = async (id: string) => {
     const result = await Swal.fire({
       title: '?אתה בטוח',
@@ -79,6 +84,7 @@ const UserList = () => {
       }
     }
   }
+
   const handleEdit = async (user: user) => {
     await MySwal.fire({
       title: 'עדכון משתמש',
@@ -95,6 +101,7 @@ const UserList = () => {
       },
     });
   };
+
   const handleUpdate = async (data: Partial<user>) => {
     if (!data.id) return;
     try {
@@ -116,16 +123,17 @@ const UserList = () => {
       });
     }
   }
+
   return (
     <div className="max-w-7xl mx-auto my-8 px-4">
-      <h2 className="text-center text-2xl font-bold mb-8"><AdminUsersTitle /></h2>
+      <div className="text-center mb-8"><AdminUsersTitle /></div>
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6 rtl">
         <div className="flex flex-wrap gap-4 items-center">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive')}
             className="border rounded px-3 py-2 w-40 text-right"
-            dir="rtl"  // או style={{ direction: 'rtl' }}
+            dir="rtl"
           >
             <option value="all">הצג את כולם</option>
             <option value="active">משתמשים פעילים</option>
@@ -172,4 +180,5 @@ const UserList = () => {
     </div>
   );
 };
+
 export default UserList;

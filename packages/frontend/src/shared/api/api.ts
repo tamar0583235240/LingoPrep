@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { ProgressStats } from "../../features/dashboard/types/aiInsightsType";
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
@@ -7,11 +8,8 @@ export const api = createApi({
     }),
     reducerPath: "api",
 
-    tagTypes: ["Item" ,"Feedback" ,"AiInsights","answers","question","shared_recordings","admin","users","DynamicContents","PracticeQuestion","Topics"],
+    tagTypes: ["Item", "Feedback", "AiInsights", "answers", "question", "shared_recordings", "InterviewMaterials", "users", "questions", "PracticeQuestion","answers", "insights", "admin", "users", "DynamicContents"],
     endpoints: () => ({}),
 });
 
-
-
-
-
+export const { } = api;

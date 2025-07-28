@@ -7,7 +7,6 @@ import { ResetFormData } from "../types/types";
 import { CardSimple } from "../../../shared/ui/card";
 import { Input } from "../../../shared/ui/input";
 import { Button } from "../../../shared/ui/button";
-
 const schema = yup.object().shape({
   password: yup.string().required("שדה חובה").min(6, "לפחות 6 תווים"),
   confirm: yup
@@ -15,7 +14,6 @@ const schema = yup.object().shape({
     .oneOf([yup.ref("password")], "הסיסמאות אינן תואמות")
     .required("שדה חובה"),
 });
-
 const ResetPassword = () => {
   const {
     register,
@@ -24,16 +22,13 @@ const ResetPassword = () => {
   } = useForm<ResetFormData>({
     resolver: yupResolver(schema),
   });
-
   const [resetPassword, { isLoading, isError, isSuccess, error }] =
     useResetPasswordMutation();
   const navigate = useNavigate();
   const location = useLocation();
-
   // Get token from query string
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get("token");
-
   const onSubmit = async (data: ResetFormData) => {
     try {
       if (!token) throw new Error("טוקן חסר");
@@ -43,17 +38,17 @@ const ResetPassword = () => {
       console.error(e);
     }
   };
-
   return (
     <CardSimple className="max-w-md w-full mx-auto p-6 space-y-4">
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* <h2>איפוס סיסמה</h2> */}
-        <label>סיסמה חדשה:</label>
-        <Input type="password" {...register("password")} />
+        <label htmlFor="password">סיסמה חדשה:</label>
+        <Input id="password" type="password" {...register("password")} />
         {errors.password && <p>{errors.password.message}</p>}
-        <label>אימות סיסמה:</label>
-        <Input type="password" {...register("confirm")} />
+
+        <label htmlFor="confirm">אימות סיסמה:</label>
+        <Input id="confirm" type="password" {...register("confirm")} />
         {errors.confirm && <p>{errors.confirm.message}</p>}
+
         <Button type="submit" disabled={isSubmitting || isLoading}>
           {isLoading ? "טוען..." : "איפוס סיסמה"}
         </Button>
@@ -67,5 +62,4 @@ const ResetPassword = () => {
     </CardSimple>
   );
 };
-
 export default ResetPassword;

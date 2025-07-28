@@ -51,13 +51,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      authApi.endpoints.refreshToken.matchPending,
-      (state) => {
-        state.loading = true;
-        state.error = null;
-      }
-    );
-    builder.addMatcher(
       authApi.endpoints.refreshToken.matchFulfilled,
       (state, action) => {
         state.loading = false;
@@ -65,6 +58,13 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.loggedIn = true;
         state.isAdmin = action.payload.user.role === "manager";
+        state.error = null;
+      }
+    );
+    builder.addMatcher(
+      authApi.endpoints.refreshToken.matchPending,
+      (state) => {
+        state.loading = true;
         state.error = null;
       }
     );
