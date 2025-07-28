@@ -7,6 +7,8 @@ import 'cross-fetch/polyfill';
 
 
 
+
+
 jest.mock('sweetalert2', () => ({
   fire: jest.fn(),
 }));

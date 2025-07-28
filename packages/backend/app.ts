@@ -19,6 +19,9 @@ import profileRoutes from './src/routes/profileRouts';
 import publicProfileRoutes from './src/routes/publicProfileRoutes';
 
 dotenv.config();
+// בדיקה שעולה
+console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
 const allowedOrigins = (process.env.CORS_ORIGIN?.split(",") ?? [
   "http://localhost:3000",
@@ -32,7 +35,6 @@ const corsOptions = {
   origin: process.env.CORS_ORIGIN,
   credentials: true,
 };
-dotenv.config();
 const app: Application = express();
 
 
