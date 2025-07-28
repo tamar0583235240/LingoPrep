@@ -1,12 +1,10 @@
 import { interviewType } from "../types/questionType";
 import { ChevronUp, ChevronDown, Home } from "lucide-react";
-
 interface SidebarProps {
   questions: interviewType[];
   currentIndex: number;
   onNavigate: (index: number) => void;
 }
-
 const Sidebar: React.FC<SidebarProps> = ({
   questions,
   currentIndex,
@@ -14,14 +12,12 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const answeredCount = questions.filter((q) => q.answered).length;
   const percentage = Math.round((answeredCount / questions.length) * 100);
-
   return (
     <div className="flex flex-col items-center py-4 px-1 h-full w-64 ">
       {/* סטטוס שאלה */}
       <div className="text-center text-lg font-semibold text-primary mb-3">
         {`${currentIndex + 1} מתוך ${questions.length}`}
       </div>
-
       {/* בר התקדמות */}
       <div className="w-full mb-4 px-2">
         <div className="text-xs text-text-secondary text-center mb-1">
@@ -34,7 +30,6 @@ const Sidebar: React.FC<SidebarProps> = ({
           ></div>
         </div>
       </div>
-
       {/* כפתור קודם */}
       <button
         onClick={() => onNavigate(currentIndex - 1)}
@@ -44,7 +39,6 @@ const Sidebar: React.FC<SidebarProps> = ({
       >
         <ChevronUp size={18} />
       </button>
-
       {/* רשימת שאלות */}
       <div className="grid grid-cols-5 gap-2 overflow-y-auto max-h-[300px] px-2 mb-2">
          {questions.map((q, i) => {
@@ -70,8 +64,6 @@ const Sidebar: React.FC<SidebarProps> = ({
           );
         })}
       </div>
-
-
       {/* כפתור הבא */}
       <button
         onClick={() => onNavigate(currentIndex + 1)}
@@ -81,7 +73,6 @@ const Sidebar: React.FC<SidebarProps> = ({
       >
         <ChevronDown size={18} />
       </button>
-
       {/* חזור לעמוד הבית */}
       <button
         onClick={() => (window.location.href = "/")}
@@ -93,5 +84,4 @@ const Sidebar: React.FC<SidebarProps> = ({
     </div>
   );
 };
-
 export default Sidebar;

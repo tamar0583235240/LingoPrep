@@ -41,4 +41,5 @@ const TipsComponent: React.FC = () => {
     </div>
   );
 };
+
 export default TipsComponent;
