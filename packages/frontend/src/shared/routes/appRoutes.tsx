@@ -33,6 +33,7 @@ import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import SharedRecordingsPage from "../../pages/SharedRecordingsPage";
 import { AutoDeleteSettings } from "../../features/admin/components/AutoDeleteSettings";
 import { ReminderBell } from "../ui/RemindersSidebar";
+import PracticeQuestionsUser from "../../pages/PracticeQuestionsUser";
 
 export default function AppRoutes() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -137,6 +138,14 @@ export default function AppRoutes() {
             element={
               <RoleProtectedRoute allowedRoles={["student", "manager"]}>
                 <ProfileList />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/practiceQuestionsUser"
+            element={
+              <RoleProtectedRoute allowedRoles={["student", "manager"]}>
+                <PracticeQuestionsUser />
               </RoleProtectedRoute>
             }
           />

@@ -3,7 +3,7 @@ import { pool } from '../config/dbConnection';
 import { Feedback } from '../interfaces/entities/Feedback';
 import { Users } from '../interfaces/entities/Users';
 import { get } from 'http';
-import * as sharedRecordingsRepository from '../reposioty/sharedRecordings.repository';
+import * as sharedRecordingsRepository from '../repository/sharedRecordings.repository';
 
 
 

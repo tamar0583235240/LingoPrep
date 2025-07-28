@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 
-import { getAutoDeleteConfig, deleteOldRecordings } from '../reposioty/deleteRecordingRepository';
+import { getAutoDeleteConfig, deleteOldRecordings } from '../repository/deleteRecordingRepository';
 
 cron.schedule('0 2 * * *', async () => {
   try {

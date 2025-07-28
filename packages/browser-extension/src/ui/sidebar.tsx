@@ -1,9 +1,9 @@
 import * as FaIcons from "react-icons/fa";
 import { useLocation, NavLink } from "react-router-dom";
-import { cn } from "../utils/cn";
+import { cn } from "./cn";
 import { useSelector } from "react-redux";
 import React from "react";
-import { ExitButton } from "../../features/auth/components/ExitButton";
+import { ExitButton } from "../../../frontend/src/features/auth/components/ExitButton";
 
 const FaGraduationCap = FaIcons.FaGraduationCap as unknown as React.FC;
 
@@ -21,6 +21,7 @@ const navItems: NavItem[] = [
   { label: "הקלטות משותפות", href: "/shared" },
   { label: "משאבים", href: "/resources" },
   { label: "מרכז חומרי ראיונות", href: "/interviewMaterialsHub" },
+    { label: "Programming Questions", href: "/practiceQuestionsUser" },
   { label: "מנהל", href: "", isSectionTitle: true, adminOnly: true },
   { label: "ניהול שאלות", href: "/manager/questions", adminOnly: true },
   { label: "ניהול משתמשים", href: "/manager/users", adminOnly: true },

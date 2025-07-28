@@ -59,7 +59,7 @@ export const addParticipant = async (req: Request, res: Response): Promise<void>
     res.status(500).json({ error: 'Error creating shared recording' });
   }
 };
-import * as sharedRepo from '../reposioty/sharedRecordings.repository';
+import * as sharedRepo from '../repository/sharedRecordings.repository';
 
 export const getSharedRecordingsByUser = async (req: Request, res: Response) => {
   try {

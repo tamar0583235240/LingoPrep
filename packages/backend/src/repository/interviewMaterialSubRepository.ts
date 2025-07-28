@@ -123,7 +123,7 @@ export const deleteInterviewMaterialSub = async (id: string) => {
     if (queryText.length > 1) {
       result = await pool.query(
         `SELECT id, title, thumbnail, short_description,
-                ts_rank(document_with_weights, to_tsquery('simple', $1)) AS rank
+                ts_rank(coalesce(document_with_weights, to_tsvector('')), to_tsquery('simple', $1)) AS rank
          FROM interview_materials_sub
          WHERE (document_with_weights IS NOT NULL AND document_with_weights @@ to_tsquery('simple', $1))
             OR title ILIKE '%' || $1 || '%'

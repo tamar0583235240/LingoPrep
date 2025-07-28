@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { upsertAutoDeleteConfig, getAutoDeleteConfig } from '../reposioty/deleteRecordingRepository';
-import { deleteOldRecordings } from '../reposioty/deleteRecordingRepository';
+import { upsertAutoDeleteConfig, getAutoDeleteConfig } from '../repository/deleteRecordingRepository';
+import { deleteOldRecordings } from '../repository/deleteRecordingRepository';
 
 export const getAutoDeleteConfigHandler = async (req: Request, res: Response) => {
     console.log("💡 reached GET /auto-delete-config");

@@ -5,10 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon index.ts",
-<<<<<<< HEAD
     "test": "jest",
-=======
->>>>>>> 77b8de848426770193a5db72a02e0c468f4b2460
     "build": "tsc",
     "start": "node index.js",
     "clean": "rm -rf dist"
@@ -25,6 +22,7 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.1",
+    "node-cron": "^4.2.1",
     "nodemailer": "^7.0.3",
     "pg": "^8.16.0",
     "react-icons": "^5.5.0",
@@ -32,7 +30,8 @@
     "supertest": "^7.1.1",
     "transliteration": "^2.3.5",
     "typeorm": "^0.3.25",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -46,13 +45,8 @@
     "@types/pg": "^8.15.4",
     "@types/uuid": "^10.0.0",
     "nodemon": "^3.0.1",
-<<<<<<< HEAD
-
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
-=======
-    "ts-node": "^10.9.1",
->>>>>>> 77b8de848426770193a5db72a02e0c468f4b2460
     "typescript": "^5.0.0"
   }
 }

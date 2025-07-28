@@ -32,7 +32,7 @@ import interviewMaterialsRoutes from './src/routes/interviewMaterialsRoutes';
 import profileRoutes from './src/routes/profileRouts';
 import publicProfileRoutes from './src/routes/publicProfileRoutes';
 import feedbackRouter from './src/routes/feedbackRouts';
-
+import codeQuestionsRouts from './src/routes/codeQuestionsRouts';
 dotenv.config();
 
 const allowedOrigins = (process.env.CORS_ORIGIN?.split(",") ?? [
@@ -94,6 +94,12 @@ app.use("/api/aiInsight", aiInsightRoutes);
 // app.use("/manager/interview-materials", interviewMaterialsRoutes);
 app.use("/profiles", profileRoutes);
 app.use('/public-profile', publicProfileRoutes);
+app.use('/api/codeQuestions', codeQuestionsRouts);
+
+
+
+
+
 
 export default app;
 

@@ -5,10 +5,6 @@ import bcrypt from 'bcrypt';
 import { generateUniqueSlug } from '../utils/generateSlug';
 import { pool } from '../config/dbConnection';
 import { v4 as uuidv4 } from 'uuid';
-<<<<<<< HEAD
-=======
-
->>>>>>> 77b8de848426770193a5db72a02e0c468f4b2460
 import { createUserByAdminSchema , updateUserByAdminSchema  } from '../validations/userValidations';
 import  insertUsersFromExcel  from '../repository/userRpository';
 
