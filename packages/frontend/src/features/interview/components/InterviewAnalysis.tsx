@@ -4,10 +4,11 @@ import { InterviewAnalysis } from '../types/interviewAnalysis.types';
 type Props = {
   data: InterviewAnalysis;
 };
+console.log("InterviewAnalysisComponent");
 
 export const InterviewAnalysisComponent: React.FC<Props> = ({ data }) => (
   <div>
-    <h2>תמלול:</h2>
+        <h2>תמלול:</h2>
     <p>{data.transcript}</p>
     <h3>דירוג כללי: {data.rating}/5</h3>
     <h3>ביטחון: {data.confidence}/5</h3>

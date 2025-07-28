@@ -9,9 +9,24 @@ import { Paragraph } from "../../../shared/ui/typography";
 
 
 export const AiInsightsList = (props: any) => {
-    const { answerId } = props
-    const { data, isLoading, isError } = useGetAiInsightsByAnswerIdQuery(answerId);
+    const { answerId, isAnalyzing } = props;
+    const { data, isLoading, isError } = useGetAiInsightsByAnswerIdQuery(answerId, { skip: !answerId || isAnalyzing });
     const [viewAiIn, setViewAiIn] = useState(false)
+
+    if (isAnalyzing) {
+        return (
+            <GridContainer maxWidth="lg" className="text-center">
+                <CardSimple className="p-8">
+                    <div className="flex flex-col items-center justify-center">
+                        <div className="animate-spin mb-2">
+                            <Brain size={32} className="text-blue-400" />
+                        </div>
+                        <Paragraph className="text-blue-700 mb-0">ממתין לניתוח AI...</Paragraph>
+                    </div>
+                </CardSimple>
+            </GridContainer>
+        );
+    }
 
     if (isLoading) {
         return (

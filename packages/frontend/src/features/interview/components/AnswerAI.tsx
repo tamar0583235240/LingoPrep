@@ -88,6 +88,7 @@ const AnswerAI: React.FC<AnswerAIProps> = ({ answerId,  onClose, onLoaded }) => 
   // אחרת נציג כקומפוננטה רגילה
   return (
     <div className="bg-white rounded-xl shadow-sm">
+      <p>yugiiiiiju</p>
       {content}
     </div>
   );

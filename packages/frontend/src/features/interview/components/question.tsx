@@ -13,6 +13,7 @@ import { setCurrentAnswerId } from "../../interview/store/simulationSlice";
 
 import FileUpload from "../../recordings/components/FileUpload";
 import { analyzeInterview } from "../services/analyze.service";
+import { AiInsightsList } from "../../recordings/components/AiInsightsList";
 interface QuestionProps {
   question: interviewType & { answered?: boolean };
   onFinishRecording: () => void;
@@ -38,6 +39,18 @@ const Question: React.FC<QuestionProps> = ({
     type: "success" | "error";
     icon?: React.ReactNode;
   } | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  // הגדרת טיפוס לניתוח AI
+  interface AnalysisResult {
+    summary?: string;
+    rating?: number;
+    strengths?: string;
+    improvements?: string;
+    flow?: string;
+    confidence?: string;
+    [key: string]: any;
+  }
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | string | null>(null);
   if (!questions.length || currentIndex >= questions.length) return <div>אין שאלות להצגה</div>;
   return (
     <div className="bg-transparent">
@@ -90,8 +103,16 @@ const Question: React.FC<QuestionProps> = ({
                     if (answer?.id && fileObj) {
                       onAnswerSaved(answer.id);
                       dispatch(setCurrentAnswerId(answer.id.toString()));
-                      console.log('$$$$$$$$$$$4', fileObj, answer.id.toString());
-                      await analyzeInterview(fileObj, answer.id.toString());
+                      setIsAnalyzing(true);
+                      setAnalysisResult(null);
+                      try {
+                        const result = await analyzeInterview(fileObj, answer.id.toString());
+                        setAnalysisResult(result);
+                      } catch (err) {
+                        setAnalysisResult('שגיאה בניתוח הקובץ');
+                      } finally {
+                        setIsAnalyzing(false);
+                      }
                     }
                   } catch (e) {
                     console.error('שגיאה בשמירת התשובה:', e);
@@ -112,6 +133,36 @@ const Question: React.FC<QuestionProps> = ({
               />
             </div>
           </div>
+          {/* הצגת תוצאת ניתוח AI */}
+          {isAnalyzing && (
+            <div className="flex justify-center items-center mt-4">
+              <MagicLoader />
+              <span className="ml-2">מנתח תשובה...</span>
+            </div>
+          )}
+          {analysisResult && !isAnalyzing && (
+            <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl text-blue-900">
+              <div className="font-bold mb-2">תוצאת ניתוח AI:</div>
+              <div>
+                {typeof analysisResult === 'string' ? (
+                  analysisResult
+                ) : (
+                  <div>
+                    {'summary' in analysisResult && <div><b>סיכום:</b> {analysisResult.summary}</div>}
+                    {'rating' in analysisResult && <div><b>דירוג:</b> {analysisResult.rating}</div>}
+                    {'strengths' in analysisResult && <div><b>חוזקות:</b> {analysisResult.strengths}</div>}
+                    {'improvements' in analysisResult && <div><b>הצעות לשיפור:</b> {analysisResult.improvements}</div>}
+                    {'flow' in analysisResult && <div><b>שטף:</b> {analysisResult.flow}</div>}
+                    {'confidence' in analysisResult && <div><b>ביטחון:</b> {analysisResult.confidence}</div>}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          {/* הצגת AiInsightsList רק אחרי סיום הניתוח */}
+          {currentAnswerId && (
+            <AiInsightsList answerId={currentAnswerId} isAnalyzing={isAnalyzing} />
+          )}
         </div>
         {/* </div> */}
         <button

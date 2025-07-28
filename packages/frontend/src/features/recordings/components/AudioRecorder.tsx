@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRecording } from '../hooks/useRecording';
 import { formatTime } from '../../../shared/utils/timeUtils';
 import { Button } from '../../../shared/ui/button';
@@ -49,9 +49,15 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const [fileName, setFileName] = useState('');
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showRecordingModal, setShowRecordingModal] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [recordingPhase, setRecordingPhase] = useState<
     'idle' | 'recording' | 'paused' | 'finished'
   >('idle');
+
+  useEffect(() => {
+
+
+  }, [isAnalyzing]);
 
   const handleMainButtonClick = () => {
     if (recordingPhase === 'idle' || recordingPhase === 'finished') {
@@ -87,22 +93,15 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       if (onSaveSuccess && answer?.id) {
         console.log("onSaveSuccess and answer.id exist", { onSaveSuccessExists: !!onSaveSuccess, answerId: answer?.id });
 
-        console.log('//////////////////////////////////');
-        console.log(audioBlobRef.current, "saveRecording");
-        console.log('//////////////////////////////////');
 
         if (audioBlobRef.current) {
           console.log("audioBlobRef.current exists", audioBlobRef.current);
-          // בדיקת סוג ה-Blob לפני יצירת הקובץ
           console.log("Blob type:", audioBlobRef.current.type);
           console.log("Blob size:", audioBlobRef.current.size);
-          // בדיקת הסיומת של שם הקובץ
           console.log("File name:", fileName || "recording.wav");
-          // בדיקת האם זה באמת webm
           if (audioBlobRef.current.type === "audio/webm" || audioBlobRef.current.type === "video/webm") {
             console.warn("הקלטה היא בפורמט webm, לא wav אמיתי. יש להמיר בשרת!");
           }
-          // שלח תמיד את הקובץ בפורמט webm עם סיומת webm
           let safeFileName = fileName.trim() || "recording.webm";
           if (!safeFileName.endsWith('.webm')) {
             safeFileName += '.webm';
@@ -111,6 +110,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
           analyzeInterview(file, answer.id)
             .then(result => {
               console.log("AI Analysis Result:", result);
+              setIsAnalyzing(true);
+
             })
             .catch(err => {
               console.error("AI Analysis Error:", err);
@@ -133,7 +134,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       });
       setTimeout(() => setNotification?.({ message: "", type: "success" }), 3500);
 
-      //////////////////////////
 
     } catch (error) {
       console.error('שגיאה בשמירה:', error);

@@ -19,6 +19,7 @@ import { CheckCircle2, Lightbulb, X } from "lucide-react";
 import { Button } from "../shared/ui/button";
 import CategoryTabs from "../features/interview/components/showCategories";
 import { useGetAnsweredQuestionsQuery } from "../features/interview/services/statusAPI";
+import { AiInsightsList } from "../features/recordings/components/AiInsightsList";
 
 const InterviewPage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -241,7 +242,8 @@ const InterviewPage = () => {
                     <MagicLoader />
                   </div>
                 ) : (
-                  <AnswerAI
+                  // <AnswerAI
+                  <AiInsightsList
                     answerId={currentAnswerId}
                     // audioFile={}
                     onClose={() => dispatch(setCurrentAnswerId(null))}
