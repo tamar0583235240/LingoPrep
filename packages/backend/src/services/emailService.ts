@@ -3,8 +3,8 @@
 
 
 import { ReminderType } from "@interfaces/reminderInterfaces";
-import { getUserEmailById } from "reposioty/userRepository2";
-import sendEmail from "utils/sendEmail";
+import { getUserEmailById } from "../reposioty/userRepository2";
+import sendEmail from "../utils/sendEmail";
 
 export async function sendReminderEmail(userId: string, type: ReminderType, content: string): Promise<boolean> {
   const email = await getUserEmailById(userId);

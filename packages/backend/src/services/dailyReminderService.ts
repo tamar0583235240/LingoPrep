@@ -68,7 +68,8 @@
 // };
 // src/services/dailyReminderService.ts
 ;
-import { getActiveUserReminderSettingsByDay, getNextContent, updateLastSeen } from "reposioty/reminderRepository2";
+// import { getActiveUserReminderSettingsByDay, getNextContent, updateLastSeen } from "reposioty/reminderRepository2";
+import { getActiveUserReminderSettingsByDay, getNextContent, updateLastSeen } from "../reposioty/reminderRepository2";
 import { sendReminderEmail } from "./emailService";
 
 
