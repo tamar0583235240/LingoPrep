@@ -1,4 +1,5 @@
 import { Column, Entity, Index, ManyToMany, OneToMany } from "typeorm";
+import { Answers } from "./Answers";
 
 @Index("questions_pkey", ["id"], { unique: true })
 @Entity("questions", { schema: "public" })
@@ -20,5 +21,8 @@ export class Questions {
 
   @Column("boolean", { name: "is_active", default: () => "true" })
   is_active: boolean;
+
+  @OneToMany(() => Answers, (answers) => answers.question)
+  answers: Answers[];
 
 }
