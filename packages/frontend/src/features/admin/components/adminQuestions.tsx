@@ -113,7 +113,6 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
 
   const editClick = (question: Question) => {
     setQuestionToEdit(question);
-
   };
 
 
