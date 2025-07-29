@@ -3,7 +3,7 @@ import { useGetSharedRecordingsQuery } from '../features/shared-recordings/servi
 import SharedRecordingCard from '../features/shared-recordings/components/SharedRecordingCard';
 import SharedRecordingDetails from '../features/shared-recordings/components/SharedRecordingDetails';
 import { SharedRecording } from '../features/shared-recordings/types/types';
-import { useCreateFeedbackMutation } from '../features/feedback/services/FeedbackApi';
+import { useCreateFeedbackMutation } from '../features/feedback/services/feedbackApi';
 
 import { useSelector } from 'react-redux';
 import { RootState } from '../shared/store/store';

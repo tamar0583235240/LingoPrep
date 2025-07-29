@@ -1,7 +1,7 @@
 import { api } from "../../../shared/api/api";
 import { FeedbackInManager } from "../types/FeedbackInManager";
 // import { FeedbackType } from "../types/FeedbackType";
-import { FeedbackType } from "../types/FeedbackType";
+import { FeedbackType } from "../types/feedbackType";
 
 export const FeedbackApi = api.injectEndpoints({
   endpoints: (builder) => ({

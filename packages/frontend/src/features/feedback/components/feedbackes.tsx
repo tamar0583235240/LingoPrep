@@ -1,9 +1,9 @@
 // בס"ד
 import { useState } from "react"
-import {   useGetAllFeedbacksQuery,  useGetFeedbackAveragesQuery,useGetFeedbackesBysharedRecordingIdQuery } from "../services/FeedbackApi"
+import {   useGetAllFeedbacksQuery,  useGetFeedbackAveragesQuery,useGetFeedbackesBysharedRecordingIdQuery } from "../services/feedbackApi"
 import { MessageCircle, ChevronDown, ChevronUp, User, Calendar } from "lucide-react"
 import { Users } from "../types/UsersType"
-import { FeedbackType } from "../types/FeedbackType"
+import { FeedbackType } from "../types/feedbackType"
 // import '../../shared-recordings/components/shareErcording.css'
 
 export const Feedbackes = ({

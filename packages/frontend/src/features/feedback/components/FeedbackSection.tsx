@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 //   useGetFeedbacksBySharedRecordingIdQuery,
 //   useUpdateFeedbackMutation,
 // } from '../../feedback/services/FeedbackApi'; 
-import {useUpdateFeedbackMutation,useCreateFeedbackMutation,useGetFeedbackesBysharedRecordingIdQuery} from "../services/FeedbackApi"
+import {useUpdateFeedbackMutation,useCreateFeedbackMutation,useGetFeedbackesBysharedRecordingIdQuery} from "../services/feedbackApi"
 interface Props {
   recordingId: string;
   userId: string;

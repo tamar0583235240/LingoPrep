@@ -1,5 +1,5 @@
 import React from 'react';
-import { FeedbackType } from '../../feedback/types/FeedbackType';
+import { FeedbackType } from '../../feedback/types/feedbackType';
 import FeedbackSection from '../../feedback/components/FeedbackSection';
 
 interface Props {

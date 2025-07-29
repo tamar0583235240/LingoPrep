@@ -1,7 +1,7 @@
 import { TitleQuestions } from "./question";
 import { RootState } from '../../../shared/store/store';
 import { useSelector } from "react-redux";
-import { Feedbackes } from "../../feedback/components/Feedbackes";
+import { Feedbackes } from "../../feedback/components/feedbackes";
 import { useGetAnswersByIdUserQuery } from "../services/answerApi";
 import { AiInsightsList } from "./AiInsightsList";
 import { GridContainer } from "../../../shared/ui/GridContainer";
