@@ -1,68 +1,37 @@
 import React from 'react'
 
 import { useState } from "react"
+import { useAddReminderMutation, useRemoveReminderMutation } from '../features/feedback/services/feedbackApi'
 import FeedbackCardManager from "../features/feedback/components/FeedbackCardManager"
 import { Grid } from "../shared/ui/grid"
 import FeedbackChart from '../features/feedback/components/FeedbackChart'
 import { useGetAllFeedbacksQuery } from '../features/feedback/services/feedbackApi'
 import ExportFeedbacksToExcel from '../features/feedback/components/exportFeedbacksToExcel'
 
-const sampleFeedbacks = [
-    {
-        id: "1",
-        user_id: "user-123",
-        username: "יוסי כהן", // From user lookup
-        general_experience_rating: 5,
-        relevance_rating: 5,
-        tips_quality_rating: 4,
-        content_usability_rating: 5,
-        liked_most: "השירות המהיר והמקצועי של צוות התמיכה",
-        suggestion_for_improver: "אולי להוסיף צ'אט בזמן אמת",
-        is_anonymous: false,
-        treatment_status: "completed" as const,
-        createdat: "2024-01-15",
-        file_upload_path: "/uploads/screenshot_123.png",
-    },
-    {
-        id: "2",
-        user_id: "user-456",
-        username: "שרה לוי",
-        general_experience_rating: 4,
-        relevance_rating: 5,
-        content_usability_rating: 3,
-        suggestion_for_improver: "הוספת אפשרות לסינון מתקדם בעמוד הראשי",
-        feature_idea: "מערכת התראות מותאמת אישית",
-        is_anonymous: false,
-        treatment_status: "in-progress" as const,
-        createdat: "2024-01-14",
-    },
-    {
-        id: "3",
-        user_id: null,
-        general_experience_rating: 3,
-        relevance_rating: 4,
-        confidence_contribution: "שמתי לב שהאתר טוען לאט יותר מהרגיל בשעות הערב",
-        is_anonymous: true,
-        treatment_status: "pending" as const,
-        createdat: "2024-01-13",
-    },
-]
 const FeedbackInManager = () => {
     const { data, isLoading, isError, } = useGetAllFeedbacksQuery()
     console.log(data);
 
     const [reminders, setReminders] = useState<Set<string>>(new Set())
+    const [addReminder] = useAddReminderMutation();
+    const [removeReminder] = useRemoveReminderMutation();
 
-    const toggleReminder = (feedbackId: string) => {
-        setReminders((prev) => {
-            const newReminders = new Set(prev)
-            if (newReminders.has(feedbackId)) {
-                newReminders.delete(feedbackId)
-            } else {
-                newReminders.add(feedbackId)
-            }
-            return newReminders
-        })
+    const toggleReminder = async (feedbackId: string, userId: string) => {
+        if (reminders.has(feedbackId)) {
+            await removeReminder({ feedbackId });
+            setReminders((prev) => {
+                const newReminders = new Set(prev);
+                newReminders.delete(feedbackId);
+                return newReminders;
+            });
+        } else {
+            await addReminder({ feedbackId: feedbackId, user_id: userId });
+            setReminders((prev) => {
+                const newReminders = new Set(prev);
+                newReminders.add(feedbackId);
+                return newReminders;
+            });
+        }
     }
     return (
         <>
@@ -92,14 +61,16 @@ const FeedbackInManager = () => {
                         <ExportFeedbacksToExcel />
                     </div>
                     <Grid cols={2} className="gap-4">
-                        {data?.map((feedback) => (
-                            <FeedbackCardManager
-                                key={feedback.id}
-                                feedback={feedback}
-                                isReminder={reminders.has(feedback.id)}
-                                onToggleReminder={toggleReminder}
-                            />
-                        ))}
+                        {data?.map((feedback) =>
+                            feedback.user_id ? (
+                                <FeedbackCardManager
+                                    key={feedback.id}
+                                    feedback={feedback}
+                                    isReminder={reminders.has(feedback.id)}
+                                    onToggleReminder={() => toggleReminder(feedback.id, feedback.user_id as string)}
+                                />
+                            ) : null
+                        )}
                     </Grid>
                 </div>
             </div>
