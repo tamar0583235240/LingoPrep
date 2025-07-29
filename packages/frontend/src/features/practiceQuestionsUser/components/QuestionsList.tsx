@@ -6,7 +6,7 @@ import { LikeDislike } from "./LikeDislike";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../shared/store/store";
 import { SendMailModal } from "./SendMailModal";
-import { useGetUserAnswerQuery, useSendEmailMutation } from "../../../shared/api/runCodeApi";
+import { useGetUserAnswerQuery, useLazyGetUserAnswerQuery, useSendEmailMutation } from "../../../shared/api/runCodeApi";
 import Swal from "sweetalert2";
 import { skipToken } from "@reduxjs/toolkit/query";
 
@@ -15,6 +15,7 @@ interface Question {
   content: string;
   difficulty: string;
   type: string;
+  answerToSend?: string;
 }
 
 type Status = "not_started" | "in_progress" | "completed";
@@ -34,8 +35,6 @@ export const QuestionsList = ({ topicName, level, type }: Props) => {
 
   const {
     data: userAnswer,
-    isLoading,
-    error,
     refetch
   } = useGetUserAnswerQuery(
     selectedQuestion
@@ -43,9 +42,44 @@ export const QuestionsList = ({ topicName, level, type }: Props) => {
       : skipToken
   );
 
+  const [getUserAnswer, { data: lazyUserAnswer, isLoading, error }] = useLazyGetUserAnswerQuery();
   const [mailQuestion, setMailQuestion] = useState<Question | null>(null);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [sendEmail, { isLoading: sendingEmail }] = useSendEmailMutation();
+
+  // בפונקציית הטיפול של הכפתור:
+  const handleSendMailClick = async (q: Question, status: Status) => {
+    if (status !== "completed") {
+      Swal.fire({
+        icon: 'warning',
+        iconColor: 'red',
+        title: 'לא ניתן לשלוח מייל',
+        text: 'ניתן לשלוח מייל רק על שאלות שהושלמו.',
+        confirmButtonText: 'סגור',
+        confirmButtonColor: '#00B894',
+      });
+      return;
+    }
+
+    try {
+      // קורא לתשובה מהשרת
+      const result = await getUserAnswer({ userId, questionId: q.id }).unwrap();
+
+      setMailQuestion({
+        ...q,
+        answerToSend: result.answer || "עדיין לא ענית על שאלה זו",
+      });
+    } catch (error) {
+      console.error("Error fetching answer:", error);
+      Swal.fire({
+        icon: 'error',
+        iconColor: 'red',
+        title: 'שגיאה בשליפת התשובה',
+        text: 'נסה שוב מאוחר יותר.',
+        confirmButtonText: 'סגור',
+        confirmButtonColor: '#00B894',
+      });
+    }
+  };
 
   useEffect(() => {
     if (selectedQuestion) {
@@ -127,15 +161,6 @@ export const QuestionsList = ({ topicName, level, type }: Props) => {
     fetchStatuses();
   }, [userId]);
 
-  useEffect(() => {
-    if (userAnswer && selectedQuestion) {
-      setAnswers((prev) => ({
-        ...prev,
-        [selectedQuestion.id]: userAnswer.answer || "",
-      }));
-    }
-  }, [userAnswer, selectedQuestion]);
-
   const handleStatusChange = async (id: string, newStatus: Status) => {
     setQuestionStatuses((prev) => ({
       ...prev,
@@ -196,25 +221,12 @@ export const QuestionsList = ({ topicName, level, type }: Props) => {
                     </button>
 
                     <button
-                      onClick={() => {
-                        const status = questionStatuses[q.id] ?? "not_started";
-                        if (status === "completed") {
-                          setMailQuestion(q);
-                        } else {
-                          Swal.fire({
-                            icon: 'warning',
-                            iconColor: 'red',
-                            title: 'לא ניתן לשלוח מייל',
-                            text: 'ניתן לשלוח מייל רק על שאלות שהושלמו.',
-                            confirmButtonText: 'סגור',
-                            confirmButtonColor: '#00B894',
-                          });
-                        }
-                      }}
+                      onClick={() => handleSendMailClick(q, status)}
                       className="group w-36 h-10 flex items-center justify-center gap-2 bg-gray-300 hover:bg-gray-400 text-white text-sm font-medium rounded-md"
                     >
                       <FiMail className="text-base" /> שלח מייל
                     </button>
+
                   </div>
                 </div>
               </li>
@@ -237,14 +249,14 @@ export const QuestionsList = ({ topicName, level, type }: Props) => {
       {mailQuestion && (
         <SendMailModal
           questionContent={mailQuestion.content}
-          answer={answers[mailQuestion.id] ?? "עדיין לא ענית על שאלה זו"}
+          answer={mailQuestion.answerToSend ?? "עדיין לא ענית על שאלה זו"}
           onClose={() => setMailQuestion(null)}
           onSend={async (email, question, answer, senderName, senderEmail) => {
             try {
               const subject = `שאלה מעניינת בנושא ${topicName}`;
               const message = `שלום,
 
-              ${senderName} רצה לשתף אותך בשאלה שהוא ענה עליה:
+              ${senderName} רוצה לשתף אותך בשאלה שהיא ענתה עליה:
               שאלה:
               ${question}
               תשובה:
