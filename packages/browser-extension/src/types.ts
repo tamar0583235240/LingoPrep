@@ -1,7 +1,7 @@
 export interface User {
   id: string;
   first_name: string;
-  last_name: string;
+  lastName: string;
   email: string;
   phone?: string;
   role: 'student' | 'manager';
@@ -34,7 +34,7 @@ export interface LoginResponse {
 
 export interface SignupRequest {
   first_name: string;
-  last_name: string;
+  lastName: string;
   email: string;
   password: string;
 }

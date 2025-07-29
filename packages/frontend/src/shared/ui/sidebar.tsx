@@ -20,6 +20,7 @@ const navItems: NavItem[] = [
   { label: "הקלטות משותפות", href: "/shared" },
   { label: "משאבים", href: "/resources" },
   { label: "פרופילים", href: "/profiles" },
+  { label: " הורדת תוסף לדפדפן", href: "/browser-extension" },
   { label: "מנהל", href: "", isSectionTitle: true, adminOnly: true },
   { label: "ניהול שאלות", href: "/manager/questions", adminOnly: true },
   { label: "ניהול משתמשים", href: "/manager/users", adminOnly: true },
