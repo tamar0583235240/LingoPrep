@@ -1,3 +1,4 @@
+
 import { Router } from "express";
 import { addQuestionToCategoryController, getAllCategoriesController, getCategoryForQuestionsController } from "../controllers/categoryController";
 

@@ -88,4 +88,3 @@ export const getQuestionsByCategoryController = async (req: Request, res: Respon
     res.status(500).json({ error });
   }
 };
-

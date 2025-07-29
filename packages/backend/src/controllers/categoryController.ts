@@ -25,6 +25,7 @@ export const addQuestionToCategoryController = async (req: Request, res: Respons
 
 export const getCategoryForQuestionsController = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
+    console.log(id, "id from params in getCategoryForQuestionsController");
     try {
         const category = await categoryRepository.getCategoryForQuestions(id);
         if (!category) {

@@ -49,7 +49,7 @@ export const AdminQuestionApi = api.injectEndpoints({
             invalidatesTags: ["question"],
         }),
         getCategoryForQuestion: builder.query<Category, string>({
-            query: (id) => `question/getCategoryForQuestions/${id}`,
+            query: (id) => `/api/categories/getCategoryForQuestions/${id}`,
             providesTags: ['categories'],
         }),
     }),

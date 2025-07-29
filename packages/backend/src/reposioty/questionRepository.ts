@@ -118,4 +118,3 @@ const getQuestionsByCategory = async (category_id: string): Promise<Questions[]>
 };
 
 export default { getAllQuestionById, getAllQuestions, deleteQuestionById, addQustion, updateQuestionById, getQuestionsByCategory };
-
