@@ -63,7 +63,7 @@ app.use("/manager/interview-materials", interviewMaterialsRoutes);
 app.use("/profiles", profileRoutes);
 app.use('/public-profile', publicProfileRoutes);
 app.use("/expertise-skills", experienceSkillsRoutes);
-app.use("/recordings-notifications", newRecordingNotificationsRoutes);
+app.use('/recordings-notifications', newRecordingNotificationsRoutes);
 
 
 export default app;

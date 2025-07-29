@@ -1,15 +1,21 @@
 import { api } from "../../../shared/api/api";
-import { Notification } from "../types/Notification";
 
 export const notificationsApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getUnreadNotifications: builder.query<Notification[], void>({
-      query: () => "recordings-notifications",
+    getUnreadNotifications: builder.query({
+      query: () => `recordings-notifications/`,
       providesTags: ["Notification"],
     }),
-    markAllNotificationsAsSeen: builder.mutation<Notification[], void>({
+    markAllNotificationsAsSeen: builder.mutation({
       query: () => ({
-        url: "recordings-notifications/mark-all-seen",
+        url: `recordings-notifications/mark-all-seen`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["Notification"],
+    }),
+    markNotificationAsSeen: builder.mutation({
+      query: (id: string) => ({
+        url: `recordings-notifications/${id}/mark-seen`,
         method: "PATCH",
       }),
       invalidatesTags: ["Notification"],
@@ -20,4 +26,5 @@ export const notificationsApi = api.injectEndpoints({
 export const {
   useGetUnreadNotificationsQuery,
   useMarkAllNotificationsAsSeenMutation,
+  useMarkNotificationAsSeenMutation,
 } = notificationsApi;

@@ -27,3 +27,12 @@ export const notifyAllManagers = async () => {
     "A new recording was submitted."
   );
 };
+
+export const markNotificationAsSeen = async (req: Request, res: Response) => {
+  const userId = (req as any).user?.id;
+  const notificationId = req.params.id;
+  if (!userId || !notificationId) return res.status(400).json({ message: "Missing data" });
+
+  await newRecordingNotificationsRepository.markOneAsSeen(userId, notificationId);
+  res.json({ success: true });
+};

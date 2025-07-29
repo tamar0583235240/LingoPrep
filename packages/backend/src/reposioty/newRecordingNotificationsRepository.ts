@@ -46,4 +46,15 @@ export const newRecordingNotificationsRepository = {
     const result = await pool.query(query, [userId]);
     return result.rows;
   },
+
+  markOneAsSeen: async (userId: string, notificationId: string) => {
+    const query = `
+    UPDATE notifications
+    SET is_seen = true
+    WHERE user_id = $1 AND id = $2
+    RETURNING *;
+  `;
+    const result = await pool.query(query, [userId, notificationId]);
+    return result.rows[0];
+  },
 };

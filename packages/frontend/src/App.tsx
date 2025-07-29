@@ -12,6 +12,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ToastContainer } from 'react-toastify';
 import { FeedbackNotificationListener } from './features/feedback/components/AllFeedbackNotificationListener';
 import { NotificationListener } from './features/dashboard/components/NotificationListener';
+import NewNotificationToast from './features/recordings/components/newNotificationToast';
 
 
 function App() {
@@ -23,7 +24,7 @@ function App() {
   refreshTokenTrigger()
     .unwrap()
     .then((res) => {
-      console.log("הצלחה!", res);
+      console.log("הצלחה!", res);      
       dispatch(loginSuccess({ token: res.token, user: res.user }));
     })
     .catch((err) => {
@@ -46,6 +47,7 @@ function App() {
         <BrowserRouter>
           <AppRoutes />
           <FeedbackNotificationListener />
+          <NewNotificationToast />
           <NotificationListener />
           <ToastContainer />
         </BrowserRouter>
