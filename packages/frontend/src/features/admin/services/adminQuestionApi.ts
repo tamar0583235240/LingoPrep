@@ -19,7 +19,7 @@ export const AdminQuestionApi = api.injectEndpoints({
         }),
         updateQuestion: builder.mutation<Question, { data: Partial<Question>; category: Category }>({
             query: ({ data, category }) => ({
-                url: question/updateQuestion, 
+                url: 'question/updateQuestion', 
                 method: "PUT",
                 body: {data,category}
             }),
