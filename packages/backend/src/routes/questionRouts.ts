@@ -18,6 +18,6 @@ router.get('/getAllQuestions', adminqQuestionController);
 router.put('/updateQuestion', updateQuestionController);
 router.patch('/deleteQuestionById/:question_id', deleteQuestionController);
 router.get('/', getAllQuestionsController);
-router.get('/category/:categoryId', getQuestionsByCategoryController);
+//router.get('/category/:categoryId', getQuestionsByCategoryController);
 
 export default router;

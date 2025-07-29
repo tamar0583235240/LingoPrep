@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Question } from '../types/Question';
 
-import { useUpdateQuestionMutation, useGetAllCategoriesQuery } from '../services/adminQuestionApi';
+import { useUpdateQuestionMutation, useGetAllCategoriesQuery, useGetCategoryForQuestionQuery } from '../services/adminQuestionApi';
 import { Button } from "../../../shared/ui/button";
 import { Input } from "../../../shared/ui/input";
 import { CardSimple } from "../../../shared/ui/card";
@@ -13,24 +13,39 @@ import { X, Save, Edit, ChevronDown } from "lucide-react";
 import { cn } from "../../../shared/utils/cn";
 import { Category } from '../types/Categories';
 
-export const UpdateQuestion = (props: { question: Question,categorySelected:Category, questionSaveClick: Function }) => {
-    const { question, categorySelected,questionSaveClick } = props;
+export const UpdateQuestion = (props: { question: Question, questionSaveClick: Function }) => {
+    const { question, questionSaveClick } = props;
     const [updateQuestionById, { isLoading }] = useUpdateQuestionMutation();
     const { data: categories } = useGetAllCategoriesQuery();
     const { showMessage } = useMessageModal();
 
+
     const [titleQ, setTitleQ] = useState(question.title);
     const [contentQ, setContentQ] = useState(question.content);
-    const [categoryQ, setCategoryQ] = useState<Category>(categorySelected);
+    const [categoryQ, setCategoryQ] = useState<Category | null>(null);
     const [tipsQ, setTipsQ] = useState(question.tips);
     const [ai_guidanceQ, setAi_guidanceQ] = useState(question.ai_guidance);
     const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
 
+
+
+
+    const { data: selectedCategoryData, refetch, error, isLoading: isCategoryLoading } =
+        useGetCategoryForQuestionQuery(question.id, {
+            skip: !question.id,
+        });
+
+    useEffect(() => {
+        if (selectedCategoryData) {
+            setCategoryQ(selectedCategoryData);
+        }
+    }, [selectedCategoryData]);
+
+
     const handleCategorySelect = (categoryName: string, categoryId: string) => {
-        const categorySelected: Category =
-        {
+        const categorySelected: Category = {
             id: categoryId,
-            name: categoryName,           
+            name: categoryName,
         };
         setCategoryQ(categorySelected);
         setIsCategoryDropdownOpen(false);
@@ -38,6 +53,12 @@ export const UpdateQuestion = (props: { question: Question,categorySelected:Cate
 
     const updateQuestionF = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        // אם אין קטגוריה נבחרת, נשתמש בקטגוריה ריקה או נציג אזהרה
+        if (!categoryQ) {
+            showMessage("אזהרה", "לא נבחרה קטגוריה. האם להמשיך?");
+            // אפשר להמשיך בלי קטגוריה או לעצור כאן
+        }
 
         const UpdateQuestionn: Partial<Question> = {
             id: question.id,
@@ -48,14 +69,26 @@ export const UpdateQuestion = (props: { question: Question,categorySelected:Cate
             is_active: true
         };
 
+        console.log("UpdateQuestionn", UpdateQuestionn);
+        console.log("categoryQ", categoryQ);
+
         try {
-            await updateQuestionById({ data: UpdateQuestionn, category: categoryQ }).unwrap();            showMessage("הצלחה!", "השאלה עודכנה בהצלחה");
+            // אם יש קטגוריה, נשלח אותה. אחרת נשלח null או undefined
+            await updateQuestionById({
+                data: UpdateQuestionn,
+                category: categoryQ || { id: '', name: '' }
+            }).unwrap();
+            showMessage("הצלחה!", "השאלה עודכנה בהצלחה");
             questionSaveClick();
-        } catch (e) {
+            await refetch();
+        } catch (e: any) {
             console.error('שגיאה בעדכון השאלה:', e);
-            showMessage("שגיאה", `שגיאה בעדכון השאלה: ${e}`);
+            const errorMessage = e?.data?.message || e?.message || 'שגיאה לא ידועה';
+            showMessage("שגיאה", `שגיאה בעדכון השאלה: ${errorMessage}`);
         }
     }
+
+
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -154,7 +187,9 @@ export const UpdateQuestion = (props: { question: Question,categorySelected:Cate
                                         <span className={cn("text-right flex-1",
                                             categoryQ ? "text-gray-900" : "text-gray-500"
                                         )}>
-                                            {categoryQ.name || "בחר קטגוריה..."}
+                                            {isCategoryLoading
+                                                ? "טוען קטגוריה..."
+                                                : categoryQ?.name || "בחר קטגוריה..."}
                                         </span>
                                     </button>
 
@@ -168,7 +203,7 @@ export const UpdateQuestion = (props: { question: Question,categorySelected:Cate
                                                         onClick={() => handleCategorySelect(category.name, category.id)}
                                                         className={cn(
                                                             "w-full px-3 py-2 text-right hover:bg-gray-100 transition-colors text-sm",
-                                                            categoryQ === category.name && "bg-blue-50 text-blue-700"
+                                                            categoryQ?.id === category.id && "bg-blue-50 text-blue-700"
                                                         )}
                                                     >
                                                         {category.name}
@@ -253,7 +288,7 @@ export const UpdateQuestion = (props: { question: Question,categorySelected:Cate
                             </Button>
                         </div>
                     </form>
-                </CardSimple>
+                    </CardSimple>
             </div>
         </div>
     );

@@ -54,7 +54,7 @@ const getAllQuestions = async (): Promise<Questions[]> => {
 
 
 
-const updateQuestionById = async (updates: Questions, category: Categories) => {
+const updateQuestionById = async (updates: Questions,category:Categories) => {
   const { id, ...fieldsToUpdate } = updates;
   const fields = Object.keys(fieldsToUpdate);
   if (fields.length === 0) {

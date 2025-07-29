@@ -19,9 +19,9 @@ export const AdminQuestionApi = api.injectEndpoints({
         }),
         updateQuestion: builder.mutation<Question, { data: Partial<Question>; category: Category }>({
             query: ({ data, category }) => ({
-                url: `question/updateQuestion`,
+                url: question/updateQuestion, 
                 method: "PUT",
-                body: data,
+                body: {data,category}
             }),
             invalidatesTags: ["question"],
         }),
@@ -37,7 +37,7 @@ export const AdminQuestionApi = api.injectEndpoints({
             providesTags: ['categories'],
         }),
         getCategoryForQuestion: builder.query<Category, string>({
-            query: (id) => `question/getCategoryForQuestions/${id}`,
+            query: (id) => `/api/categories/getCategoryForQuestions/${id}`,
             providesTags: ['categories'],
         }),
         addCategory: builder.mutation<void, string>({
