@@ -5,7 +5,7 @@ export const sharedRecordingsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getSharedRecordings: builder.query<SharedRecording[], { role: string; userId: string }>({
       query: ({ role, userId }) =>
-        `/shared-recordings?userId=${userId}&role=${role}`,
+        `/shared-recordings/${userId}/${role}`,
       providesTags: ['shared_recordings'],
     }),
   }),

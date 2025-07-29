@@ -1,6 +1,8 @@
+import { log } from 'console';
 import { pool } from '../config/dbConnection';
 
 // export const getSharedRecordingsByUserId = async (userId: string, role: string) => {
+//   console.log(`###Fetching shared recordings for userId: ${userId}, role: ${role}`);
 //   const query = `
 //     SELECT
 //       sr.id,
@@ -13,52 +15,71 @@ import { pool } from '../config/dbConnection';
 //       f.rating AS "feedbackRating"
 //     FROM shared_recordings sr
 //     LEFT JOIN feedback f ON f.shared_recording_id = sr.id
-//     WHERE $1 = ANY(sr.sharedwith)
+//     WHERE ($2 = 'manager' OR $1 = ANY(sr.sharedwith))
 //   `;
-//   const { rows } = await pool.query(query, [userId]);
+//   const { rows } = await pool.query(query, [userId, role]);
+//   return rows;
+// };
+
+// export const getSharedRecordingsByUserId = async (userId: string, role: string) => {
+//   const query = `
+//     SELECT
+//       sr.id,
+//       u.first_name || ' ' || u.last_name AS "userName",
+//       sr.questiontitle AS "questionTitle",
+//       sr.date,
+//       sr.audiourl AS "audioUrl",
+//       sr.aisummary AS "aiSummary",
+//       f.comment AS "feedbackComment",
+//       f.rating AS "feedbackRating"
+//     FROM shared_recordings sr
+//     JOIN users u ON sr.owner_id = u.id
+//     LEFT JOIN feedback f ON f.shared_recording_id = sr.id
+//     WHERE ($2 = 'manager' OR $1 = ANY(sr.sharedwith))
+//   `;
+//   const { rows } = await pool.query(query, [userId, role]);
 //   return rows;
 // };
 
 export const getSharedRecordingsByUserId = async (userId: string, role: string) => {
-  let query: string;
-  let params: any[];
-
   if (role === 'manager') {
-    query = `
-      SELECT
-        sr.id,
-        sr.username AS "userName",
-        sr.questiontitle AS "questionTitle",
-        sr.date,
-        sr.audiourl AS "audioUrl",
-        sr.aisummary AS "aiSummary",
-        f.comment AS "feedbackComment",
-        f.rating AS "feedbackRating"
-      FROM shared_recordings sr
-      LEFT JOIN feedback f ON f.shared_recording_id = sr.id
-    `;
-    params = [];
-  } else {
-    query = `
-      SELECT
-        sr.id,
-        sr.username AS "userName",
-        sr.questiontitle AS "questionTitle",
-        sr.date,
-        sr.audiourl AS "audioUrl",
-        sr.aisummary AS "aiSummary",
-        f.comment AS "feedbackComment",
-        f.rating AS "feedbackRating"
-      FROM shared_recordings sr
-      LEFT JOIN feedback f ON f.shared_recording_id = sr.id
-      WHERE $1 = ANY(sr.sharedwith)
-    `;
-    params = [userId];
+    const query = `
+    SELECT
+      sr.id,
+      sr.username AS "userName",
+      sr.questiontitle AS "questionTitle",
+      sr.date,
+      sr.audiourl AS "audioUrl",
+      sr.aisummary AS "aiSummary",
+      f.comment AS "feedbackComment",
+      f.rating AS "feedbackRating"
+    FROM shared_recordings sr
+    LEFT JOIN feedback f ON f.shared_recording_id = sr.id
+  `;
+    const { rows } = await pool.query(query, [userId]);
+    return rows;
+  }
+  else {
+    const query = `
+    SELECT
+      sr.id,
+      sr.username AS "userName",
+      sr.questiontitle AS "questionTitle",
+      sr.date,
+      sr.audiourl AS "audioUrl",
+      sr.aisummary AS "aiSummary",
+      f.comment AS "feedbackComment",
+      f.rating AS "feedbackRating"
+    FROM shared_recordings sr
+    LEFT JOIN feedback f ON f.shared_recording_id = sr.id
+    WHERE $1 = ANY(sr.sharedwith)
+  `;
+    const { rows } = await pool.query(query, [userId]);
+    return rows;
   }
 
-  const { rows } = await pool.query(query, params);
-  return rows;
 };
+
 
 
 export const getRecordingDetailsById = async (recordingId: string) => {

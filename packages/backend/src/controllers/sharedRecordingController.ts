@@ -76,8 +76,8 @@ import * as sharedRepo from '../reposioty/sharedRecordings.repository';
 
 export const getSharedRecordingsByUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.query.userId as string;
-    const role = req.query.role as string;
+      const { userId, role } = req.params;
+    console.log("getSharedRecordingsByUser called with:", { userId, role });
 
     if (!userId || !role) {
       return res.status(400).json({ error: 'Missing userId or role in query' });

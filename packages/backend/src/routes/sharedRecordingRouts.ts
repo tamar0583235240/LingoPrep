@@ -11,7 +11,7 @@ const router = Router();
 
 router.use(sharedRecordingMiddleware);
 
-router.get('/', getSharedRecordingsByUser);
+router.get('/:userId/:role', getSharedRecordingsByUser);
 
 router.get('/details/:recordingId', getRecordingDetails);
 
