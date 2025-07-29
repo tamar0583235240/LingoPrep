@@ -21,7 +21,7 @@ const getInterviewMaterialSub = async (
       ...item,
       thumbnailUrl: item.thumbnail || null,
       fileUrl: item.fileUrl || null,
-      originalFileName: item.originalFileName || null,
+      // originalFileName: item.originalFileName || null,
     }));
     res.status(200).json(itemsWithUrls);
   } catch (error) {
@@ -100,7 +100,7 @@ const updateInterviewMaterialSub = async (req: Request, res: Response) => {
 
     console.log("Existing Material:", existingMaterial);
     let updatedFileUrl = existingMaterial.fileUrl;
-    let updatedOriginalFileName = existingMaterial.originalFileName;
+    // let updatedOriginalFileName = existingMaterial.originalFileName;
 
     if (files?.file?.[0]) {
       const publicId = extractPublicId(existingMaterial.fileUrl);
@@ -114,14 +114,14 @@ const updateInterviewMaterialSub = async (req: Request, res: Response) => {
         "interviewMaterialsHub/files"
       );
       updatedFileUrl = fileUpload.secure_url;
-      updatedOriginalFileName = Buffer.from(
-        files.file[0].originalname,
-        "latin1"
-      ).toString("utf8");
+      // updatedOriginalFileName = Buffer.from(
+      //   files.file[0].originalname,
+      //   "latin1"
+      // ).toString("utf8");
     } else if (existingFileUrl) {
       // If existingFileUrl is provided, use it instead of the current file URL
       updatedFileUrl = existingFileUrl;
-      updatedOriginalFileName = existingMaterial.originalFileName;
+      // updatedOriginalFileName = existingMaterial.originalFileName;
     }
     if (!updatedFileUrl) {
       return res
@@ -145,20 +145,20 @@ const updateInterviewMaterialSub = async (req: Request, res: Response) => {
     }
 
     console.log("Before update", {
-      existingMaterialOriginalFileName: existingMaterial.originalFileName,
-      updatedOriginalFileName,
+      // existingMaterialOriginalFileName: existingMaterial.originalFileName,
+      // updatedOriginalFileName,
     });
 
-    const updated =
-      await interviewMaterialSubRepository.updateInterviewMaterialSub(
-        id,
-        newTitle,
-        newShortDesc,
-        updatedThumbnail,
-        updatedFileUrl,
-        updatedOriginalFileName
-      );
-    return res.json(updated);
+    // const updated =
+    //   await interviewMaterialSubRepository.updateInterviewMaterialSub(
+    //     id,
+    //     newTitle,
+    //     newShortDesc,
+    //     updatedThumbnail,
+    //     updatedFileUrl,
+    //     // updatedOriginalFileName
+    //   );
+    // return res.json(updated);
   } catch (error) {
     console.error("Error updating interview material:", error);
     return res.status(500).json({ message: "שגיאה בעדכון" });

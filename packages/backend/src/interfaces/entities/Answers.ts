@@ -5,36 +5,34 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-} 
-from "typeorm";
+} from "typeorm";
 import { AiInsights } from "./AiInsights";
 import { Questions } from "./Questions";
 import { Users } from "./Users";
 import { Feedback } from "./Feedback";
+import { SharedRecordings } from "./SharedRecordings";
 
 @Index("answers_pkey", ["id"], { unique: true })
 @Entity("answers", { schema: "public" })
 export class Answers {
-
   @Column("uuid", {
     primary: true,
     name: "id",
-    default: () => "uuid_generate_v4()",
+    default: () => "gen_random_uuid()",
   })
-
   id: string;
 
   @Column("text", { name: "file_url" })
   fileUrl: string;
-
-  @Column("text", { name: "answer_file_name", nullable: true })
-  answerFileName: string | null;
 
   @Column("timestamp without time zone", {
     name: "submitted_at",
     default: () => "now()",
   })
   submittedAt: Date;
+
+  @Column("text", { name: "answer_file_name", nullable: true })
+  answerFileName: string | null;
 
   @Column("integer", {
     name: "amount_feedbacks",
@@ -58,4 +56,10 @@ export class Answers {
 
   @OneToMany(() => Feedback, (feedback) => feedback.answerCode)
   feedbacks: Feedback[];
+
+  @OneToMany(
+    () => SharedRecordings,
+    (sharedRecordings) => sharedRecordings.answer
+  )
+  sharedRecordings: SharedRecordings[];
 }

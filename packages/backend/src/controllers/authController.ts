@@ -258,7 +258,7 @@ export const requestSignup = async (req: Request, res: Response) => {
       isActive: true,
       answers: [],
       feedbacks: [],
-      feedbacktypes: [],
+      // feedbacktypes: [],
       passwordResetTokens: [],
       createdAt: new Date(),
       sharedRecordings: [],
@@ -269,7 +269,7 @@ export const requestSignup = async (req: Request, res: Response) => {
       userSessions: [],
       userActivities: [],
       workExperiences: [],
-      resources: [],
+      // resources: [],
       profiles: {
         id: uuidv4(),
         userId: userId, // This will be updated after user creation

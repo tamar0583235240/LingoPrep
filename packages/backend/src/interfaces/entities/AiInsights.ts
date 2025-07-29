@@ -1,30 +1,33 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 import { Answers } from "./Answers";
+
 @Index("ai_insights_pkey", ["id"], { unique: true })
 @Entity("ai_insights", { schema: "public" })
 export class AiInsights {
   @Column("uuid", { primary: true, name: "id" })
-  id!: string;
+  id: string;
+
   @Column("text", { name: "summary" })
-  summary!: string;
+  summary: string;
+
   @Column("integer", { name: "rating" })
-  rating!: number;
+  rating: number;
+
   @Column("text", { name: "strengths" })
-  strengths!: string;
+  strengths: string;
+
   @Column("text", { name: "improvements" })
-  improvements!: string;
+  improvements: string;
+
+  @Column("text", { name: "flow", nullable: true })
+  flow: string | null;
+
+  @Column("text", { name: "confidence", nullable: true })
+  confidence: string | null;
+
   @ManyToOne(() => Answers, (answers) => answers.aiInsights, {
     onDelete: "CASCADE",
   })
   @JoinColumn([{ name: "answer_id", referencedColumnName: "id" }])
-  answer!: Answers;
+  answer: Answers;
 }
-
-
-
-
-
-
-
-
-

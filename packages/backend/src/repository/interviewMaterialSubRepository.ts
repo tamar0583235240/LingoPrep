@@ -31,7 +31,7 @@ export const getInterviewMaterialSubById = async (
       thumbnail: row.thumbnail,
       shortDescription: row.short_description,
       fileUrl: row.file_url,
-      originalFileName: row.original_file_name,
+      // originalFileName: row.original_file_name,
       downloadsCount: row.downloads_count,
     };
   } catch (error) {

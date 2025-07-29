@@ -6,24 +6,15 @@ export class InterviewMaterialsSub {
   @PrimaryGeneratedColumn({ type: "integer", name: "id" })
   id: number;
 
-  @Column("text", { name: "title", nullable: true })
+  @Column("text", { name: "title" })
   title: string;
 
-  @Column("text", { name: "thumbnail", nullable: true })
+  @Column("text", { name: "thumbnail" })
   thumbnail: string;
 
   @Column("text", { name: "short_description", nullable: true })
   shortDescription: string | null;
 
-
-  @Column("text", { name: "file_url" })
-  fileUrl: string;
-
-  @Column("text", { name: "original_file_name", nullable: true })
-  originalFileName: string;
-
-// removed merge conflict markers
-  @Column("text", { name: "file_url" })
   @Column("text", { name: "file_url" })
   fileUrl: string;
 

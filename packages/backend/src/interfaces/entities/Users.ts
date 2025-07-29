@@ -5,14 +5,12 @@ import { InterviewExperiences } from "./InterviewExperiences";
 import { Answers } from "./Answers";
 import { Feedback } from "./Feedback";
 import { PasswordResetTokens } from "./PasswordResetTokens";
-import { Resources } from "./Resources";
-import { SharedRecordings } from "./SharedRecordings";
-import { Feedbacktype } from "./Feedbacktype";
 import { Profiles } from "./Profiles";
+import { SharedRecordings } from "./SharedRecordings";
+import { UserActivity } from "./UserActivity";
 import { UserReminderSettings } from "./UserReminderSettings";
 import { UserSessions } from "./UserSessions";
 import { WorkExperiences } from "./WorkExperiences";
-import { UserActivity } from "./UserActivity";
 
 @Index("users_email_key", ["email"], { unique: true })
 @Index("users_pkey", ["id"], { unique: true })
@@ -55,10 +53,16 @@ export class Users {
   @OneToMany(() => ContentReports, (contentReports) => contentReports.user)
   contentReports: ContentReports[];
 
-  @OneToMany(() => ExperienceThanks, (experienceThanks) => experienceThanks.user)
+  @OneToMany(
+    () => ExperienceThanks,
+    (experienceThanks) => experienceThanks.user
+  )
   experienceThanks: ExperienceThanks[];
 
-  @OneToMany(() => InterviewExperiences, (interviewExperiences) => interviewExperiences.user)
+  @OneToMany(
+    () => InterviewExperiences,
+    (interviewExperiences) => interviewExperiences.user
+  )
   interviewExperiences: InterviewExperiences[];
 
   @OneToMany(() => Answers, (answers) => answers.user)
@@ -67,25 +71,28 @@ export class Users {
   @OneToMany(() => Feedback, (feedback) => feedback.givenByUser)
   feedbacks: Feedback[];
 
-  @OneToMany(() => Feedbacktype, (feedbacktype) => feedbacktype.givenByUser)
-  feedbacktypes: Feedbacktype[];
-
-  @OneToMany(() => PasswordResetTokens, (passwordResetTokens) => passwordResetTokens.user)
+  @OneToMany(
+    () => PasswordResetTokens,
+    (passwordResetTokens) => passwordResetTokens.user
+  )
   passwordResetTokens: PasswordResetTokens[];
-
-  @OneToMany(() => Resources, (resources) => resources.user)
-  resources: Resources[];
 
   @OneToOne(() => Profiles, (profiles) => profiles.user)
   profiles: Profiles;
 
-  @OneToMany(() => SharedRecordings, (sharedRecordings) => sharedRecordings.owner)
+  @OneToMany(
+    () => SharedRecordings,
+    (sharedRecordings) => sharedRecordings.owner
+  )
   sharedRecordings: SharedRecordings[];
 
   @OneToMany(() => UserActivity, (userActivity) => userActivity.user)
   userActivities: UserActivity[];
 
-  @OneToMany(() => UserReminderSettings, (userReminderSettings) => userReminderSettings.user)
+  @OneToMany(
+    () => UserReminderSettings,
+    (userReminderSettings) => userReminderSettings.user
+  )
   userReminderSettings: UserReminderSettings[];
 
   @OneToMany(() => UserSessions, (userSessions) => userSessions.user)
