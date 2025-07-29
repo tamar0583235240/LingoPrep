@@ -19,3 +19,4 @@ export const AiInsightsApi = api.injectEndpoints({
 export const {
   useGetAiInsightsByAnswerIdQuery,useGetAiInsightsQuery
 } = AiInsightsApi;
+

@@ -14,6 +14,12 @@ import recordingReducer from '../../features/recordings/store/recordingSlice';
 import answeredReducer from '../../features/interview/store/answeredSlice';
 import { profilesApi } from "../../features/profile/services/profileApi";
 import { interviewMaterialSubApi } from "../../features/interview-materials-hub/store/interviewMaterialSubApi";
+import  AI_Insight from "../../features/interview/store/AI_InsightSlice";
+
+
+
+
+
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
@@ -28,6 +34,13 @@ const rootReducer = combineReducers({
   simulation: simulationReducer,
   recording: recordingReducer,
   answered: answeredReducer,
+  AI_Insight:AI_Insight
+
+
+
+
+
+
 });
 
 const persistConfig = {

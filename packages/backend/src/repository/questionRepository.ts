@@ -1,13 +1,8 @@
 import { pool } from '../config/dbConnection';
-
 import { Questions } from "../interfaces/entities/Questions";
 import { v4 as uuid4 } from 'uuid';
-
-
-
 const addQustion = async (question: Questions): Promise<Questions> => {
   try {
-
     let id: string = "";
     let exists = true;
     id = uuid4();
@@ -15,47 +10,34 @@ const addQustion = async (question: Questions): Promise<Questions> => {
       INSERT INTO questions (id , title , content , tips , ai_guidance , is_active)
       VALUES ('${id}', '${question.title}', '${question.content}', '${question.tips}', '${question.aiGuidance}','${question.isActive}')
     `;
-
     const result = await pool.query(query);
     return result.rows[0] as Questions;
-
   } catch (error) {
     console.error("Error adding question to PostgreSQL:", error);
     throw error;
   }
 };
-
-
-
-
 const getAllQuestionById = async (Id: string): Promise<Questions> => {
   try {
-    const query = 'SELECT * FROM questions WHERE id = $1';
+    const query = 'SELECT * FROM questions WHERE id = \$1';
     const value = [Id];
     const { rows } = await pool.query(query, value);
     return rows[0] as Questions;
   } catch (error) {
-    console.error("Error fetching question from PostgreSQL:", error);
+    console.error("Error fetching question from Supabase:", error);
     throw error;
   }
 }
-
-
-
 const getAllQuestions = async (): Promise<Questions[]> => {
   try {
     const query = 'SELECT * FROM questions';
     const { rows } = await pool.query(query);
     return rows as Questions[];
   } catch (error) {
-    console.error("Error fetching questions from PostgreSQL:", error);
+    console.error("Error fetching questions from Supabase:", error);
     throw error;
   }
 }
-
-
-
-
 const updateQuestionById = async (updates: Questions) => {
   const { id, ...fieldsToUpdate } = updates;
   const fields = Object.keys(fieldsToUpdate);
@@ -66,14 +48,12 @@ const updateQuestionById = async (updates: Questions) => {
   const setString = fields
     .map((field, i) => `"${field}" = $${i + 1}`)
     .join(', ');
-
   const query = `
     UPDATE questions
     SET ${setString}
     WHERE id = $${fields.length + 1}
     RETURNING *;
   `;
-
   try {
     const { rows } = await pool.query(query, [...values, id]);
     if (rows.length === 0) {
@@ -85,9 +65,6 @@ const updateQuestionById = async (updates: Questions) => {
     throw new Error('Failed to update question');
   }
 }
-
-
-
 const deleteQuestionById = async (id: string, is_active: boolean): Promise<string> => {
   try {
     const query = 'UPDATE questions SET is_active = $1 WHERE id = $2';
@@ -99,5 +76,39 @@ const deleteQuestionById = async (id: string, is_active: boolean): Promise<strin
     throw error;
   }
 }
-export default { getAllQuestionById, getAllQuestions, deleteQuestionById, addQustion, updateQuestionById };
+const getQuestionsByCategory = async (category_id: string): Promise<Questions[]> => {
+  try {
+    const query = `
+      SELECT q.*
+      FROM questions q
+      JOIN question_categories qc ON qc.question_id = q.id
+      WHERE qc.category_id = $1
+    `;
+    const result = await pool.query(query, [category_id]);
+    return result.rows as Questions[];
+  } catch (error) {
+    console.error(":x: Error fetching questions by category:", error);
+    throw error;
+  }
+};
+export default { getAllQuestionById, getAllQuestions, deleteQuestionById, addQustion, updateQuestionById, getQuestionsByCategory };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
