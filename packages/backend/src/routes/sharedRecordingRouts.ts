@@ -10,13 +10,9 @@ import { sharedRecordingMiddleware } from '../middlewares/sharedRecordingMiddlew
 const router = Router();
 
 router.use(sharedRecordingMiddleware);
-
 router.get('/', getSharedRecordingsByUser);
-
-router.get('/details/:recordingId', getRecordingDetails);
-
 router.post('/feedback', createFeedback);
-
 router.put('/feedback/:id', updateFeedback);
+router.get('/:userId/:role', getSharedRecordingsByUser);
 
 export default router;

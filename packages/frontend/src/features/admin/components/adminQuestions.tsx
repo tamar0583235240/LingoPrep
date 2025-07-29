@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useGetAllQuestionsQuery } from "../services/adminQuestionApi";
+import { useGetAllQuestionsQuery, useGetCategoryForQuestionQuery } from "../services/adminQuestionApi";
 import { DeleteQuestion } from "./deleteQuestion";
 import { Button } from "../../../shared/ui/button";
 import { GridContainer } from "../../../shared/ui/GridContainer";
@@ -10,6 +10,7 @@ import { Question } from "../types/Question";
 import { AddQuestion } from "./addQuestion";
 import { SearchComponents } from "./searchComponents";
 import { useDynamicContents } from "../../dynamicContent/hooks/useDynamicContents";
+import { Category } from "../types/Categories";
 
 type AdminQuestionsProps = {
   allowedRoles: string[];
@@ -32,6 +33,21 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
 
     setFilteredQuestions(results);
   }, [searchText, data]);
+
+  const getCategory = (questionId: string) => {
+    const { data, error } = useGetCategoryForQuestionQuery(questionId);
+    if (data) {
+      const c: Category = {
+        id: data.id,
+        name: data.name,
+      };
+      return c;
+    }
+    if (error) {
+      console.error("Error fetching category for question:", error);
+      return null;
+    }
+  }
 
   if (isLoading)
     return (
@@ -89,6 +105,11 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
 
   const deleteClick = (idQuestion: string) => {
     setQuestionToDelete(idQuestion);
+  };
+
+  const editClick = (question: Question) => {
+    setQuestionToEdit(question);
+
   };
 
   return (
@@ -154,12 +175,7 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
                     icon={<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>}
                     iconPosition="right"
                   />
-                  {questionToEdit?.id === question.id && (
-                    <UpdateQuestion
-                      question={questionToEdit}
-                      questionSaveClick={() => setQuestionToEdit(null)}
-                    />
-                  )}
+
                   <Button
                     variant="danger"
                     size="sm"
@@ -172,7 +188,12 @@ export const AdminQuestions: React.FC<AdminQuestionsProps> = ({ allowedRoles, ch
             ))}
           </div>
         )}
-
+        {questionToEdit && (
+          <UpdateQuestion
+            question={questionToEdit}
+            questionSaveClick={() => setQuestionToEdit(null)}
+          />
+        )}
         {questionToDelete && (
           <DeleteQuestion
             id={questionToDelete}
