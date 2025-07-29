@@ -42,8 +42,8 @@ import { pool } from '../config/dbConnection';
 // };
 
 export const getSharedRecordingsByUserId = async (userId: string, role: string) => {
-  if (role === 'manager') {
-    const query = `
+if (role === 'manager') {
+  const query = `
     SELECT
       sr.id,
       sr.username AS "userName",
@@ -56,9 +56,10 @@ export const getSharedRecordingsByUserId = async (userId: string, role: string) 
     FROM shared_recordings sr
     LEFT JOIN feedback f ON f.shared_recording_id = sr.id
   `;
-    const { rows } = await pool.query(query, [userId]);
-    return rows;
-  }
+  const { rows } = await pool.query(query); 
+  return rows;
+}
+
   else {
     const query = `
     SELECT
