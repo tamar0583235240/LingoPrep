@@ -63,16 +63,19 @@ import * as sharedRepo from '../repository/sharedRecordings.repository';
 
 export const getSharedRecordingsByUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.query.userId as string; 
-    if (!userId) {
-      return res.status(400).json({ error: 'Missing userId in query' });
+      const { userId, role } = req.params;
+    console.log("getSharedRecordingsByUser called with:", { userId, role });
+    if (!userId || !role) {
+      return res.status(400).json({ error: 'Missing userId or role in query' });
     }
-    const recordings = await sharedRepo.getSharedRecordingsByUserId(userId);
-    res.json(recordings);
+    const recordings = await sharedRepo.getSharedRecordingsByUserId(userId, role);
+    res.status(200).json(recordings);
   } catch (error) {
-    res.status(500).json({ error });
+    console.error('Error in getSharedRecordingsByUser:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 export const getRecordingDetails = async (req: Request, res: Response) => {
   try {

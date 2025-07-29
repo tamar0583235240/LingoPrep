@@ -11,10 +11,16 @@ import toast from 'react-hot-toast';
 
 export default function SharedRecordingsPage() {
 
-  const userId = useSelector((state: RootState) => state.auth.user?.id);
-  const { data, isLoading, error, refetch } = useGetSharedRecordingsQuery(userId!, {
-    skip: !userId,
-  });
+  const user = useSelector((state: RootState) => state.auth.user);
+  const userId = user?.id;
+  const userRole = user?.role;
+  if (!userId || !userRole) {
+    return <p>לא נמצאו הקלטות משותפות</p>;
+  }
+  const { data, isLoading, error, refetch } = useGetSharedRecordingsQuery(
+    { role: userRole, userId },
+    { skip: false }
+  );
 
 
   const [selectedRecordingId, setSelectedRecordingId] = useState<string | null>(null);
