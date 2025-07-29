@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRecording } from '../hooks/useRecording';
 import { formatTime } from '../../../shared/utils/timeUtils';
 import { Button } from '../../../shared/ui/button';
 import * as FiIcons from 'react-icons/fi';
-import { useSelector } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { analyzeInterview } from '../../interview/services/analyze.service';
 import type { RecordingState } from '../types/Answer';
 import RecordButton from './RecordButton';
 import { RootState } from "../../../shared/store/store";
 import { CheckCircle2, XCircle } from 'lucide-react';
+import { setAI_Insight, setIsAnalyzing } from '../../interview/store/AI_InsightSlice';
 
 type AudioRecorderProps = {
   answered?: boolean;
@@ -19,7 +20,7 @@ type AudioRecorderProps = {
     message: string;
     type: "success" | "error";
     icon?: React.ReactNode;
-  }) => void;
+  } | null) => void;
 };
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
@@ -30,6 +31,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 }) => {
   const { questions, currentIndex, currentUserId } = useSelector((state: RootState) => state.simulation);
   const currentQuestion = questions[currentIndex];
+  const { AI_result, isAnalyzing } = useSelector((state: RootState) => state.AI_Insight);
+  const dispatch = useDispatch();
+
 
   const {
     currentRecording,
@@ -48,9 +52,15 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const [fileName, setFileName] = useState('');
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showRecordingModal, setShowRecordingModal] = useState(false);
+  // const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [recordingPhase, setRecordingPhase] = useState<
     'idle' | 'recording' | 'paused' | 'finished'
   >('idle');
+
+  useEffect(() => {
+
+
+  }, [isAnalyzing]);
 
   const handleMainButtonClick = () => {
     if (recordingPhase === 'idle' || recordingPhase === 'finished') {
@@ -73,35 +83,72 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   const handleSaveRecording = async () => {
     try {
-    setShowRecordingModal(false);
-    const answer = await saveRecording(currentUserId, String(currentQuestion.id), fileName);
-    setShowSaveModal(false);
-    setFileName('');
+      console.log(audioBlobRef.current, "saveRecording");
 
-    if (onSaveSuccess && answer?.id) {
-      onSaveSuccess(answer.id);
+      setShowRecordingModal(false);
+      console.log(audioBlobRef.current, "setShowRecordingModal");
+
+      const answer = await saveRecording(currentUserId, String(currentQuestion.id), fileName.trim());
+      console.log("After saveRecording, answer:", answer);
+      setShowSaveModal(false);
+
+
+      if (onSaveSuccess && answer?.id) {
+        console.log("onSaveSuccess and answer.id exist", { onSaveSuccessExists: !!onSaveSuccess, answerId: answer?.id });
+        if (audioBlobRef.current) {
+          console.log("audioBlobRef.current exists", audioBlobRef.current);
+          console.log("Blob type:", audioBlobRef.current.type);
+          console.log("Blob size:", audioBlobRef.current.size);
+          console.log("File name:", fileName || "recording.wav");
+          if (audioBlobRef.current.type === "audio/webm" || audioBlobRef.current.type === "video/webm") {
+            console.warn("הקלטה היא בפורמט webm, לא wav אמיתי. יש להמיר בשרת!");
+          }
+          let safeFileName = fileName.trim() || "recording.webm";
+          if (!safeFileName.endsWith('.webm')) {
+            safeFileName += '.webm';
+          }
+          const file = new File([audioBlobRef.current], safeFileName, { type: "audio/webm" });
+          onSaveSuccess(answer.id);
+          setFileName('');
+          setNotification?.({
+            message: "ההקלטה נשמרה בהצלחה!",
+            type: "success",
+            icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
+          });
+          setTimeout(() => setNotification?.(null), 3500);
+
+          // רק אחרי שהמשתמש רואה שההקלטה נשמרה, תפעילי את הניתוח:
+          if (audioBlobRef.current) {
+            const file = new File([audioBlobRef.current], safeFileName, { type: "audio/webm" });
+            try {
+              const result = await analyzeInterview(file, answer.id.toString());
+              dispatch(setAI_Insight(result));
+            } catch (err) {
+              dispatch(setAI_Insight('שגיאה בניתוח הקובץ'));
+            }
+          }
+        } else {
+          console.log("audioBlobRef.current is missing");
+        }
+      } else {
+        console.log("onSaveSuccess or answer.id missing", { onSaveSuccessExists: !!onSaveSuccess, answerId: answer?.id });
+      }
+
+    } catch (error) {
+      console.error('שגיאה בשמירה:', error);
+      setNotification?.({
+        message: "שגיאה בשמירת ההקלטה",
+        type: "error",
+        icon: <XCircle className="w-6 h-6 text-red-500" />,
+      });
+      setTimeout(() => setNotification?.(null), 3500);
     }
-
-    setNotification?.({
-      message: "ההקלטה נשמרה בהצלחה!",
-      type: "success",
-      icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
-    });
-    setTimeout(() => setNotification?.({ message: "", type: "success" }), 3500);
-
-  } catch (error) {
-    console.error('שגיאה בשמירה:', error);
-    setNotification?.({
-      message: "שגיאה בשמירת ההקלטה",
-      type: "error",
-      icon: <XCircle className="w-6 h-6 text-red-500" />,
-    });
-    setTimeout(() => setNotification?.({ message: "", type: "success" }), 3500);
-  }
   };
 
   const downloadRecording = () => {
     if (audioBlobRef.current) {
+      console.log(audioBlobRef.current);
+
       const url = URL.createObjectURL(audioBlobRef.current);
       const a = document.createElement('a');
       a.href = url;
@@ -112,25 +159,22 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       URL.revokeObjectURL(url);
     }
   };
-
   return (
     <div className="space-y-4 w-full">
       {/* כפתור ראשי תמיד מוצג */}
       <>
-        
-          <button
-            className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white rounded-xl px-6 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={() => {
-              setRecordingPhase('idle');
-              setShowRecordingModal(true)}
-            }
-
-            disabled={answered}
-          >
-            <FiIcons.FiMic size={20} />
-            התחל הקלטה
-          </button>
-        
+        <button
+          className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white rounded-xl px-6 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={() => {
+            setRecordingPhase('idle');
+            setShowRecordingModal(true)
+          }
+          }
+          disabled={answered}
+        >
+          <FiIcons.FiMic size={20} />
+          התחל הקלטה
+        </button>
         <RecordButton
           open={showRecordingModal}
           onClose={() => setShowRecordingModal(false)}

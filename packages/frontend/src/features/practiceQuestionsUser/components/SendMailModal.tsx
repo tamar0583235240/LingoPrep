@@ -18,7 +18,7 @@ export const SendMailModal = ({ questionContent, answer, onClose, onSend }: Send
 
   const message = `שלום,
 
-${senderName} רצה לשתף אותך בשאלה שהוא ענה עליה:
+${senderName} רוצה לשתף אותך בשאלה שהיא ענתה עליה:
 
 שאלה:
 ${questionContent}

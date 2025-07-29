@@ -7,12 +7,12 @@ export const useInterviewAnalysis = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const analyze = async (file: File) => {
+  const analyze = async (file: File, answerId: string) => {
     setLoading(true);
     setError(null);
 
     try {
-      const result = await analyzeInterview(file);
+      const result = await analyzeInterview(file, answerId);
       setAnalysis(result);
     } catch (err) {
       setError('אירעה שגיאה בעת ניתוח ההקלטה');

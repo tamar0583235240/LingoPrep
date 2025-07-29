@@ -19,6 +19,8 @@ import { CheckCircle2, Lightbulb, X } from "lucide-react";
 import { Button } from "../shared/ui/button";
 import CategoryTabs from "../features/interview/components/showCategories";
 import { useGetAnsweredQuestionsQuery } from "../features/interview/services/statusAPI";
+import { AI_Insight } from "../features/interview/components/AI-Insight";
+// import { AiInsightsList } from "../features/recordings/components/AiInsightsList";
 
 const InterviewPage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -156,7 +158,7 @@ const InterviewPage = () => {
       </div>
     </div>
     {/* שאלה ופעולות */}
-    <div className="lg:col-span-9 space-y-6">
+    <div className="lg:col-span-9 space-y-2">
       {questionsWithStatus[currentIndex] ? (
         <div className="p-4 md:p-6 lg:p-8">
           <Question
@@ -172,7 +174,7 @@ const InterviewPage = () => {
         </div>
       )}
       {/* כפתורי פעולה */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+      {/* <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
         {isCurrentQuestionAnswered && !currentAnswerId && !notificationOpen && (
           <Button
             variant="primary-dark"
@@ -200,40 +202,14 @@ const InterviewPage = () => {
           >
             הצג ניתוח AI
           </Button>
-        )}
+        )} */}
           <EndSurvey
             showEndButton={allAnswered}
             answeredCount={answeredCount}
             totalQuestions={totalQuestions}
           />
         {/* טיפים בתוך הכרטיס */}
-        <div className="absolute bottom-6 left-6 z-30">
-          {showTips ? (
-            <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-5 w-80 max-h-96 overflow-y-auto">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                  <Lightbulb className="w-5 h-5 text-yellow-500" />
-                  טיפים שימושיים
-                </h3>
-                <button
-                  onClick={() => setShowTips(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-              <TipsComponent />
-            </div>
-          ) : (
-            <button
-              onClick={() => setShowTips(true)}
-              className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-110 hover:-translate-y-1"
-              title="הצג טיפים"
-            >
-              <Lightbulb className="w-6 h-6" />
-            </button>
-          )}
-        </div>
+          <TipsComponent />
       </div>
     </div>
   </div>
@@ -261,24 +237,26 @@ const InterviewPage = () => {
                 </button>
               </div>
               <div className="p-6 max-h-[70vh] overflow-y-auto">
-                {isLoadingAI ? (
+                {/* {isLoadingAI ? (
                   <div className="text-center py-12">
                     <h3 className="text-xl font-bold text-purple-800 mb-6">מנתח תשובה...</h3>
                     <MagicLoader />
                   </div>
                 ) : (
                   <AnswerAI
+                  <AiInsightsList
                     answerId={currentAnswerId}
+                    // audioFile={}
                     onClose={() => dispatch(setCurrentAnswerId(null))}
                     onLoaded={() => setIsLoadingAI(false)}
                   />
-                )}
+                )} */}
+                <AI_Insight/>
               </div>
             </div>
           </div>
         )}
       </div>
-    </div>
   );
 };
 

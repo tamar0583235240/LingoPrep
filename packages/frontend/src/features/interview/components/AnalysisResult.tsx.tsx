@@ -12,4 +12,4 @@ const AnalysisResult = () => {
   );
 };
 
-export default AnalysisResult;
+export default AnalysisResult;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       

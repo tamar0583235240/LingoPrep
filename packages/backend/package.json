@@ -11,6 +11,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@Google/genai": "npm:@google/genai@^1.11.0",
     "@supabase/supabase-js": "^2.50.0",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.7.0",
