@@ -5,11 +5,11 @@ import { Category } from "../types/Categories";
 export const AdminQuestionApi = api.injectEndpoints({
 
     endpoints: (builder) => ({
-        addQuestion: builder.mutation<void, Question>({
-            query: (question) => ({
+        addQuestion: builder.mutation<void, { question: Question; id_category: string }>({
+            query: ({ question, id_category }) => ({
                 url: "question/addQuestion",
                 method: "POST",
-                body: question,
+                body: { question:question, id_category: id_category },
             }),
             invalidatesTags: ["question"],
         }),
@@ -19,7 +19,7 @@ export const AdminQuestionApi = api.injectEndpoints({
         }),
         updateQuestion: builder.mutation<Question, { data: Partial<Question>; category: Category }>({
             query: ({ data, category }) => ({
-                url: `question/updateQuestion`, 
+                url: `question/updateQuestion`,
                 method: "PUT",
                 body: data,
             }),
@@ -32,28 +32,25 @@ export const AdminQuestionApi = api.injectEndpoints({
             }),
             invalidatesTags: ['question'],
         }),
-        getAllCategories: builder.query<[Category], void>({
+        getAllCategories: builder.query<Category[], void>({
             query: () => '/api/categories',
             providesTags: ['categories'],
         }),
-        addQuestionToCategory: builder.mutation<void, string[]>({
-            query: ([question_id, category_id]) => ({
-                url: "/api/categories/addQuestionToCategory",
-                method: "POST",
-                body: {
-                    question_id: question_id,
-                    category_id: category_id
-                },
-            }),
-            invalidatesTags: ["question"],
-        }),
-        getCategoryForQuestion: builder.query< Category,string>({
+        getCategoryForQuestion: builder.query<Category, string>({
             query: (id) => `question/getCategoryForQuestions/${id}`,
             providesTags: ['categories'],
+        }),
+        addCategory: builder.mutation<void, string>({
+            query: (name) => ({
+                url: "/api/categories/addCategory",
+                method: "POST",
+                body: { name },
+            }),
+            invalidatesTags: ["categories"],
         }),
     }),
 });
 
 
-export const { useGetAllQuestionsQuery, useDeleteQuestionByIdMutation, useAddQuestionMutation, useUpdateQuestionMutation , useGetAllCategoriesQuery ,useAddQuestionToCategoryMutation , useGetCategoryForQuestionQuery} = AdminQuestionApi;
+export const { useGetAllQuestionsQuery, useDeleteQuestionByIdMutation, useAddQuestionMutation, useUpdateQuestionMutation, useGetAllCategoriesQuery, useGetCategoryForQuestionQuery , useAddCategoryMutation } = AdminQuestionApi;
 

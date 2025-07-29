@@ -12,17 +12,6 @@ export const getAllCategoriesController = async (req: Request, res: Response): P
     }
 }
 
-export const addQuestionToCategoryController = async (req: Request, res: Response): Promise<void> => {
-    const { question_id, category_id } = req.body; 
-    try {
-        await categoryRepository.addQuestionToCategory(question_id, category_id);
-        res.status(200).json({ message: "Question added to category successfully" });
-    } catch (error) {
-        console.error("❌ Error adding question to category:", error);
-        res.status(500).json({ error: "Failed to add question to category" });
-    }
-};
-
 export const getCategoryForQuestionsController = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     try {
@@ -35,5 +24,20 @@ export const getCategoryForQuestionsController = async (req: Request, res: Respo
     } catch (error) {
         console.error("❌ Error fetching category for questions:", error);
         res.status(500).json({ error: "Failed to fetch category for questions" });
+    }
+};
+
+export const addCategoryController = async (req: Request, res: Response): Promise<void> => {
+    const { name } = req.body;
+    if (!name) {
+        res.status(400).json({ error: "Category name is required" });
+        return;
+    }
+    try {
+        await categoryRepository.addCategory(name);
+        res.status(201).json({ message: "Category added successfully" });
+    } catch (error) {
+        console.error("❌ Error adding category:", error);
+        res.status(500).json({ error: "Failed to add category" });
     }
 };

@@ -8,31 +8,27 @@ import { IconWrapper } from "../../../shared/ui/IconWrapper"
 import { useMessageModal } from "../../../shared/ui/MessageModalContext"
 import { Plus, X, FileQuestion, ChevronDown } from "lucide-react"
 import { cn } from "../../../shared/utils/cn"
-import { useAddQuestionMutation, useAddQuestionToCategoryMutation, useGetAllCategoriesQuery } from "../services/adminQuestionApi"
+import {  useAddQuestionMutation, useGetAllCategoriesQuery } from "../services/adminQuestionApi"
 import { Category } from '../types/Categories';
+import { Question } from "../types/Question"
+import { AddCategory } from "./addCategory"
 
 export const AddQuestion = () => {
     const [addQuestion, { isLoading, isSuccess, isError, error }] = useAddQuestionMutation()
-    const [addQuestionToCategory] = useAddQuestionToCategoryMutation()
     const { data: categories } = useGetAllCategoriesQuery()
     const { showMessage } = useMessageModal()
-    
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
-    
-    const [newQuestion, setNewQuestion] = useState({
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false)
+    const [newQuestion, setNewQuestion] = useState<Question>({
         id: "00000000-0000-0000-0000-000000000000",
         title: "",
         content: "",
-        category: null as Category | null, 
         tips: "",
-        aiGuidance: "",
-        isActive: true,
         ai_guidance: "",
         is_active: true
     })
 
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -43,19 +39,15 @@ export const AddQuestion = () => {
         }
 
         try {
-            await addQuestion(newQuestion).unwrap()
-            await addQuestionToCategory([ newQuestion.id, selectedCategory.id]).unwrap()
-            
+            console.log("hfgfg", newQuestion)
+            await addQuestion({ question: newQuestion, id_category: selectedCategory.id }).unwrap()
             showMessage("הצלחה!", "השאלה נוספה בהצלחה למאגר השאלות")
-            
+
             setNewQuestion({
                 id: "00000000-0000-0000-0000-000000000000",
                 title: "",
                 content: "",
-                category: null,
                 tips: "",
-                aiGuidance: "",
-                isActive: true,
                 ai_guidance: "",
                 is_active: true
             })
@@ -72,10 +64,10 @@ export const AddQuestion = () => {
 
     const handleCategorySelect = (category: Category) => {
         setSelectedCategory(category)
-        setNewQuestion(prev => ({ ...prev, category: category }))
         setIsCategoryDropdownOpen(false)
     }
 
+   
     return (
         <>
             {/* כפתור פתיחת המודל */}
@@ -185,9 +177,9 @@ export const AddQuestion = () => {
                                                     )}
                                                 />
                                                 <span className={cn("text-right flex-1",
-                                                    newQuestion.category ? "text-gray-900" : "text-gray-500"
+                                                    selectedCategory ? "text-gray-900" : "text-gray-500"
                                                 )}>
-                                                    {newQuestion.category?.name || "בחר קטגוריה..."}
+                                                    {selectedCategory?.name || "בחר קטגוריה..."}
                                                 </span>
                                             </button>
 
@@ -216,7 +208,7 @@ export const AddQuestion = () => {
                                             )}
                                         </div>
                                     </div>
-
+                                    <AddCategory/>
                                     {/* טיפים למענה */}
                                     <div className="space-y-2">
                                         <label
@@ -250,8 +242,8 @@ export const AddQuestion = () => {
                                         <textarea
                                             id="aiGuidance"
                                             placeholder="הכנס הוראות למערכת AI לגבי איך להעריך תשובות לשאלה זו..."
-                                            value={newQuestion.aiGuidance}
-                                            onChange={(e) => { handleInputChange('aiGuidance', e.target.value); handleInputChange('ai_guidance', e.target.value) }}
+                                            value={newQuestion.ai_guidance}
+                                            onChange={(e) => { handleInputChange('ai_guidance', e.target.value) }}
                                             required
                                             rows={3}
                                             className={cn(

@@ -1,6 +1,4 @@
 import { Column, Entity, Index, ManyToMany, OneToMany } from "typeorm";
-import { Answers } from "./Answers";
-import { Categories } from "./Categories";
 
 @Index("questions_pkey", ["id"], { unique: true })
 @Entity("questions", { schema: "public" })
@@ -18,20 +16,9 @@ export class Questions {
   tips: string;
 
   @Column("text", { name: "ai_guidance" })
-  aiGuidance: string;
+  ai_guidance: string;
 
   @Column("boolean", { name: "is_active", default: () => "true" })
-  isActive: boolean;
+  is_active: boolean;
 
-  @Column("text", { name: "options", nullable: true, array: true })
-  options: string[] | null;
-
-  @Column("text", { name: "question_type", nullable: true })
-  questionType: string | null;
-
-  @OneToMany(() => Answers, (answers) => answers.question)
-  answers: Answers[];
-
-  @ManyToMany(() => Categories, (categories) => categories.questions)
-  categories: Categories[];
 }

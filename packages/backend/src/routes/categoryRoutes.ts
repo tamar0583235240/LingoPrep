@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { addQuestionToCategoryController, getAllCategoriesController, getCategoryForQuestionsController } from "../controllers/categoryController";
+import {  addCategoryController, getAllCategoriesController, getCategoryForQuestionsController } from "../controllers/categoryController";
 
 
 const router = Router();
 
 router.get('/', getAllCategoriesController)
-router.post('/addQuestionToCategory', addQuestionToCategoryController);
+router.post('/addCategory', addCategoryController);
 router.get('/getCategoryForQuestions/:id', getCategoryForQuestionsController);
 export default router;

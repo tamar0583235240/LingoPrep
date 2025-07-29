@@ -4,20 +4,16 @@ import { Questions } from "../interfaces/entities/Questions";
 import { v4 as uuid4 } from 'uuid';
 
 
-//צריך לשנות פה בגלל שמחקנו category 
-//מטבלת שאלות
-const addQustion = async (question: Questions): Promise<Questions> => {
+const addQuestion = async (question: Questions, categoryId: string): Promise<Questions> => {
   try {
-
-    let id: string = "";
-    let exists = true;
-    id = uuid4();
+    let question_id: string = "";
+    question_id = uuid4();
     const query = `
-      INSERT INTO questions (id , title , content  , tips , ai_guidance , is_active)
-      VALUES ('${id}', '${question.title}', '${question.content}', '${"question.category"}', '${question.tips}', '${question.aiGuidance}','${question.isActive}')
-    `;
-
-    const result = await pool.query(query);
+    INSERT INTO questions (id, title, content, tips, ai_guidance, is_active)
+    VALUES (\$1, \$2, \$3, \$4, \$5, \$6) RETURNING *`;
+    const result = await pool.query(query, [question_id, question.title, question.content, question.tips, question.ai_guidance, question.is_active]);
+    const query2 = ` INSERT INTO "question_categories" ( question_id , category_id) VALUES ($1, $2)`;
+    await pool.query(query2, [question_id, categoryId]);
     return result.rows[0] as Questions;
 
   } catch (error) {
@@ -58,7 +54,7 @@ const getAllQuestions = async (): Promise<Questions[]> => {
 
 
 
-const updateQuestionById = async (updates: Questions,category:Categories) => {
+const updateQuestionById = async (updates: Questions, category: Categories) => {
   const { id, ...fieldsToUpdate } = updates;
   const fields = Object.keys(fieldsToUpdate);
   if (fields.length === 0) {
@@ -117,5 +113,5 @@ const getQuestionsByCategory = async (category_id: string): Promise<Questions[]>
   }
 };
 
-export default { getAllQuestionById, getAllQuestions, deleteQuestionById, addQustion, updateQuestionById, getQuestionsByCategory };
+export default { getAllQuestionById, getAllQuestions, deleteQuestionById, addQuestion, updateQuestionById, getQuestionsByCategory };
 
