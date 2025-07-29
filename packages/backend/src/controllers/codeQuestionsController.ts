@@ -172,37 +172,51 @@ export const getAllLikes = async (req: Request, res: Response) => {
   }
 };
 
-// שליחת מייל
+// // שליחת מייל
 export const sendEmail = async (req: Request, res: Response) => {
   const { to, subject, text } = req.body;
 
   if (!to || !subject || !text) {
-    return res.status(400).json({ message: "Missing to, subject or text in request body" });
+    return res
+      .status(400)
+      .json({ message: "Missing to, subject or text in request body" });
   }
 
   try {
-    // הגדרת transporter עם פרטי החשבון שלך מהסביבה
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST, // smtp.gmail.com
-      port: Number(process.env.SMTP_PORT), // 587
-      secure: false, // TLS
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: false,
       auth: {
-        user: process.env.EMAIL_USER, // notify.lingoprep@gmail.com
-        pass: process.env.EMAIL_PASS, // סיסמת האפליקציה
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
-    // שליחת המייל
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; direction: rtl; text-align: right; padding: 20px;">
+        <p style="background-color: #f9f9f9; padding: 10px; border-radius: 6px; line-height: 1.6;">
+          ${text.replace(/\n/g, "<br>")}
+        </p>
+      </div>
+    `;
+
     await transporter.sendMail({
       from: `"LingoPrep" <${process.env.EMAIL_USER}>`,
       to,
       subject,
-      text,
+      html: htmlContent,
     });
 
-    res.status(200).json({ success: true, message: "Email sent successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "Email sent successfully" });
   } catch (error: any) {
     console.error("Error sending email:", error);
-    res.status(500).json({ success: false, message: "Failed to send email", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Failed to send email",
+      error: error.message,
+    });
   }
 };

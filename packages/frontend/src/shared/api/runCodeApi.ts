@@ -80,6 +80,7 @@ export const {
   useSaveUserAnswerMutation,
   useGetQuestionStatusesQuery,
   useGetUserAnswerQuery,
+  useLazyGetUserAnswerQuery,
   useDeleteUserAnswerMutation,
   useRunCodeMutation,
   useVoteQuestionMutation,
