@@ -85,7 +85,7 @@ import ForgotPassword from "../../features/auth/components/ForgotPassword";
 import LoginForm from "../../features/auth/components/LoginForm";
 import SignupForm from "../../features/auth/components/SignupForm";
 import DashboardLayout from "../ui/DashboardLayout";
-import { WeeklyStats } from "../components/WeeklyStats";
+import { UserStats } from "../components/UserStats"; // Import the new UserStats component
 import ResetPassword from "../../features/auth/components/ResetPassword";
 // import WeeklyStats from "../../features/stats/components/WeeklyStats";  // הוסף את הרכיב שלך לסטטיסטיקות
 
@@ -152,7 +152,7 @@ export default function AppRoutes() {
             path="/weekly-stats"
             element={
               <RoleProtectedRoute allowedRoles={["student", "admin"]}>
-                <WeeklyStats />
+                <UserStats  />
               </RoleProtectedRoute>
             }
           />

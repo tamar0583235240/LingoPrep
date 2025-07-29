@@ -110,7 +110,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../shared/ui/button";
 import { GridContainer } from "../shared/ui/GridContainer";
 import { store } from "../shared/store/store";
-import { WeeklyStats } from "../shared/components/WeeklyStats";
+import { UserStats } from "../shared/components/UserStats";
 
 const HomePage = () => {
   const navigate = useNavigate();
