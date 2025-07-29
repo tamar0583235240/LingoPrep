@@ -9,6 +9,7 @@ import {
   getInsightById,
 } from '../repository/AiInsightsReposiory';
 import { analyzeAudio } from '../utils/geminiService';
+
 export const createInsightController = async (req: Request, res: Response) => {
   console.log('--- [AI] createInsightController called ---');
   const answerId = req.body.answerId || req.body.answer_id;
@@ -38,6 +39,7 @@ export const createInsightController = async (req: Request, res: Response) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 export const getAllInsightsController = async (req: Request, res: Response) => {
   console.log('--- [AI] getAllInsightsController called ---');
   try {
@@ -49,6 +51,7 @@ export const getAllInsightsController = async (req: Request, res: Response) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 export const getInsightByIdController = async (req: Request, res: Response) => {
   console.log("tami");
   
@@ -69,6 +72,7 @@ export const getInsightByIdController = async (req: Request, res: Response) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 export const updateInsightController = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { answerId, summary, rating, strengths, improvements, flow, confidence } = req.body;
@@ -97,6 +101,7 @@ export const updateInsightController = async (req: Request, res: Response) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 export const analyzeRecordingController = async (req: Request, res: Response) => {
   try {
     if (!req.file) {
@@ -125,6 +130,7 @@ export const analyzeRecordingController = async (req: Request, res: Response) =>
     });
   }
 };
+
 export const deleteInsightController = async (req: Request, res: Response) => {
   const { id } = req.params;
   console.log('--- [AI] deleteInsightController called ---', id);

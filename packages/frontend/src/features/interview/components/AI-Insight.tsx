@@ -5,18 +5,20 @@ import MagicLoader from "./MagicLoader";
 import { setAI_Insight, setIsAnalyzing } from "../store/AI_InsightSlice";
 export const AI_Insight = (props: any) => {
     const { AI_result, isAnalyzing } = useSelector((state: RootState) => state.AI_Insight);
-    if (isAnalyzing && !AI_result) {
+    
+    if ( !AI_result) {
         return (
             <div className="flex justify-center items-center mt-4">
                 <MagicLoader />
             </div>
         );
     }
+    
     return (
         <div>
             {/* הצגת תוצאת ניתוח AI */}
             {AI_result && (
-                <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl text-blue-900">
+                <div className="mt-4 p-4 bg-[--color-surface] border border-[--color-primary] rounded-xl text-[--color-text]">
                     <div className="font-bold mb-2">תוצאת ניתוח AI:</div>
                     <div>
                         {typeof AI_result === 'string' ? (

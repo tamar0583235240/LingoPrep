@@ -29,31 +29,23 @@ const Question: React.FC<QuestionProps> = ({
   const dispatch = useDispatch();
   const { questions, currentIndex, currentUserId } = useSelector((state: RootState) => state.simulation);
   const { AI_result, isAnalyzing } = useSelector((state: RootState) => state.AI_Insight);
-  // const [AI_result, setAI_result] = useState<AI_result | string | null>(null);
   const currentQuestion = questions[currentIndex];
   const [uploadAnswer] = useUploadAnswerMutation();
-  const { currentAnswerId } = useSelector(
-    (state: RootState) => state.simulation
-  );
+  // const { currentAnswerId } = useSelector(
+  //   (state: RootState) => state.simulation
+  // );
   const [notification, setNotification] = useState<{
     message: string;
     type: "success" | "error";
     icon?: React.ReactNode;
   } | null>(null);
-  // הגדרת טיפוס לניתוח AI
-  // interface AI_result {
-  //   summary?: string;
-  //   rating?: number;
-  //   strengths?: string;
-  //   improvements?: string;
-  //   flow?: string;
-  //   confidence?: string;
-  //   [key: string]: any;
-  // }
+
   useEffect(() => {
     dispatch(setAI_Insight(null));
   }, [currentIndex, dispatch]);
+
   if (!questions.length || currentIndex >= questions.length) return <div>אין שאלות להצגה</div>;
+  
   return (
     <div className="bg-transparent">
       {notification && (
