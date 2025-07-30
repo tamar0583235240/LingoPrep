@@ -1,28 +1,14 @@
 import React, { useState } from 'react';
-// import { useAppDispatch, useAppSelector } from '../../../shared/hooks/reduxHooks';
-// import { RootState } from '../../../shared/store/store';
-// import { RotateCcw, Sparkles, X } from 'lucide-react';
-// import { interviewType } from '../types/questionType';
-// import { Certificate } from '../../dashboard/components/Certificate';
 import { Button } from "../../../shared/ui/button";
 
 interface showAI_InsightProps {
   showButton: boolean;
-//   analysisVisible: boolean;
 }
 
 const showAI_Insight: React.FC<showAI_InsightProps> = ({
     showButton,
 }) => {
-//   const dispatch = useAppDispatch();
-//   const { questions, currentIndex } = useAppSelector(
-//     (state: RootState) => state.simulation
-//   );
-//   const user = useAppSelector((state: RootState) => state.auth.user);
-//   const [showEnd, setShowEnd] = useState(false);
-//   const [showCertificate, setShowCertificate] = useState(false);
-//   const currentQuestion = questions[currentIndex];
-//   const answeredCount = questions.filter((q: interviewType) => q.answered).length;
+
 
   return (
     <div>
