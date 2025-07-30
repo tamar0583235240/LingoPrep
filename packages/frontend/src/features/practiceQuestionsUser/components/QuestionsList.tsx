@@ -280,7 +280,7 @@ export const QuestionsList = ({ topicName, level, type }: Props) => {
                 icon: 'error',
                 iconColor: 'red',
                 title: 'שגיאה בשליחת המייל',
-                text: 'נסה שוב מאוחר יותר או בדוק את כתובת המייל.',
+                text: 'בדוק את החיבור או את כתובת המייל.',
                 confirmButtonText: 'סגור',
                 confirmButtonColor: '#00B894',
               });

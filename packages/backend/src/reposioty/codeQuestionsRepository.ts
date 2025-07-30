@@ -53,42 +53,6 @@ export const getAllQuestionsFromDB = async (topicName?: string, level?: string, 
   }
 };
 
-// שמירת תשובת המשתמש ועדכון הסטטוס
-// export const upsertQuestionStatus = async (
-//   userId: string,
-//   questionId: string,
-//   status: "not_started" | "in_progress" | "completed",
-//   answer: string | null
-// ) => {
-//   const findQuery = `
-//     SELECT * FROM user_practice_answers
-//     WHERE user_id = $1 AND question_id = $2
-//   `;
-//   const result = await pool.query(findQuery, [userId, questionId]);
-
-//   if (result.rows.length > 0) {
-//     // עדכון רשומה קיימת
-//     const updateQuery = `
-//       UPDATE user_practice_answers
-//       SET status = $3, answer = $4
-//       WHERE user_id = $1 AND question_id = $2
-//       RETURNING *
-//     `;
-//     const updateResult = await pool.query(updateQuery, [userId, questionId, status, answer]);
-//     return updateResult.rows[0];
-//   } else {
-//     // יצירת רשומה חדשה
-//     const insertQuery = `
-//       INSERT INTO user_practice_answers (user_id, question_id, status, answer)
-//       VALUES ($1, $2, $3, $4)
-//       RETURNING *
-//     `;
-//     const insertResult = await pool.query(insertQuery, [userId, questionId, status, answer]);
-//     return insertResult.rows[0];
-//   }
-// };
-
-
 // עדכון סטטוס שאלה
 export const updateQuestionStatus = async (
   userId: string,

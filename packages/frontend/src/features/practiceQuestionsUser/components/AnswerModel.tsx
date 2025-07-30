@@ -1,6 +1,6 @@
 import { Dialog } from "@headlessui/react";
 import { useEffect, useState } from "react";
-import CodeRunner from './CodeRunner';
+import CodeRunner, { Language } from './CodeRunner';
 import { useDeleteUserAnswerMutation, useSaveUserAnswerMutation, useUpdateQuestionStatusMutation } from "../../../shared/api/runCodeApi";
 
 
@@ -21,23 +21,50 @@ interface AnswerModalProps {
     refetchUserAnswer: () => Promise<any>;
 }
 
+const initialCodeMap: Record<Language, string> = {
+    java: `public class Main {\n  public static void main(String[] args) {\n    System.out.println("Hello, Java!");\n  }\n}`,
+    python: `print("Hello, Python!")`,
+    sql: `SELECT 'Hello, SQL!' AS message;`,
+    html: `<!DOCTYPE html>\n<html>\n  <head>\n    <title>Hello HTML</title>\n  </head>\n  <body>\n    <h1>Hello, HTML!</h1>\n  </body>\n</html>`,
+    c: `#include <stdio.h>\n\nint main() {\n  printf("Hello, C!\\n");\n  return 0;\n}`,
+    cpp: `#include <iostream>\n\nint main() {\n  std::cout << "Hello, C++!" << std::endl;\n  return 0;\n}`,
+    javascript: `console.log("Hello, JavaScript!");`,
+};
+
 
 export const AnswerModal = ({ question, userId, userAnswer, onClose, onStatusChange, refetchUserAnswer }: AnswerModalProps) => {
     const [answer, setAnswer] = useState("");
     const [updateQuestionStatus] = useUpdateQuestionStatusMutation();
     const [saveUserAnswer] = useSaveUserAnswerMutation();
     const [deleteUserAnswer] = useDeleteUserAnswerMutation();
+    const [codeLanguage, setCodeLanguage] = useState<Language | undefined>(undefined);
 
-    
+
     useEffect(() => {
-        if (userAnswer && userAnswer.status === "in_progress") {
-            setAnswer(userAnswer.answer);
+        if (!userAnswer) return;
+
+        const lang = userAnswer.code_language as Language;
+
+        if (question.type === "code") {
+            setCodeLanguage(lang ?? "java");
+
+            const codeToShow =
+                userAnswer.status === "in_progress"
+                    ? userAnswer.answer
+                    : initialCodeMap[lang] ?? "";
+
+            setAnswer(codeToShow);
+        } else if (question.type === "free_text" || question.type === "yes_no") {
+            const answerToShow =
+                userAnswer.status === "in_progress"
+                    ? userAnswer.answer
+                    : "";
+
+            setAnswer(answerToShow);
+            setCodeLanguage(undefined);
         }
-        else if (!userAnswer || userAnswer.status === "not_started"){
-            console.log(answer, "not_started");
-            setAnswer("");
-        }
-    }, [userAnswer]);
+    }, [userAnswer, question.type]);
+
 
     const renderInput = () => {
         switch (question.type) {
@@ -71,7 +98,12 @@ export const AnswerModal = ({ question, userId, userAnswer, onClose, onStatusCha
             case "code":
                 return (
                     <div className="mt-4 w-full h-[450px]">
-                        <CodeRunner onCodeChange={setAnswer} />
+                        <CodeRunner
+                            language={codeLanguage ?? 'java'}
+                            code={answer}
+                            onChangeCode={(code) => setAnswer(code)}
+                            onChangeLanguage={(lang) => setCodeLanguage(lang)}
+                        />
                     </div>
                 );
             default:
@@ -123,8 +155,8 @@ export const AnswerModal = ({ question, userId, userAnswer, onClose, onStatusCha
                     userId,
                     questionId: question.id,
                     answer,
-                    codeLanguage: question.type === 'code' ? 'javascript' : undefined,
-                }).unwrap();
+                    codeLanguage: question.type === 'code' ? codeLanguage : undefined,
+                });
             }
 
             onClose();
@@ -149,8 +181,8 @@ export const AnswerModal = ({ question, userId, userAnswer, onClose, onStatusCha
                     userId,
                     questionId: question.id,
                     answer,
-                    codeLanguage: question.type === 'code' ? 'javascript' : undefined,
-                }).unwrap();
+                    codeLanguage: question.type === 'code' ? codeLanguage : undefined,
+                });
             }
 
             onClose();

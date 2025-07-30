@@ -3,10 +3,13 @@ import Editor, { Monaco } from '@monaco-editor/react';
 import { Button } from '../../../shared/ui/button';
 import { useRunCodeMutation } from '../../../shared/api/runCodeApi';
 
-type Language = 'java' | 'python' | 'sql' | 'html' | 'c' | 'cpp' | 'javascript';
+export type Language = 'java' | 'python' | 'sql' | 'html' | 'c' | 'cpp' | 'javascript';
 
 interface CodeRunnerProps {
-  onCodeChange?: (code: string) => void; // הוספתי את הפרופס כאן
+  language: Language;
+  code: string;
+  onChangeCode?: (updatedCode: string) => void;
+  onChangeLanguage?: (lang: Language) => void;
 }
 
 const languageMap: Record<Language, string> = {
@@ -19,8 +22,7 @@ const languageMap: Record<Language, string> = {
   javascript: 'javascript',
 };
 
-
-const initialCode: Record<Language, string> = {
+const initialCodeMap: Record<Language, string> = {
   java: `public class Main {
   public static void main(String[] args) {
     System.out.println("Hello, Java!");
@@ -54,51 +56,56 @@ int main() {
   javascript: `console.log("Hello, JavaScript!");`,
 };
 
-const commentSymbols: Record<Language, string> = {
-  java: '//',
-  python: '#',
-  sql: '--',
-  html: '<!--',
-  c: '//',
-  cpp: '//',
-  javascript: '//',
-};
-
-const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
+const CodeRunner = ({ language, code, onChangeCode, onChangeLanguage }: CodeRunnerProps) => {
   const editorRef = useRef<any>(null);
-  const [language, setLanguage] = useState<Language>('java');
-  const [code, setCode] = useState(initialCode['java']);
   const [output, setOutput] = useState<string | null>(null);
-
   const [showOutputModal, setShowOutputModal] = useState(false);
-
   const [runCode, { isLoading }] = useRunCodeMutation();
 
+  // לאחסן מקומי את השפה והקוד כדי לאפשר עריכה בתוך הקומפוננטה
+  const [currentLanguage, setCurrentLanguage] = useState<Language>(language);
+  const [currentCode, setCurrentCode] = useState<string>(code);
+
+  // סינכרון אם ה־props משתנים מבחוץ
   useEffect(() => {
-    if (onCodeChange) {
-      onCodeChange(code);
-    }
-  }, [code, onCodeChange]);
+    setCurrentLanguage(language);
+  }, [language]);
+
+  useEffect(() => {
+    setCurrentCode(code);
+  }, [code]);
+
+  // כשהקוד משתנה בעורך - מעדכנים את ה-state המקומי והוריו דרך callback
+  const handleCodeChange = (value: string | undefined) => {
+    const newCode = value || '';
+    setCurrentCode(newCode);
+    onChangeCode && onChangeCode(newCode);
+  };
+
+  // כשהשפה משתנה - מעדכנים את ה-state המקומי ואת ההורה
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newLang = e.target.value as Language;
+    setCurrentLanguage(newLang);
+
+    // אפשר גם לאפס את הקוד לשפת ברירת המחדל (או להשאיר אותו כפי שהוא)
+    const defaultCode = initialCodeMap[newLang];
+    setCurrentCode(defaultCode);
+    onChangeLanguage && onChangeLanguage(newLang);
+    onChangeCode && onChangeCode(defaultCode);
+    setOutput(null);
+  };
 
   const handleEditorDidMount = (editor: any, monaco: Monaco) => {
     editorRef.current = editor;
-    // כאן אפשר להוסיף קיצור דרך וכו'
-  };
-
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const lang = e.target.value as Language;
-    setLanguage(lang);
-    setCode(initialCode[lang]);
-    setOutput(null);
   };
 
   const handleRunCode = async () => {
     setOutput(null);
     try {
-      const data = await runCode({ language, code }).unwrap();
+      const data = await runCode({ language: currentLanguage, code: currentCode }).unwrap();
       const result = data.rows ? JSON.stringify(data.rows, null, 2) : data.output;
       setOutput(result);
-      setShowOutputModal(true); // פותח פופאפ תוצאה
+      setShowOutputModal(true);
     } catch (error: any) {
       setOutput('שגיאה: ' + (error?.data?.error || error.message || 'אירעה שגיאה'));
       setShowOutputModal(true);
@@ -131,7 +138,7 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
           }}
         >
           <select
-            value={language}
+            value={currentLanguage}
             onChange={handleLanguageChange}
             style={{
               padding: '6px 10px',
@@ -143,14 +150,11 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
             }}
             disabled={isLoading}
           >
-            <option value="java">Java</option>
-            <option value="python">Python</option>
-            <option value="sql">SQL</option>
-            <option value="html">HTML</option>
-            <option value="c">C</option>
-            <option value="cpp">C++</option>
-            <option value="javascript">JavaScript</option>
-
+            {Object.keys(languageMap).map((lang) => (
+              <option key={lang} value={lang}>
+                {lang.charAt(0).toUpperCase() + lang.slice(1)}
+              </option>
+            ))}
           </select>
 
           <Button
@@ -165,9 +169,10 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
 
         <Editor
           height="calc(100% - 110px)"
-          defaultLanguage={languageMap[language]}
-          value={code}
-          onChange={(value) => setCode(value || '')}
+          defaultLanguage={languageMap[currentLanguage]}
+          language={languageMap[currentLanguage]}
+          value={currentCode}
+          onChange={handleCodeChange}
           onMount={handleEditorDidMount}
           options={{
             fontSize: 14,
@@ -219,7 +224,7 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
                 fontSize: 35,
                 cursor: 'pointer',
                 lineHeight: 1,
-                color: 'red'
+                color: 'red',
               }}
               aria-label="Close output modal"
             >
@@ -228,7 +233,7 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
 
             <h2 className="text-m font-bold text-[--color-text] mb-2">תוצאת הרצת הקוד</h2>
 
-            {language === 'html' ? (
+            {currentLanguage === 'html' ? (
               <iframe
                 title="HTML Preview"
                 srcDoc={output || ''}
@@ -266,4 +271,3 @@ const CodeRunner = ({ onCodeChange }: CodeRunnerProps) => {
 };
 
 export default CodeRunner;
-
