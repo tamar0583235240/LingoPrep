@@ -7,7 +7,7 @@ import {
     deleteInterviewMaterialSub,
 } from '../controllers/InterviewMaterialSubController';
 import { downloadInterviewMaterial } from '../controllers/downloadController';
-import { getInterviewMaterialSubs,searchMterials ,incrementDownloadCount, addFile} from '../controllers/interviewMaterialsHub';
+import { getInterviewMaterialSubs, searchMterials, incrementDownloadCount, addFile } from '../controllers/interviewMaterialsHub';
 
 const router = Router();
 
@@ -16,11 +16,11 @@ const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
 
- router.get('/download/:id', downloadInterviewMaterial);
+router.get('/download/:id', downloadInterviewMaterial);
 router.post('/uploadFile', upload.single('file_url'), addFile);
-router.get('/search',searchMterials)
+router.get('/search', searchMterials)
 router.patch("/:id", incrementDownloadCount);
- router.delete('/:id', deleteInterviewMaterialSub);
+router.delete('/:id', deleteInterviewMaterialSub);
 router.post('/',
     upload.fields([
         { name: 'thumbnail', maxCount: 1 },

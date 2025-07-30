@@ -77,7 +77,10 @@ app.use('/api/answers', answerRouter);
 app.use('/api/question', questionRoute);
 app.use('/api/shared-recordings', sharedRecordingsRoutes);
 app.use('/api/interviewMaterialSub', interviewMaterialsRoutes);
-app.use('/api/interview-materials-hub', interviewMaterialsRoutes);
+// app.use('/api/interview-materials-hub', interviewMaterialsRoutes);
+app.use('/api/interview_materials_hub', interviewMaterialsRoutes);
+app.use('/api/manager/interview_materials_hub', interviewMaterialsRoutes);
+
 app.use('/api/users', userRouts);
 app.use('/api/admin', userAdminRouts);
 app.use("/api/aiInsight", aiInsightRoutes);
