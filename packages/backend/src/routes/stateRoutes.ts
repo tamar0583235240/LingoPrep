@@ -1,28 +1,50 @@
-import { pool } from '../config/dbConnection';
+// בקובץ stateRoutes.ts
 import express from 'express';
+import { pool } from '../config/dbConnection';
 
 const router = express.Router();
 
-router.get('/funnel', async (req, res) => {
+router.get('/category-users', async (req, res) => {
   try {
-   const { rows } = await pool.query(`
-  SELECT
-    COUNT(*) FILTER (WHERE page = 'login') AS entrance,
-    COUNT(*) FILTER (WHERE page = 'simulation_start') AS simulation_start,
-    COUNT(*) FILTER (WHERE page = 'simulation_end') AS simulation_end
-  FROM user_activity_log
-`);
+    const query = `
+      SELECT
+        c.name AS category,
+        COUNT(DISTINCT a.user_id) AS user_count
+      FROM
+        answers a
+      JOIN
+        questions q ON a.question_id = q.id
+      JOIN
+        question_categories qc ON q.id = qc.question_id
+      JOIN
+        categories c ON qc.category_id = c.id
+      GROUP BY
+        c.name
+      ORDER BY
+        user_count DESC;
+    `;
 
-res.json({
-  entrance: parseInt(rows[0].entrance),
-  simulation_start: parseInt(rows[0].simulation_start),
-  simulation_end: parseInt(rows[0].simulation_end),
-});
-
+    const { rows } = await pool.query(query);
+    res.json(rows); // מחזיר מערך של קטגוריות עם ספירת משתמשים
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'server error' });
+    console.error('Error fetching category stats:', err);
+    res.status(500).json({ error: 'שגיאה בשרת' });
   }
 });
+router.get('/funnel', async (req, res) => {
+  try {
+    const query = `
+      SELECT
+        (SELECT COUNT(*) FROM users) AS entrance,
+        (SELECT COUNT(DISTINCT user_id) FROM answers) AS simulation_start,
+        (SELECT COUNT(DISTINCT user_id) FROM answers WHERE amount_feedbacks > 0) AS simulation_end;
+    `;
 
+    const { rows } = await pool.query(query);
+    res.json(rows[0]);
+  } catch (err) {
+    console.error('Error fetching funnel data:', err);
+    res.status(500).json({ error: 'שגיאה בשרת' });
+  }
+});
 export default router;

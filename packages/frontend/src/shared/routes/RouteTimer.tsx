@@ -1,35 +1,42 @@
-import React from 'react'
-import { useLocation } from "react-router-dom";
-import { useEffect, useRef } from "react";
-// import { useSendPageTimeMutation } from '../api/activity_MonitoringhApi'
-const RouteTimer = () => {
+import React, { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useSendPageTimeMutation } from '../api/activityMonitoringApi';
+// import { useSendPageTimeMutation } from '../../../shared/api/activityMonitoringhApi';
 
-//     const location = useLocation();
-//     const enterTimeRef = useRef(Date.now());
-//     const [sendPageTime] = useSendPageTimeMutation();
+const RouteTimer: React.FC = () => {
+  const location = useLocation();
+  const prevPathRef = useRef(location.pathname);
+  const enterTimeRef = useRef(Date.now());
+  const [sendPageTime] = useSendPageTimeMutation();
 
-//     useEffect(() => {
-//         const leaveTime = Date.now();
-//         const timeSpentSec = Math.floor((leaveTime - enterTimeRef.current) / 1000);
+  const sendTime = (path: string) => {
+    const leaveTime = Date.now();
+    const timeSpentSec = Math.floor((leaveTime - enterTimeRef.current) / 1000);
+    sendPageTime({ metric: path, timeSpentSec });
 
-//         console.log("עמוד:", location.pathname, "שניות שהייה:", timeSpentSec);
-//         sendPageTime({
-//             page: location.pathname,
-//             timeSpentSec,
-//         })
-//         enterTimeRef.current = Date.now();
-//     }, [location.pathname]);
-//     return (
-//         <div>
+    navigator.sendBeacon(
+      '/api/monitoring',
+      JSON.stringify({ metric: path, timeSpentSec })
+    );
+  };
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      sendTime(prevPathRef.current);
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
+  useEffect(() => {
+    if (prevPathRef.current !== location.pathname) {
+      sendTime(prevPathRef.current);
+      prevPathRef.current = location.pathname;
+      enterTimeRef.current = Date.now();
+    }
+  }, [location.pathname]);
+  return null; 
+};
 
-
-
-//         </div>
-//     )
-}
-
-export default RouteTimer
-
-
-
+export default RouteTimer;

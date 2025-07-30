@@ -43,11 +43,11 @@ const HomePage = () => {
           <Button variant="outline" fullWidth onClick={() => navigate("/admin/dynamic-content")}>
             ניהול תכנים דינמיים
           </Button>
-          <Button variant="outline" fullWidth onClick={() => navigate("/admin/activity-monitoring")}>
-            ניטור פעילות
-          </Button>
           <Button variant="outline" fullWidth onClick={() => navigate("/admin/monitoring")}>
            נתוני זמן שהייה
+          </Button>
+          <Button variant="outline" fullWidth onClick={() => navigate("/admin/activity-monitoring")}>
+            ניטור פעילות
           </Button>
           <Button variant="outline" fullWidth onClick={() => navigate("/admin/category-stats")}>
            קטגוריה

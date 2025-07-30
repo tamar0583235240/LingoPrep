@@ -19,9 +19,10 @@ const PopularQuestions = () => {
     if (loading) return;
     setLoading(true);
     try {
-      const response = await fetch(`/api/popular-questions/popular?limit=${customLimit}&offset=${customOffset}`, {
-        credentials: 'include',
-      });
+      const response = await fetch(`/api/monitoring/questions/popular?limit=${customLimit}&offset=${customOffset}`, {
+      credentials: 'include',
+    });
+
       const data: PopularQuestion[] = await response.json();
       setQuestions(prev => {
         const existingIds = new Set(prev.map(q => q.id));

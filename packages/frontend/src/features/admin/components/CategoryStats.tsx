@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { fetchActivityData } from "../../../shared/api/activity_MonitoringhApi";
 
 interface Activity {
   user_id: string;
@@ -12,6 +11,14 @@ const ActivityPage = () => {
   const [data, setData] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+const fetchActivityData = async (): Promise<Activity[]> => {
+  const res = await fetch("/api/monitoring/activity");
+  if (!res.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return res.json();
+};
 
   useEffect(() => {
     fetchActivityData()

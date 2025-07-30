@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useStats from "../hooks/States";
 import { log } from "console";
-import { useGetPageStatsQuery } from "../../../shared/api/activity_MonitoringhApi";
+import { useGetPageStatsQuery } from "../../../shared/api/activityMonitoringApi";
 
 const getRange = (option: string): [string, string] => {
   const today = new Date();
@@ -53,7 +53,8 @@ const StatsDateRangePicker = () => {
       </select>
 
       {isLoading && <div>🔄 טוען נתונים…</div>}
-      {error && <div>❌ שגיאה: error</div>}
+      {/* {error && <div>❌ שגיאה: error</div>} */}
+      {error && <div>❌ שגיאה: {(error as any).toString()}</div>}
 
       {!isLoading && !error && data && data.length > 0 && (
         <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>

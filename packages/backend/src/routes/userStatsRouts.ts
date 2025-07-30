@@ -3,7 +3,7 @@ import { pool } from '../config/dbConnection';
 
 const router = Router();
 
-router.get('/stats/category-users', async (req: Request, res: Response) => {
+router.get('/category-users',  async (req: Request, res: Response) => {
   try {
     const query = `
       SELECT

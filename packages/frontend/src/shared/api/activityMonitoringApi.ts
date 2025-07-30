@@ -1,14 +1,9 @@
-import { api } from './api';
+import { api } from "./api";
+
 export interface SendPageTimeRequest {
   metric: string;
   timeSpentSec: number;
 }
-export const fetchActivityData = async () => {
-  const response = await fetch("/api/activity");
-  if (!response.ok) throw new Error("שגיאה בשליפת הנתונים");
-  return response.json();
-};
-
 
 export interface PageStats {
   metric: string;
@@ -16,8 +11,7 @@ export interface PageStats {
   avg_time_sec: number;
 }
 
-
-export const activity_MonitoringhApi = api.injectEndpoints({
+export const activityMonitoringApi = api.injectEndpoints({
   endpoints: (builder) => ({
     sendPageTime: builder.mutation<void, SendPageTimeRequest>({
       query: (body) => ({
@@ -32,18 +26,12 @@ export const activity_MonitoringhApi = api.injectEndpoints({
         method: "GET",
         params: { from, to },
       }),
-
     }),
-
   }),
+  overrideExisting: false,
 });
 
 export const {
   useSendPageTimeMutation,
   useGetPageStatsQuery,
-} = activity_MonitoringhApi;
-
-
-
-
-
+} = activityMonitoringApi;

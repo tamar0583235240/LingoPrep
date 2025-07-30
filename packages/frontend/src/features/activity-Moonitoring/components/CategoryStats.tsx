@@ -11,9 +11,10 @@ const CategoryStats = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/stats/category-users", {
+    fetch('http://localhost:5000/api/stats/category-users', {
       credentials: 'include',
     })
+    
       .then((res) => {
         if (!res.ok) throw new Error('שגיאה בשרת');
         return res.json();

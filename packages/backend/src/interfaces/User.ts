@@ -34,5 +34,4 @@ export interface User {
   userReminderSettings: any[]; // ולא userReminderSetting
   userSessions: UserSessions[];
   workExperiences: WorkExperiences[];
-  // userReminderSettings: null; // או אובייקט, תלוי מה מצופה
 }

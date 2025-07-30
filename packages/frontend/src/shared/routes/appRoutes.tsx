@@ -12,10 +12,11 @@ import ResetPassword from "../../features/auth/components/ResetPassword";
 import NotAuthorizedPage from "../components/NotAuthorizedPage";
 import DynamicContentPage from "../../pages/DynamicContentPage";
 import Dashboard from "../../pages/dashboard";
-import Activity_Monitoring from "../../pages/Activity_Monitoring";
-import StatsDashboard from "../../pages/StatsDashboard";
+// import StatsDashboard from "../../pages/StatsDashboard";
 import CategoryStats from "../../features/activity-Moonitoring/components/CategoryStats";
 import FunnelDiagram from "../../features/activity-Moonitoring/components/FunnelDiagram";
+import ActivityMonitoring from "../../pages/ActivityMonitoring";
+import StatsDateRangePicker from "../../features/activity-Moonitoring/components/StatsDateRangePicker";
 
 export default function AppRoutes() {
   return (
@@ -109,13 +110,15 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+          {/* סטטיסטיקות שהיה */}
         <Route 
             path="/admin/monitoring" element={
                 <RoleProtectedRoute allowedRoles={["manager"]}>
                 {/* {<Activity_Monitoring />} */}
-                {<StatsDashboard/>}
+                <StatsDateRangePicker/>
                 </RoleProtectedRoute>
             } />
+            {/* שרי ליברמן */}
           <Route
             path="/admin/dynamic-content"
             element={
@@ -124,6 +127,7 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+          {/* משתמשות לפי תחום */}
           <Route 
             path="/admin/category-stats"
             element={
@@ -132,14 +136,16 @@ export default function AppRoutes() {
               </RoleProtectedRoute>
             }
           />
+          {/* שהיות */}
           <Route
             path="/admin/activity-monitoring"
             element={
               <RoleProtectedRoute allowedRoles={["manager"]}>
-                <Activity_Monitoring />
+                <ActivityMonitoring />
               </RoleProtectedRoute>
             }
           />
+          {/*משפך  */}
           <Route
             path="/admin/FunnelDiagram"
             element={

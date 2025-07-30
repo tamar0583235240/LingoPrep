@@ -1,10 +1,8 @@
-import { Request, Response } from "express";
-import { pool } from "../config/dbConnection";
+import express from "express";
+import PopularQuestions  from "../controllers/activity-Monitoring";
 
-export const getPopularQuestions = async (req: Request, res: Response) => {
-    res.json({ message: "נתוני פעילות נשלפו בהצלחה" });
+const router = express.Router();
 
-  }
+router.get("/questions/popular", PopularQuestions);
 
-
-
+export default router;
