@@ -55,7 +55,7 @@ const EditProfilePage = () => {
     if (!user) return;
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}profiles/user/${user.id}`);
+        const res = await axios.get(`${API_BASE_URL}/profiles/user/${user.id}`);
         setProfile(res.data);
         setFormData({
           status: res.data.status || "",
@@ -67,8 +67,6 @@ const EditProfilePage = () => {
           is_public: res.data.is_public ?? false,
         });
       } catch (err) {
-        console.log(err);
-        
         setError("שגיאה בטעינת הפרופיל.");
       } finally {
         setLoading(false);

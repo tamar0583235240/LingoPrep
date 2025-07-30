@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useRecording } from '../hooks/useRecording';
@@ -11,7 +12,8 @@ import RecordButton from './RecordButton';
 import { RootState } from "../../../shared/store/store";
 import { CheckCircle2, XCircle } from 'lucide-react';
 import { setAI_Insight, setIsAnalyzing } from '../../interview/store/AI_InsightSlice';
-
+import { set } from 'react-hook-form';
+import { setCurrentAnswerId } from '../../interview/store/simulationSlice';
 type AudioRecorderProps = {
   answered?: boolean;
   onFinish?: () => void;
@@ -22,7 +24,6 @@ type AudioRecorderProps = {
     icon?: React.ReactNode;
   } | null) => void;
 };
-
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
   answered,
   onFinish,
@@ -33,8 +34,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const currentQuestion = questions[currentIndex];
   const { AI_result, isAnalyzing } = useSelector((state: RootState) => state.AI_Insight);
   const dispatch = useDispatch();
-
-
   const {
     currentRecording,
     isLoading,
@@ -48,7 +47,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   } = useRecording() as ReturnType<typeof useRecording> & {
     currentRecording: RecordingState;
   };
-
   const [fileName, setFileName] = useState('');
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showRecordingModal, setShowRecordingModal] = useState(false);
@@ -56,12 +54,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const [recordingPhase, setRecordingPhase] = useState<
     'idle' | 'recording' | 'paused' | 'finished'
   >('idle');
-
   useEffect(() => {
-
-
   }, [isAnalyzing]);
-
   const handleMainButtonClick = () => {
     if (recordingPhase === 'idle' || recordingPhase === 'finished') {
       restartRecording();
@@ -74,25 +68,19 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       setRecordingPhase('recording');
     }
   };
-
   const handleStopRecording = () => {
     stopRecording();
     setRecordingPhase('finished');
     onFinish?.();
   };
-
   const handleSaveRecording = async () => {
     try {
       console.log(audioBlobRef.current, "saveRecording");
-
       setShowRecordingModal(false);
       console.log(audioBlobRef.current, "setShowRecordingModal");
-
       const answer = await saveRecording(currentUserId, String(currentQuestion.id), fileName.trim());
       console.log("After saveRecording, answer:", answer);
       setShowSaveModal(false);
-
-
       if (onSaveSuccess && answer?.id) {
         console.log("onSaveSuccess and answer.id exist", { onSaveSuccessExists: !!onSaveSuccess, answerId: answer?.id });
         if (audioBlobRef.current) {
@@ -110,19 +98,23 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
           const file = new File([audioBlobRef.current], safeFileName, { type: "audio/webm" });
           onSaveSuccess(answer.id);
           setFileName('');
+          dispatch(setCurrentAnswerId(answer.id.toString()));
+          dispatch(setIsAnalyzing(true));
           setNotification?.({
             message: "ההקלטה נשמרה בהצלחה!",
             type: "success",
             icon: <CheckCircle2 className="w-6 h-6 text-[--color-primary-dark]" />,
           });
           setTimeout(() => setNotification?.(null), 3500);
-
           // רק אחרי שהמשתמש רואה שההקלטה נשמרה, תפעילי את הניתוח:
           if (audioBlobRef.current) {
             const file = new File([audioBlobRef.current], safeFileName, { type: "audio/webm" });
             try {
-              const result = await analyzeInterview(file, answer.id.toString());
+              const result = await analyzeInterview(file, answer.id.toString())
+              .then((result) => {
               dispatch(setAI_Insight(result));
+              setIsAnalyzing(false);
+               });
             } catch (err) {
               dispatch(setAI_Insight('שגיאה בניתוח הקובץ'));
             }
@@ -133,7 +125,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       } else {
         console.log("onSaveSuccess or answer.id missing", { onSaveSuccessExists: !!onSaveSuccess, answerId: answer?.id });
       }
-
     } catch (error) {
       console.error('שגיאה בשמירה:', error);
       setNotification?.({
@@ -144,11 +135,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       setTimeout(() => setNotification?.(null), 3500);
     }
   };
-
   const downloadRecording = () => {
     if (audioBlobRef.current) {
       console.log(audioBlobRef.current);
-
       const url = URL.createObjectURL(audioBlobRef.current);
       const a = document.createElement('a');
       a.href = url;
@@ -192,7 +181,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
           formatTime={formatTime}
         />
       </>
-
       {/* מודאל להזנת שם קובץ */}
       {showSaveModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
@@ -232,5 +220,21 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     </div>
   );
 };
-
 export default AudioRecorder;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

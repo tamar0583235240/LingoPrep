@@ -80,6 +80,7 @@ app.use('/api/interviewMaterialSub', interviewMaterialsRoutes);
 // app.use('/api/interview-materials-hub', interviewMaterialsRoutes);
 app.use('/api/interview_materials_hub', interviewMaterialsRoutes);
 app.use('/api/manager/interview_materials_hub', interviewMaterialsRoutes);
+app.use("/profiles", profileRoutes);
 
 app.use('/api/users', userRouts);
 app.use('/api/admin', userAdminRouts);
@@ -93,7 +94,6 @@ app.use('/api/insights', aIInsightRouts);
 app.use('/api/dynamic-contents', useDynamicContentRouter);
 app.use("/api/questions", answerRoutes);
 app.use("/api/manager/interview-materials", interviewMaterialsRoutes);
-// app.use("/profiles", profileRoutes);
 app.use("/api/profiles", profileRoutes);
 app.use("/api/public-profile", publicProfileRoutes);
 app.use('/api/codeQuestions', codeQuestionsRouts);
