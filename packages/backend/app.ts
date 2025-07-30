@@ -33,6 +33,7 @@ import profileRoutes from './src/routes/profileRouts';
 import publicProfileRoutes from './src/routes/publicProfileRoutes';
 import feedbackRouter from './src/routes/feedbackRouts';
 import codeQuestionsRouts from './src/routes/codeQuestionsRouts';
+import remindersRoutes from 'routes/remindersRoutes';
 dotenv.config();
 
 const allowedOrigins = (process.env.CORS_ORIGIN?.split(",") ?? [
@@ -61,13 +62,12 @@ app.use(cors({
   credentials: true
 }));
 
-
-
 app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api', resourceRouts);
 app.use('/api/auth', authRouts);
+//  app.use("/api/reminders", remindersRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/resources', resourceRouts);
 app.use('/api/feedbackes', feedbackRouter);
@@ -98,6 +98,13 @@ app.use("/api/profiles", profileRoutes);
 app.use("/api/public-profile", publicProfileRoutes);
 app.use('/api/codeQuestions', codeQuestionsRouts);
 app.use("/api/aiInsight", aiInsightRoutes);
+app.use('/api', autoDeleteRoutes);
+
+
+
+
+
+
 
 
 

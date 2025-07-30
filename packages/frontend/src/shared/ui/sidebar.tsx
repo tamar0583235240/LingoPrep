@@ -32,7 +32,6 @@ const navItems: NavItem[] = [
   { label: "ניהול משתמשים", href: "/manager/users", adminOnly: true },
   { label: "ניהול משאבים", href: "/manager/resources", adminOnly: true },
   { label: "ניהול חומרים", href: "/manager/interview-materials", adminOnly: true, },
-
   { label: "ניהול הקלטות", href: "/auto-delete-config", adminOnly: true },
 
 ];

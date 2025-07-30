@@ -67,6 +67,8 @@ const EditProfilePage = () => {
           is_public: res.data.is_public ?? false,
         });
       } catch (err) {
+        console.log(err);
+        
         setError("שגיאה בטעינת הפרופיל.");
       } finally {
         setLoading(false);
