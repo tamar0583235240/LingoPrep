@@ -10,17 +10,15 @@ import {
 import { RootState } from "../shared/store/store";
 import Sidebar from "../features/interview/components/sidebar";
 import Question from "../features/interview/components/question";
-import AnswerAI from "../features/interview/components/AnswerAI";
 import TipsComponent from "../features/interview/components/tipsComponent";
-import MagicLoader from "../features/interview/components/MagicLoader";
 import EndSurvey from "../features/interview/components/endSurvey";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { CheckCircle2, Lightbulb, X } from "lucide-react";
+import { X } from "lucide-react";
 import { Button } from "../shared/ui/button";
 import CategoryTabs from "../features/interview/components/showCategories";
 import { useGetAnsweredQuestionsQuery } from "../features/interview/services/statusAPI";
 import { AI_Insight } from "../features/interview/components/AI-Insight";
-// import { AiInsightsList } from "../features/recordings/components/AiInsightsList";
+import ShowAI_Insight from "../features/interview/components/showAI_Insight";
 
 const InterviewPage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -149,7 +147,7 @@ const InterviewPage = () => {
   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
     {/* סיידבר */}
     <div className="lg:col-span-3">
-      <div className="sticky top-12">
+      <div className="sticky top-16">
         <Sidebar
           questions={questionsWithStatus}
           currentIndex={currentIndex}
@@ -160,7 +158,7 @@ const InterviewPage = () => {
     {/* שאלה ופעולות */}
     <div className="lg:col-span-9 space-y-2">
       {questionsWithStatus[currentIndex] ? (
-        <div className="p-4 md:p-6 lg:p-8">
+        <div className="p-4 md:p-4 lg:p-6">
           <Question
             question={questionsWithStatus[currentIndex]}
             onFinishRecording={() => setShowTips(true)}
@@ -174,40 +172,18 @@ const InterviewPage = () => {
         </div>
       )}
       {/* כפתורי פעולה */}
-      {/* <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        {isCurrentQuestionAnswered && !currentAnswerId && !notificationOpen && (
-          <Button
-            variant="primary-dark"
-            size="md"
-            icon={
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                />
-              </svg>
-            }
-            iconPosition="left"
-            onClick={() => {
-              const answered = answeredIdsFromServer.find(
-                (a) => a.question.id === String(questionsWithStatus[currentIndex].id)
-              );
-              if (answered) {
-                dispatch(setCurrentAnswerId(answered.id));
-              }
-            }}
-            className="hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
-          >
-            הצג ניתוח AI
-          </Button>
-        )} */}
+       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+       {/* <div className="flex  items-center gap-4 mt-4"> */}
+        {/* {isCurrentQuestionAnswered && !notificationOpen && ( */}
+          <ShowAI_Insight showButton={isCurrentQuestionAnswered && !notificationOpen} />
+        {/* // )} */}
+
           <EndSurvey
             showEndButton={allAnswered}
             answeredCount={answeredCount}
             totalQuestions={totalQuestions}
           />
+          </div>
         {/* טיפים בתוך הכרטיס */}
           <TipsComponent />
       </div>
@@ -227,7 +203,7 @@ const InterviewPage = () => {
         {currentAnswerId && !notificationOpen && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden">
-              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 flex justify-between items-center">
+              <div className="bg-[linear-gradient(to_right,var(--color-primary),var(--color-primary-dark))] text-white p-6 flex justify-between items-center">
                 <h2 className="text-xl font-bold">ניתוח AI לתשובה</h2>
                 <button
                   onClick={() => dispatch(setCurrentAnswerId(null))}
@@ -237,20 +213,6 @@ const InterviewPage = () => {
                 </button>
               </div>
               <div className="p-6 max-h-[70vh] overflow-y-auto">
-                {/* {isLoadingAI ? (
-                  <div className="text-center py-12">
-                    <h3 className="text-xl font-bold text-purple-800 mb-6">מנתח תשובה...</h3>
-                    <MagicLoader />
-                  </div>
-                ) : (
-                  <AnswerAI
-                  <AiInsightsList
-                    answerId={currentAnswerId}
-                    // audioFile={}
-                    onClose={() => dispatch(setCurrentAnswerId(null))}
-                    onLoaded={() => setIsLoadingAI(false)}
-                  />
-                )} */}
                 <AI_Insight/>
               </div>
             </div>
