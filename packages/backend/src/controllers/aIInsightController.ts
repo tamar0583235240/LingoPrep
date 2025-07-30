@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import  aiInsigthRepository  from '../repository/AiInsightsReposiory';
 import * as fs from 'fs';
 import * as path from 'path';
 import {
@@ -7,6 +8,7 @@ import {
   deleteInsight,
   updateInsight,
   getInsightById,
+  
 } from '../repository/AiInsightsReposiory';
 import { analyzeAudio } from '../utils/geminiService';
 export const createInsightController = async (req: Request, res: Response) => {
@@ -38,6 +40,27 @@ export const createInsightController = async (req: Request, res: Response) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getAiInsights = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const insights = await aiInsigthRepository.getAiInsights();
+    res.status(200).json(insights);
+  } catch (error) {
+    console.error(':x: Error in getAiInsights controller:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+export const getAiInsightsByAnswerId = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { answerId } = req.params;
+    const insights = await aiInsigthRepository.getAiInsightsByAnswerId(answerId);
+    res.status(200).json(insights);
+  } catch (error) {
+    console.error(`:x: Error in getAiInsightsByAnswerId controller for answerId ${req.params.answerId}:`, error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 export const getAllInsightsController = async (req: Request, res: Response) => {
   console.log('--- [AI] getAllInsightsController called ---');
   try {
@@ -51,10 +74,10 @@ export const getAllInsightsController = async (req: Request, res: Response) => {
 };
 export const getInsightByIdController = async (req: Request, res: Response) => {
   console.log("tami");
-  
+
   const { id } = req.params;
   console.log(id);
-  
+
   console.log('--- [AI] getInsightByIdController called ---', id);
   try {
     const insight = await getInsightById(id);

@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Profile } from "../types/profileTypes";
 export const profilesApi = createApi({
   reducerPath: "profilesApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
   endpoints: (build) => ({
     getProfiles: build.query<Profile[], void>({
       query: () => "profiles",

@@ -32,7 +32,7 @@ export const interviewMaterialsApi = api.injectEndpoints({
 
     getInterviewMaterials: builder.query<InterviewMaterial[], void>({
       query: () => ({
-        url: "/api/interview_materials_hub/",
+        url: "/interview_materials_hub/",
         method: "GET",
       }),
       providesTags: (result) =>

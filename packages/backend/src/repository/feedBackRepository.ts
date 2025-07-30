@@ -17,13 +17,14 @@ export const getFeedbackByAnswerCode= async (answerCode:string): Promise<Feedbac
 }
 
 export const getFeedbackesByanswerIdRepo = async (answerId:string): Promise<Feedback[]> => {
-
     try {
         const sharedRecordingId =  await getSharedRecordingIdByAnswerId(answerId);
+        if (!sharedRecordingId) {
+            console.warn(`No sharedRecordingId found for answerId: ${answerId}`);
+            return [];
+        }
         const data = await pool.query(`SELECT * FROM feedback WHERE shared_recording_id = $1` , [sharedRecordingId] );   
-
         console.log(data.rows.length);
-        
         return data.rows as Feedback[];
     }
     catch (error) {

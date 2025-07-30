@@ -52,11 +52,11 @@ export const getAllPreviouslySharedEmails = async (
 
 export const getSharedRecordingIdByAnswerId = async (answerId: string): Promise<string | null> => {
   try {
-
     const data = await pool.query(`SELECT id FROM shared_recordings WHERE answer_id = $1`, [answerId]);
-
     console.log(data.rows.length);
-
+    if (data.rows.length === 0) {
+      return null;
+    }
     return data.rows[0].id as string;
   }
   catch (error) {

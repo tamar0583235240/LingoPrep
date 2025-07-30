@@ -10,7 +10,7 @@ export const recordingApi = api.injectEndpoints({
     }),
     uploadAnswer: builder.mutation<Answer, UploadAnswerDto>({
       query: (answerData) => ({
-        url: "api/answers",
+        url: "/answers",
         method: "POST",
         body: answerData,
         headers: { "Content-Type": "application/json" },

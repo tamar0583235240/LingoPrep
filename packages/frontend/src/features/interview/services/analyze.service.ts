@@ -8,7 +8,6 @@ export const analyzeInterview = async (file: File, answerId: string) => {
       method: 'POST',
       body: formData,
     });
-    console.log('[AI][FE] fetch /api/insights/analyze status:', res.status);
     if (!res.ok) {
       const errText = await res.text();
       console.error('[AI][FE] Error response:', errText);

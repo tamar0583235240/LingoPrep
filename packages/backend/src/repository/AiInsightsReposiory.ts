@@ -85,6 +85,24 @@ export const deleteInsight = async (id: string) => {
 };
 
 
+const getAiInsights = async (): Promise<AiInsights[]> => {
+  console.log("[AI][Repo] getAiInsights called");
+  
+  try {
+    const result = await pool.query('SELECT * FROM ai_insights');
+    return result.rows as AiInsights[];
+  } catch (error) {
+    console.error('Error fetching AIInsight from PostgreSQL:', error);
+    throw error;
+  }
+};
+
+export default { getAiInsights, getAiInsightsByAnswerId };
+
+
+
+
+
 
 
 

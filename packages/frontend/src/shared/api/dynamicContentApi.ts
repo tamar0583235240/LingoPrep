@@ -10,13 +10,13 @@ export interface DynamicContent {
 export const dynamicContentApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getDynamicContents: builder.query<DynamicContent[], void>({
-      query: () => '/api/dynamic-contents',
+      query: () => '/dynamic-contents',
       providesTags: ['DynamicContents'],
     }),
 
     updateDynamicContent: builder.mutation<DynamicContent, { id: number; content: string }>({
       query: ({ id, content }) => ({
-        url: `/api/dynamic-contents/${id}`,
+        url: `/dynamic-contents/${id}`,
         method: 'PUT',
         body: { content },
       }),

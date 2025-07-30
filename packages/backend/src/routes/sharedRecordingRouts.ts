@@ -3,7 +3,11 @@ import {
   getSharedRecordingsByUser,
   getRecordingDetails,
   createFeedback,
-  updateFeedback
+  updateFeedback,
+  getPreviouslySharedEmails,
+  getSharedRecordingParticipants,
+  deleteParticipant,
+  addParticipant
 } from '../controllers/sharedRecordingController';
 import { sharedRecordingMiddleware } from '../middlewares/sharedRecordingMiddleware';
 
@@ -18,5 +22,9 @@ router.get('/details/:recordingId', getRecordingDetails);
 router.post('/feedback', createFeedback);
 
 router.put('/feedback/:id', updateFeedback);
+router.get('/getSharedRecordingParticipants/:answerId/:ownerId', getSharedRecordingParticipants);
+router.get('/sharedEmails/:userId', getPreviouslySharedEmails);
+router.delete('/deleteParticipant', deleteParticipant);
+router.post('/addParticipant', addParticipant);
 
 export default router;

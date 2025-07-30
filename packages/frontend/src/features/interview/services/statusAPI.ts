@@ -6,7 +6,7 @@ export const statusApi = api.injectEndpoints({
       question: any;id: string
 }[], { userId: string; categoryId: string }>({
       query: ({ userId, categoryId }) =>
-        `/api/status/answers/user/${userId}/category/${categoryId}`,
+        `/status/answers/user/${userId}/category/${categoryId}`,
     }),
   }),
 });

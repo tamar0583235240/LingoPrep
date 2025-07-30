@@ -24,11 +24,11 @@ export const ExitButton = () => {
     }
   };
 
-  return (
-    <Button onClick={handleLogout} disabled={isLoading} className="fixed top-4 left-4 text-[--color-primary] border border-[--color-primary] bg-transparent hover:bg-[--color-surface] hover:text-[--color-primary-dark] transition rounded-lg px-4 py-2 z-50">
-      {isLoading ? "מתנתק..." : "התנתק"}
-    </Button>
-  );
+  // return (
+    // <Button onClick={handleLogout} disabled={isLoading} className="fixed top-4 left-4 text-[--color-primary] border border-[--color-primary] bg-transparent hover:bg-[--color-surface] hover:text-[--color-primary-dark] transition rounded-lg px-4 py-2 z-50">
+    //   {isLoading ? "מתנתק..." : "התנתק"}
+    // </Button>
+  // );
 };
 
 // export default LogoutButton;

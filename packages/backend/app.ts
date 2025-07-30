@@ -60,15 +60,24 @@ app.use(cors({
   origin: 'http://localhost:3000',
   credentials: true
 }));
+
+
+
 app.use(express.json());
 app.use(cookieParser());
-app.use('/auth', authRouts);
+
+app.use('/api', resourceRouts);
+app.use('/api/auth', authRouts);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/resources', resourceRouts);
+app.use('/api/feedbackes', feedbackRouter);
+app.use('/api/AiInsights', AiInsightsRouter);
+app.use('/api/shared-recordings', sharedRecrdingRouter);
+app.use('/api/answers', answerRouter);
+app.use('/api/question', questionRoute);
+app.use('/api/shared-recordings', sharedRecordingsRoutes);
 app.use('/api/interviewMaterialSub', interviewMaterialsRoutes);
-app.use('/api/insights', aIInsightRouts);
-app.use('/api/categories', categoryRoutes)
-app.use('/answers', answerRouter);
-app.use('/question', questionRoute);
-app.use('/shared-recordings', sharedRecordingsRoutes);
+app.use('/api/interview-materials-hub', interviewMaterialsRoutes);
 app.use('/api/users', userRouts);
 app.use('/api/admin', userAdminRouts);
 app.use("/api/aiInsight", aiInsightRoutes);
@@ -77,23 +86,45 @@ app.use('/api/questions', questionRoutes);
 app.use('/api/status', statusRoutes);
 app.use('/api/answers', answerRoutes);
 app.use('/api/status', statusRouts);
+app.use('/api/insights', aIInsightRouts);
 app.use('/api/dynamic-contents', useDynamicContentRouter);
-
-app.use('/api/resources', resourceRouts);
-// רישום הראוטים
-app.use("/api/users", usersRoutes);
 app.use("/api/questions", answerRoutes);
+app.use("/api/manager/interview-materials", interviewMaterialsRoutes);
+app.use("/profiles", profileRoutes);
+app.use("/api/public-profile", publicProfileRoutes);
+app.use('/api/codeQuestions', codeQuestionsRouts);
 app.use("/api/aiInsight", aiInsightRoutes);
 
-// app.use("/manager/interview-materials", interviewMaterialsRoutes);
-app.use("/profiles", profileRoutes);
-app.use('/public-profile', publicProfileRoutes);
-app.use('/api/codeQuestions', codeQuestionsRouts);
-app.use('/api', resourceRouts);
-app.use('/api', feedbackRouter)
-app.use('/api', AiInsightsRouter)
-app.use('/api', sharedRecrdingRouter)
 
+
+
+
+
+
+
+
+// app.use('/auth', authRouts);
+// app.use('/answers', answerRouter);
+// app.use('/question', questionRoute);
+// app.use('/shared-recordings', sharedRecordingsRoutes);
+// app.use('/api/admin', userAdminRouts);
+// app.use('/api/answers', answerRoutes);
+// app.use('/api/status', statusRouts);
+
+// רישום הראוטים
+app.use("/api/users", usersRoutes);
+// app.use("/api/aiInsight", aiInsightRoutes);
+
+
+// app.use("/manager/interview-materials", interviewMaterialsRoutes);
+// app.use("/profiles", profileRoutes);
+// app.use('/public-profile', publicProfileRoutes);
+// app.use('/api', resourceRouts);
+// app.use('/api', feedbackRouter)
+// app.use('/api', AiInsightsRouter)
+// app.use('/api', sharedRecrdingRouter)
+
+// app.use('/api/questions', questionRoutes);
 
 
 

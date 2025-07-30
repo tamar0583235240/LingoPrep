@@ -7,7 +7,9 @@ import {
   getInsightByIdController,
   updateInsightController,
   deleteInsightController,
-  analyzeAndSaveInsight
+  analyzeAndSaveInsight,
+  getAiInsights,
+  getAiInsightsByAnswerId
 } from '../controllers/aIInsightController';
 // קונפיגורציה לשמירת קבצים זמנית
 const storage = multer.diskStorage({
@@ -22,6 +24,8 @@ const router = Router();
 // :mag: ניתוח אודיו
 router.post('/analyze', upload.single('audio'), analyzeAndSaveInsight);
 // :repeat: פעולות CRUD רגילות
+router.get('/getAiInsights', getAiInsights);
+router.get('/getAiInsightsByAnswerId/:answerId', getAiInsightsByAnswerId);
 router.post('/', createInsightController);
 router.get('/', getAllInsightsController);
 router.get('/:id', getInsightByIdController);

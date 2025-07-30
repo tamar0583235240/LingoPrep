@@ -3,10 +3,10 @@ import { api } from "../../../shared/api/api";
 export const resourceApi = api.injectEndpoints({
   endpoints: (builder) => ({
     uploadRecording: builder.mutation<{
-      id(id: any): unknown; url: string 
-}, FormData>({
+      id(id: any): unknown; url: string
+    }, FormData>({
       query: (formData) => ({
-        url: "api/upload",
+        url: "upload",
         method: "POST",
         body: formData,
       }),
