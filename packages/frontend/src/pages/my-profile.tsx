@@ -55,7 +55,7 @@ const EditProfilePage = () => {
     if (!user) return;
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/profiles/user/${user.id}`);
+        const res = await axios.get(`${API_BASE_URL}profiles/user/${user.id}`);
         setProfile(res.data);
         setFormData({
           status: res.data.status || "",
