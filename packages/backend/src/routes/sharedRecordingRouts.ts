@@ -14,17 +14,13 @@ import { sharedRecordingMiddleware } from '../middlewares/sharedRecordingMiddlew
 const router = Router();
 
 router.use(sharedRecordingMiddleware);
-
 router.get('/', getSharedRecordingsByUser);
-
-router.get('/details/:recordingId', getRecordingDetails);
-
 router.post('/feedback', createFeedback);
-
 router.put('/feedback/:id', updateFeedback);
 router.get('/getSharedRecordingParticipants/:answerId/:ownerId', getSharedRecordingParticipants);
 router.get('/sharedEmails/:userId', getPreviouslySharedEmails);
 router.delete('/deleteParticipant', deleteParticipant);
 router.post('/addParticipant', addParticipant);
+router.get('/:userId/:role', getSharedRecordingsByUser);
 
 export default router;
